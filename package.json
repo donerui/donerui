@@ -1,6 +1,6 @@
 {
   "name": "@donerui/core",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "A modern UI library for React, styled with Tailwind CSS.",
   "main": "dist/index.js",
   "type": "module",
