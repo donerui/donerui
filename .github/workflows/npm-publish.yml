@@ -42,7 +42,7 @@ jobs:
           fi
 
       - name: Build if version has changed
-        if: steps.version-check.outputs.VERSION_CHANGED == 'true'
+        if: env.VERSION_CHANGED == 'true'
         run: npm run build
 
       - name: Publish to npm if version has changed
