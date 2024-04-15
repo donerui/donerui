@@ -9,13 +9,13 @@ To use @donerui in your project, you need to have Tailwind CSS installed. If you
 After setting up Tailwind CSS, you can install @donerui via npm:
 
 ```bash
-npm install @donerui
+npm install @donerui/core
 ```
 
 or using yarn:
 
 ```bash
-yarn add @donerui
+yarn add @donerui/core
 ```
 
 ## Configuring Tailwind CSS
