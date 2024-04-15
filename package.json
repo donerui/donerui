@@ -1,0 +1,63 @@
+{
+  "name": "@donerui/core",
+  "version": "0.1.0",
+  "description": "A modern UI library for React, styled with Tailwind CSS.",
+  "main": "dist/index.js",
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "pack": "npm run build && npm pack",
+    "lint": "eslint . --ext .ts,.tsx"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/donerui/donerui.git"
+  },
+  "keywords": [
+    "react",
+    "tailwindcss",
+    "ui library",
+    "components"
+  ],
+  "authors": [
+    "Oğuzhan Kalkuz <oguzhan@enterdigit.com>"
+  ],
+  "license": "MIT",
+  "peerDependencies": {
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
+    "tailwindcss": "^3.0.0"
+  },
+  "dependencies": {
+    "@headlessui/react": "^1.7.17",
+    "animate.css": "^4.1.1",
+    "d3": "^7.8.5",
+    "lodash": "^4.17.21",
+    "magic.css": "^1.4.8",
+    "qrcode": "^1.5.3",
+    "react-icons": "^4.12.0",
+    "tailwind-merge": "^2.0.0",
+    "uuid": "^9.0.1"
+  },
+  "devDependencies": {
+    "@types/d3": "^7.4.3",
+    "@types/lodash": "^4.14.202",
+    "@types/qrcode": "^1.5.5",
+    "@types/react": "^18.2.37",
+    "@types/react-dom": "^18.2.15",
+    "@types/uuid": "^9.0.7",
+    "@typescript-eslint/eslint-plugin": "^6.13.1",
+    "@typescript-eslint/parser": "^6.13.1",
+    "eslint": "^8.54.0",
+    "eslint-config-standard-with-typescript": "^40.0.0",
+    "eslint-plugin-import": "^2.29.0",
+    "eslint-plugin-n": "^16.3.1",
+    "eslint-plugin-promise": "^6.1.1",
+    "eslint-plugin-react": "^7.33.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "typescript": "^5.3.2"
+  }
+}
