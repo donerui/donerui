@@ -72,7 +72,7 @@ module.exports = {
 Once you have included @donerui in your project and configured Tailwind CSS, you can start using the components as follows:
 
 ```jsx
-import { Button, Rating } from '@donerui';
+import { Button, Rating } from '@donerui/core';
 
 function App() {
   return (
