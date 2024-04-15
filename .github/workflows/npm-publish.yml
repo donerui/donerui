@@ -39,12 +39,12 @@ jobs:
             echo "VERSION_CHANGED=false" >> $GITHUB_ENV
           fi
 
-      - name: build if version has changed
+      - name: Build if version has changed
         if: steps.version-check.outputs.VERSION_CHANGED == 'true'
         run: npm run build
 
-      - name: Publish to npm
+      - name: Publish to npm if version has changed
         if: env.VERSION_CHANGED == 'true'
         run: npm publish --access public
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
