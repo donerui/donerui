@@ -130,6 +130,7 @@ function Pagination ({
             key={p}
             {...paginationButtonProps}
             className={twMerge(
+              paginationButtonProps.className,
               p === currentPage && ''
             )}
             onClick={() => {
