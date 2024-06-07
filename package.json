@@ -9,6 +9,7 @@
   ],
   "scripts": {
     "build": "tsc",
+    "watch": "tsc -w",
     "pack": "npm run build && npm pack",
     "lint": "eslint . --ext .ts,.tsx"
   },

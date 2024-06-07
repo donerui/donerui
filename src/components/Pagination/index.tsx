@@ -6,7 +6,7 @@ import {
 import { twMerge } from 'tailwind-merge'
 import Button, { type IButtonProps } from '../Button'
 import Icon from '../Icon'
-import { defaultPaginationButtonProps } from './constants'
+import { defaultPaginationActiveButtonProps, defaultPaginationButtonProps } from './constants'
 import { type IPaginationProps } from './types'
 
 function Pagination ({
@@ -21,7 +21,9 @@ function Pagination ({
   jumpNextButton = true,
   startPage = 0,
   buttonProps,
-  alignment = 'horizontal'
+  activeButtonProps,
+  alignment = 'horizontal',
+  showUtilityButtons = 'hover'
 }: IPaginationProps): JSX.Element {
   const isControlled = page !== undefined
 
@@ -29,18 +31,23 @@ function Pagination ({
   const [visiblePages, setVisiblePages] = useState<number[]>([])
 
   const [paginationButtonProps, setPaginationButtonProps] = useState<IButtonProps>(defaultPaginationButtonProps)
+  const [paginationActiveButtonProps, setPaginationActiveButtonProps] = useState<IButtonProps>(defaultPaginationActiveButtonProps)
 
   const isFirst = currentPage === startPage
   const renderFirst = maxPages > 0 && currentPage - Math.floor(visibleAmount / 2) > startPage
   const isLast = currentPage === startPage + maxPages - 1
   const renderLast = maxPages > 1 && currentPage + Math.floor(visibleAmount / 2) < startPage + maxPages - 1
 
-  const hasEllipsisPrevious = visiblePages[0] >= startPage + Math.floor(visibleAmount / 2)
-  const hasEllipsisNext = visiblePages[visiblePages.length - 1] <= startPage + maxPages - 1 - Math.floor(visibleAmount / 2)
+  const hasEllipsisPrevious = visiblePages[0] > startPage + Math.floor(visibleAmount / 2)
+  const hasEllipsisNext = visiblePages[visiblePages.length - 1] < startPage + maxPages - 1 - Math.floor(visibleAmount / 2)
 
   useEffect(() => {
     setPaginationButtonProps({ ...defaultPaginationButtonProps, ...buttonProps })
   }, [buttonProps])
+
+  useEffect(() => {
+    setPaginationActiveButtonProps({ ...defaultPaginationActiveButtonProps, ...activeButtonProps })
+  }, [activeButtonProps])
 
   useEffect(() => {
     if (isControlled) {
@@ -57,11 +64,20 @@ function Pagination ({
     }
 
     setVisiblePages(newVisiblePages)
-  }, [maxPages, currentPage])
+  }, [maxPages, visibleAmount, currentPage])
 
   return (
-    <span className={twMerge('flex justify-between', alignment === 'vertical' && 'flex-col h-full w-fit')}>
-      <span className={twMerge('flex gap-2', alignment === 'vertical' && 'flex-col')}>
+    <span className={twMerge(
+      'group flex justify-between',
+      alignment === 'vertical' && 'flex-col h-full w-fit',
+      showUtilityButtons === 'never' && 'justify-center'
+    )}>
+      <span className={twMerge(
+        'flex gap-2',
+        alignment === 'vertical' && 'flex-col',
+        showUtilityButtons === 'hover' && 'duration-200 opacity-25 group-hover:opacity-100',
+        showUtilityButtons === 'never' && 'hidden'
+      )}>
         {jumpPreviousButton && (
           <Button
             {...paginationButtonProps}
@@ -105,7 +121,10 @@ function Pagination ({
         )}
       </span>
 
-      <span className={twMerge('flex gap-2', alignment === 'vertical' && 'flex-col')}>
+      <span className={twMerge(
+        'flex gap-2',
+        alignment === 'vertical' && 'flex-col'
+      )}>
         {renderFirst && (
           <Button
             {...paginationButtonProps}
@@ -128,11 +147,7 @@ function Pagination ({
         {visiblePages.map((p) => (
           <Button
             key={p}
-            {...paginationButtonProps}
-            className={twMerge(
-              paginationButtonProps.className,
-              p === currentPage && ''
-            )}
+            {...(p === currentPage ? paginationActiveButtonProps : paginationButtonProps)}
             onClick={() => {
               if (!isControlled) {
                 setCurrentPage(p)
@@ -165,7 +180,12 @@ function Pagination ({
         )}
       </span>
 
-      <span className={twMerge('flex gap-2', alignment === 'vertical' && 'flex-col')}>
+      <span className={twMerge(
+        'flex gap-2',
+        alignment === 'vertical' && 'flex-col',
+        showUtilityButtons === 'hover' && 'duration-200 opacity-25 group-hover:opacity-100',
+        showUtilityButtons === 'never' && 'hidden'
+      )}>
         {nextButton && (
           <Button
             {...paginationButtonProps}
