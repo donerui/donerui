@@ -14,5 +14,5 @@ export interface IPaginationProps {
   buttonProps?: IButtonProps
   activeButtonProps?: IButtonProps
   alignment?: 'horizontal' | 'vertical'
-  showUtilityButtons?: 'always' | 'never' | 'hover'
+  showUtilityButtons?: boolean | 'hover'
 }

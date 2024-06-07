@@ -14,7 +14,7 @@ function Pagination ({
   page,
   defaultPage = 0,
   onPageChange,
-  visibleAmount = 5,
+  visibleAmount = 2,
   previousButton = true,
   nextButton = true,
   jumpPreviousButton = true,
@@ -33,13 +33,19 @@ function Pagination ({
   const [paginationButtonProps, setPaginationButtonProps] = useState<IButtonProps>(defaultPaginationButtonProps)
   const [paginationActiveButtonProps, setPaginationActiveButtonProps] = useState<IButtonProps>(defaultPaginationActiveButtonProps)
 
-  const isFirst = currentPage === startPage
-  const renderFirst = maxPages > 0 && currentPage - Math.floor(visibleAmount / 2) > startPage
-  const isLast = currentPage === startPage + maxPages - 1
-  const renderLast = maxPages > 1 && currentPage + Math.floor(visibleAmount / 2) < startPage + maxPages - 1
+  const firstVisible = visiblePages[0]
+  const lastVisible = visiblePages[visiblePages.length - 1]
 
-  const hasEllipsisPrevious = visiblePages[0] > startPage + Math.floor(visibleAmount / 2)
-  const hasEllipsisNext = visiblePages[visiblePages.length - 1] < startPage + maxPages - 1 - Math.floor(visibleAmount / 2)
+  const lastPage = startPage + maxPages - 1
+
+  const isFirst = currentPage === startPage
+  const isLast = currentPage === lastPage
+
+  const renderFirst = maxPages > 0 && firstVisible > startPage
+  const renderLast = maxPages > 1 && lastVisible < lastPage
+
+  const hasEllipsisPrevious = firstVisible > startPage + 1
+  const hasEllipsisNext = lastVisible < lastPage - 1
 
   useEffect(() => {
     setPaginationButtonProps({ ...defaultPaginationButtonProps, ...buttonProps })
@@ -58,25 +64,25 @@ function Pagination ({
   useEffect(() => {
     const newVisiblePages = []
 
-    const visibleStart = Math.max(startPage, currentPage - Math.floor(visibleAmount / 2))
-    for (let i = visibleStart; i < Math.min(maxPages, visibleStart + visibleAmount); i++) {
+    const visibleStart = Math.max(startPage, currentPage - visibleAmount)
+    for (let i = visibleStart; i <= Math.min(lastPage, currentPage + visibleAmount); i++) {
       newVisiblePages.push(i)
     }
 
     setVisiblePages(newVisiblePages)
-  }, [maxPages, visibleAmount, currentPage])
+  }, [lastPage, visibleAmount, startPage, currentPage])
 
   return (
     <span className={twMerge(
       'group flex justify-between',
       alignment === 'vertical' && 'flex-col h-full w-fit',
-      showUtilityButtons === 'never' && 'justify-center'
+      showUtilityButtons === false && 'justify-center'
     )}>
       <span className={twMerge(
         'flex gap-2',
         alignment === 'vertical' && 'flex-col',
         showUtilityButtons === 'hover' && 'duration-200 opacity-25 group-hover:opacity-100',
-        showUtilityButtons === 'never' && 'hidden'
+        showUtilityButtons === false && 'hidden'
       )}>
         {jumpPreviousButton && (
           <Button
@@ -136,7 +142,7 @@ function Pagination ({
               onPageChange?.(startPage)
             }}
           >
-            1
+            {startPage + 1}
           </Button>
         )}
 
@@ -169,13 +175,13 @@ function Pagination ({
             {...paginationButtonProps}
             onClick={() => {
               if (!isControlled) {
-                setCurrentPage(startPage + maxPages - 1)
+                setCurrentPage(lastPage)
               }
 
-              onPageChange?.(startPage + maxPages - 1)
+              onPageChange?.(lastPage)
             }}
           >
-            {maxPages}
+            {lastPage + 1}
           </Button>
         )}
       </span>
@@ -184,7 +190,7 @@ function Pagination ({
         'flex gap-2',
         alignment === 'vertical' && 'flex-col',
         showUtilityButtons === 'hover' && 'duration-200 opacity-25 group-hover:opacity-100',
-        showUtilityButtons === 'never' && 'hidden'
+        showUtilityButtons === false && 'hidden'
       )}>
         {nextButton && (
           <Button
