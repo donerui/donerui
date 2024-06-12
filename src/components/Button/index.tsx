@@ -22,7 +22,8 @@ function Button ({
         colorClassnames[color][variant],
         variantClassnames[variant],
         disabled === true && disabledClassnames,
-        className
+        typeof className === 'string' && className,
+        typeof className === 'function' && className({ shape, size, color, variant, iconButton, disabled, ...rest })
       )}
       disabled={disabled}
       {...rest}
