@@ -1,5 +1,6 @@
 import Button from './Button'
 import Icon from './Icon'
+import LicencePlate from './LicencePlate'
 import Modal from './Modal'
 import Pagination from './Pagination'
 import QRCode from './QRCode'
@@ -11,6 +12,7 @@ import Transition from './Transition'
 export * from './Button'
 export * from './Charts'
 export * from './Icon'
+export * from './LicencePlate'
 export * from './Modal'
 export * from './Pagination'
 export * from './QRCode'
@@ -24,6 +26,7 @@ export * from './Transition'
 export {
   Button,
   Icon,
+  LicencePlate,
   Modal,
   Pagination,
   QRCode,
