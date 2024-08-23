@@ -1,30 +1,9 @@
 import { twMerge } from 'tailwind-merge'
 import { inputLabelClassName } from '.'
+import { type SelectInputProps } from 'components/Input/types'
+import { forwardRef, type ReactNode, type Ref } from 'react'
 
-export const selectClassName = twMerge(
-  'mt-2 flex w-full !min-h-fit rounded !border-none shadow-sm ring-1 ring-inset ring-gray-300 overflow-hidden',
-  'placeholder:text-gray-400 focus-within:ring-2 focus-within:ring-inset focus-within:ring-primary-500 sm:text-sm sm:leading-6',
-  'disabled:bg-gray-100 disabled:text-gray-500 disabled:cursor-not-allowed',
-  'transition duration-150 ease-in-out'
-)
-
-export const selectErrorClassName = twMerge(
-  'ring-red-500 focus-within:ring-red-500',
-  'placeholder:text-red-300 text-red-900',
-  'focus-within:text-red-900 focus-within:ring-red-500'
-)
-
-export interface IOption {
-  label: string
-  value: string | number
-}
-
-interface ISelectProps extends Props {
-  label?: string
-  errorMessage?: string
-}
-
-function Select (props: ISelectProps, ref: React.Ref<any>): React.ReactNode {
+function Select<TOption> (props: SelectInputProps<TOption>, ref: Ref<any>): ReactNode {
   const { className, label, id, name, options, errorMessage, ...rest } = props
 
   return (
@@ -58,6 +37,6 @@ function Select (props: ISelectProps, ref: React.Ref<any>): React.ReactNode {
   )
 }
 
-const ForwardedSelect = React.forwardRef(Select)
+const ForwardedSelect = forwardRef(Select)
 
 export default ForwardedSelect
