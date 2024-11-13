@@ -1,10 +1,11 @@
 import { forwardRef, type ReactNode, type Ref, useState } from 'react'
 import { MdVisibility, MdVisibilityOff } from 'react-icons/md'
 import { twMerge } from 'tailwind-merge'
+import Button from '../../Button'
 import { inputClasses } from './constants'
 import { type TextInputProps } from './types'
 
-function TextInput (props: TextInputProps, ref: Ref<HTMLInputElement>): ReactNode {
+export default forwardRef(function TextInput (props: TextInputProps, ref: Ref<HTMLInputElement>): ReactNode {
   const { errorMessage, type, id, label, name, required, ...rest } = props
 
   const hasError = errorMessage != null
@@ -43,21 +44,18 @@ function TextInput (props: TextInputProps, ref: Ref<HTMLInputElement>): ReactNod
         />
 
         {isPassword && (
-          <button
-            type="button"
+          <Button
+            variant='ghost'
+            color={hasError ? 'danger' : 'light'}
             className={twMerge(inputClasses.passwordVisibilityButton.default, hasError && inputClasses.passwordVisibilityButton.error)}
             onClick={() => { setShowPassword(!showPassword) }}
           >
             {showPassword ? <MdVisibility className="size-4" /> : <MdVisibilityOff className="size-4" />}
-          </button>
+          </Button>
         )}
 
         {props.RightComponent}
       </div>
     </div>
   )
-}
-
-const ForwardedTextInput = forwardRef(TextInput)
-
-export default ForwardedTextInput
+})

@@ -7,15 +7,15 @@ export const inputClasses = {
   },
   container: {
     default: twMerge(
-      'w-full h-9 rounded-md border-0 shadow-sm ring-1 ring-gray-300',
-      'focus-within:ring-2 focus-within:ring-primary-600 sm:text-sm sm:leading-6',
+      'w-full h-8 rounded-md border-0 shadow-sm ring-1 ring-gray-300',
+      'focus-within:ring-2 focus-within:ring-primary-600 text-sm sm:text-xs sm:leading-6',
       'has-[input:disabled]:bg-gray-100 has-[input:disabled]:text-gray-500 has-[input:disabled]:cursor-not-allowed',
       'transition duration-150 ease-in-out',
       'flex items-center overflow-hidden'
     ),
     error: twMerge(
       'bg-red-50 ring-red-500 focus-within:ring-red-500',
-      'placeholder:text-red-300 text-red-800',
+      'placeholder:text-red-500 text-red-700',
       'focus-within:text-red-800 focus-within:ring-red-500',
       'has-[input:disabled]:bg-red-100 has-[input:disabled]:text-red-900'
     )
@@ -36,8 +36,8 @@ export const inputClasses = {
     )
   },
   passwordVisibilityButton: {
-    default: 'border-l h-full bg-gray-50 text-gray-400 px-2',
-    error: 'border-red-200 bg-red-100 text-red-400'
+    default: 'border-l rounded-l-none h-full px-2',
+    error: 'border-red-200'
   },
   errorText: {
     default: 'text-sm text-red-600'
