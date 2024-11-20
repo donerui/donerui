@@ -1,7 +1,7 @@
 export const shapeClassnames = {
   box: '',
   rounded: 'rounded-md',
-  circle: 'rounded-full'
+  circle: 'rounded-[100%]'
 }
 
 export const sizeClassnames = {
