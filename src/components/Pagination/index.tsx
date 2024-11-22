@@ -6,7 +6,7 @@ import {
 import { twMerge } from 'tailwind-merge'
 import Button, { type IButtonProps } from '../Button'
 import Icon from '../Icon'
-import { defaultPaginationButtonProps } from './constants'
+import { defaultPaginationActiveButtonProps, defaultPaginationButtonProps } from './constants'
 import { type IPaginationProps } from './types'
 
 function Pagination ({
@@ -14,14 +14,16 @@ function Pagination ({
   page,
   defaultPage = 0,
   onPageChange,
-  visibleAmount = 5,
+  visibleAmount = 2,
   previousButton = true,
   nextButton = true,
   jumpPreviousButton = true,
   jumpNextButton = true,
   startPage = 0,
   buttonProps,
-  alignment = 'horizontal'
+  activeButtonProps,
+  alignment = 'horizontal',
+  showUtilityButtons = 'hover'
 }: IPaginationProps): JSX.Element {
   const isControlled = page !== undefined
 
@@ -29,18 +31,29 @@ function Pagination ({
   const [visiblePages, setVisiblePages] = useState<number[]>([])
 
   const [paginationButtonProps, setPaginationButtonProps] = useState<IButtonProps>(defaultPaginationButtonProps)
+  const [paginationActiveButtonProps, setPaginationActiveButtonProps] = useState<IButtonProps>(defaultPaginationActiveButtonProps)
+
+  const firstVisible = visiblePages[0]
+  const lastVisible = visiblePages[visiblePages.length - 1]
+
+  const lastPage = startPage + maxPages - 1
 
   const isFirst = currentPage === startPage
-  const renderFirst = maxPages > 0 && currentPage - Math.floor(visibleAmount / 2) > startPage
-  const isLast = currentPage === startPage + maxPages - 1
-  const renderLast = maxPages > 1 && currentPage + Math.floor(visibleAmount / 2) < startPage + maxPages - 1
+  const isLast = currentPage === lastPage
 
-  const hasEllipsisPrevious = visiblePages[0] >= startPage + Math.floor(visibleAmount / 2)
-  const hasEllipsisNext = visiblePages[visiblePages.length - 1] <= startPage + maxPages - 1 - Math.floor(visibleAmount / 2)
+  const renderFirst = maxPages > 0 && firstVisible > startPage
+  const renderLast = maxPages > 1 && lastVisible < lastPage
+
+  const hasEllipsisPrevious = firstVisible > startPage + 1
+  const hasEllipsisNext = lastVisible < lastPage - 1
 
   useEffect(() => {
     setPaginationButtonProps({ ...defaultPaginationButtonProps, ...buttonProps })
   }, [buttonProps])
+
+  useEffect(() => {
+    setPaginationActiveButtonProps({ ...defaultPaginationActiveButtonProps, ...activeButtonProps })
+  }, [activeButtonProps])
 
   useEffect(() => {
     if (isControlled) {
@@ -51,17 +64,26 @@ function Pagination ({
   useEffect(() => {
     const newVisiblePages = []
 
-    const visibleStart = Math.max(startPage, currentPage - Math.floor(visibleAmount / 2))
-    for (let i = visibleStart; i < Math.min(maxPages, visibleStart + visibleAmount); i++) {
+    const visibleStart = Math.max(startPage, currentPage - visibleAmount)
+    for (let i = visibleStart; i <= Math.min(lastPage, currentPage + visibleAmount); i++) {
       newVisiblePages.push(i)
     }
 
     setVisiblePages(newVisiblePages)
-  }, [maxPages, currentPage])
+  }, [lastPage, visibleAmount, startPage, currentPage])
 
   return (
-    <span className={twMerge('flex justify-between', alignment === 'vertical' && 'flex-col h-full w-fit')}>
-      <span className={twMerge('flex gap-2', alignment === 'vertical' && 'flex-col')}>
+    <span className={twMerge(
+      'group flex justify-between',
+      alignment === 'vertical' && 'flex-col h-full w-fit',
+      showUtilityButtons === false && 'justify-center'
+    )}>
+      <span className={twMerge(
+        'flex gap-2',
+        alignment === 'vertical' && 'flex-col',
+        showUtilityButtons === 'hover' && 'duration-200 opacity-25 group-hover:opacity-100',
+        showUtilityButtons === false && 'hidden'
+      )}>
         {jumpPreviousButton && (
           <Button
             {...paginationButtonProps}
@@ -105,7 +127,10 @@ function Pagination ({
         )}
       </span>
 
-      <span className={twMerge('flex gap-2', alignment === 'vertical' && 'flex-col')}>
+      <span className={twMerge(
+        'flex gap-2',
+        alignment === 'vertical' && 'flex-col'
+      )}>
         {renderFirst && (
           <Button
             {...paginationButtonProps}
@@ -117,7 +142,7 @@ function Pagination ({
               onPageChange?.(startPage)
             }}
           >
-            1
+            {startPage + 1}
           </Button>
         )}
 
@@ -128,11 +153,7 @@ function Pagination ({
         {visiblePages.map((p) => (
           <Button
             key={p}
-            {...paginationButtonProps}
-            className={twMerge(
-              paginationButtonProps.className,
-              p === currentPage && ''
-            )}
+            {...(p === currentPage ? paginationActiveButtonProps : paginationButtonProps)}
             onClick={() => {
               if (!isControlled) {
                 setCurrentPage(p)
@@ -154,18 +175,23 @@ function Pagination ({
             {...paginationButtonProps}
             onClick={() => {
               if (!isControlled) {
-                setCurrentPage(startPage + maxPages - 1)
+                setCurrentPage(lastPage)
               }
 
-              onPageChange?.(startPage + maxPages - 1)
+              onPageChange?.(lastPage)
             }}
           >
-            {maxPages}
+            {lastPage + 1}
           </Button>
         )}
       </span>
 
-      <span className={twMerge('flex gap-2', alignment === 'vertical' && 'flex-col')}>
+      <span className={twMerge(
+        'flex gap-2',
+        alignment === 'vertical' && 'flex-col',
+        showUtilityButtons === 'hover' && 'duration-200 opacity-25 group-hover:opacity-100',
+        showUtilityButtons === false && 'hidden'
+      )}>
         {nextButton && (
           <Button
             {...paginationButtonProps}

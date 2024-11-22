@@ -12,5 +12,7 @@ export interface IPaginationProps {
   jumpNextButton?: boolean
   startPage?: number
   buttonProps?: IButtonProps
+  activeButtonProps?: IButtonProps
   alignment?: 'horizontal' | 'vertical'
+  showUtilityButtons?: boolean | 'hover'
 }

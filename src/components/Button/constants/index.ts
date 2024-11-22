@@ -1,7 +1,7 @@
 export const shapeClassnames = {
   box: '',
   rounded: 'rounded-md',
-  circle: 'rounded-full'
+  circle: 'rounded-[100%]'
 }
 
 export const sizeClassnames = {
@@ -52,12 +52,12 @@ export const colorClassnames = {
     ghost: 'text-blue-500 hover:enabled:bg-blue-100'
   },
   light: {
-    solid: 'bg-neutral-200 text-neutral-800 hover:enabled:bg-neutral-200',
-    outline: 'outline outline-1 outline-neutral-200 text-neutral-400 hover:enabled:bg-neutral-100 hover:enabled:text-neutral-800',
-    ghost: 'text-neutral-400 hover:enabled:bg-neutral-100 hover:enabled:text-neutral-800'
+    solid: 'bg-neutral-200 text-neutral-800 hover:enabled:bg-neutral-100',
+    outline: 'outline outline-1 outline-neutral-200 text-neutral-600 hover:enabled:bg-neutral-100 hover:enabled:text-neutral-800',
+    ghost: 'text-neutral-600 hover:enabled:bg-neutral-100 hover:enabled:text-neutral-900'
   },
   dark: {
-    solid: 'bg-neutral-900 text-white hover:enabled:bg-neutral-800',
+    solid: 'bg-neutral-900 text-white hover:enabled:bg-neutral-700',
     outline: 'outline outline-1 outline-neutral-900 text-neutral-900 hover:enabled:bg-neutral-200',
     ghost: 'text-neutral-900 hover:enabled:bg-neutral-200'
   }
