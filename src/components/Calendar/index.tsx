@@ -3,45 +3,32 @@ import { useEffect, useState, type ReactNode } from 'react'
 import { MdArrowBack, MdArrowForward } from 'react-icons/md'
 import { twMerge } from 'tailwind-merge'
 import Button from '../Button'
-
-interface DateRange {
-  start: string
-  end: string
-}
-
-type CalendarTypedProps = {
-  type: 'single'
-  value?: string
-  onChange?: (value: string) => void
-} | {
-  type: 'multiple'
-  value?: string[]
-  onChange?: (value: string[]) => void
-} | {
-  type: 'range'
-  value?: DateRange
-  onChange?: (value: DateRange) => void
-}
-
-export type CalendarProps = CalendarTypedProps & {
-  className?: string
-}
+import { type CalendarProps, type DateRange } from './types'
 
 export default function Calendar ({
   type,
   value,
   onChange,
-  className
+  className,
+  viewDate,
+  selectingRangeStart,
+  onRangeStartSelected,
+  focusedDate,
+  onFocusedDateChange,
+  showPreviosMonthButton = true,
+  showNextMonthButton = true,
+  onPreviosMonthButtonClick,
+  onNextMonthButtonClick
 }: CalendarProps): ReactNode {
   const [internalValue, setInternalValue] = useState<typeof value>(value)
-  const [shownDayjs, setShownDayjs] = useState<Dayjs>(dayjs())
+  const [viewDayjs, setViewDayjs] = useState<Dayjs>(dayjs(viewDate))
 
-  const [selectingRangeStart, setSelectingRangeStart] = useState<Dayjs>()
-  const [hoveringDate, setHoveringDate] = useState<Dayjs>()
+  const [internalSelectingRangeStart, setInternalSelectingRangeStart] = useState<Dayjs | undefined>(selectingRangeStart)
+  const [internalFocusedDate, setInternalFocusedDate] = useState<Dayjs>()
 
-  const daysInMonth = shownDayjs.daysInMonth()
-  const startDay = shownDayjs.date(1).day()
-  const endDay = shownDayjs.date(daysInMonth).day()
+  const daysInMonth = viewDayjs.daysInMonth()
+  const startDay = viewDayjs.date(1).day()
+  const endDay = viewDayjs.date(daysInMonth).day()
   const days = Array.from({ length: daysInMonth }, (_, i) => i + 1)
   const previousMonthDays = Array.from({ length: startDay === 0 ? 7 : startDay }, (_, i) => i + 1)
   const nextMonthDays = Array.from({ length: endDay === 6 ? 7 : 6 - endDay }, (_, i) => i + 1)
@@ -55,7 +42,7 @@ export default function Calendar ({
 
     switch (type) {
       case 'multiple':
-        return (internalValue as string[]).includes(date.format('YYYY-MM-DD'))
+        return (internalValue as string[]).some((d) => dayjs(d).isSame(date, 'day'))
       case 'range':
         return date.isAfter(dayjs((internalValue as DateRange).start).subtract(1, 'day'), 'day') && date.isBefore(dayjs((internalValue as DateRange).end).add(1, 'day'), 'day')
       default:
@@ -73,11 +60,11 @@ export default function Calendar ({
 
   function isInRange (date: Dayjs): boolean {
     if (internalValue === undefined) return false
-    if (selectingRangeStart === undefined) return false
-    if (hoveringDate === undefined) return false
+    if (internalSelectingRangeStart === undefined) return false
+    if (internalFocusedDate === undefined) return false
 
-    return (date.isAfter(selectingRangeStart.subtract(1, 'day'), 'day') && date.isBefore(hoveringDate.add(1, 'day'), 'day')) ||
-      (date.isAfter(hoveringDate.subtract(1, 'day'), 'day') && date.isBefore(selectingRangeStart.add(1, 'day'), 'day'))
+    return (date.isAfter(internalSelectingRangeStart.subtract(1, 'day'), 'day') && date.isBefore(internalFocusedDate.add(1, 'day'), 'day')) ||
+      (date.isAfter(internalFocusedDate.subtract(1, 'day'), 'day') && date.isBefore(internalSelectingRangeStart.add(1, 'day'), 'day'))
   }
 
   function isPreviousInRange (date: Dayjs): boolean {
@@ -107,45 +94,76 @@ export default function Calendar ({
     return ''
   }
 
+  function handleChangeSingle (value: string | undefined): void {
+    if (type === 'single') {
+      setInternalValue(value)
+      onChange?.(value)
+    }
+  }
+
+  function handleChangeMultiple (value: string[] | undefined): void {
+    if (type === 'multiple') {
+      setInternalValue(value)
+      onChange?.(value)
+    }
+  }
+
+  function handleChangeRange (value: DateRange | undefined): void {
+    if (type === 'range') {
+      setInternalValue(value)
+      onChange?.(value)
+    }
+  }
+
   function handleClick (date: Dayjs): void {
-    const dateStr = date.format('YYYY-MM-DD')
+    const dateStr = date.format()
     const internalValueArr = internalValue as string[]
     switch (type) {
       case 'multiple':
         if (internalValueArr === undefined) {
-          setInternalValue([dateStr])
+          handleChangeMultiple([dateStr])
           return
         }
 
         if (internalValueArr.includes(dateStr)) {
-          setInternalValue(internalValueArr.filter(d => d !== dateStr))
+          handleChangeMultiple(internalValueArr.filter(d => d !== dateStr))
         } else {
-          setInternalValue([...internalValueArr, dateStr])
+          handleChangeMultiple([...internalValueArr, dateStr])
         }
         break
       case 'range':
-        if (selectingRangeStart === undefined) {
-          setSelectingRangeStart(date)
-          setInternalValue({ start: dateStr, end: dateStr })
+        if (internalSelectingRangeStart === undefined) {
+          onRangeStartSelected?.(date)
+          if (selectingRangeStart == null) {
+            setInternalSelectingRangeStart(date)
+          }
+
+          handleChangeRange({ start: dateStr, end: dateStr })
           return
         }
 
-        if (selectingRangeStart.isSame(date, 'day')) {
-          setInternalValue(undefined)
-          setSelectingRangeStart(undefined)
+        if (internalSelectingRangeStart.isSame(date, 'day')) {
+          handleChangeRange(undefined)
+          onRangeStartSelected?.(undefined)
+          if (selectingRangeStart == null) {
+            setInternalSelectingRangeStart(undefined)
+          }
           return
         }
 
-        if (date.isBefore(selectingRangeStart, 'day')) {
-          setInternalValue({ start: date.format('YYYY-MM-DD'), end: selectingRangeStart.format('YYYY-MM-DD') })
+        if (date.isBefore(internalSelectingRangeStart, 'day')) {
+          handleChangeRange({ start: dateStr, end: internalSelectingRangeStart.format() })
         } else {
-          setInternalValue({ start: selectingRangeStart.format('YYYY-MM-DD'), end: date.format('YYYY-MM-DD') })
+          handleChangeRange({ start: internalSelectingRangeStart.format(), end: dateStr })
         }
 
-        setSelectingRangeStart(undefined)
+        onRangeStartSelected?.(undefined)
+        if (selectingRangeStart == null) {
+          setInternalSelectingRangeStart(undefined)
+        }
         break
       default:
-        setInternalValue(date.format('YYYY-MM-DD'))
+        handleChangeSingle(dateStr)
         break
     }
   }
@@ -209,28 +227,54 @@ export default function Calendar ({
     }
   }, [value, type])
 
+  useEffect(() => {
+    setViewDayjs(dayjs(viewDate))
+  }, [viewDate])
+
+  useEffect(() => {
+    setInternalSelectingRangeStart(selectingRangeStart)
+  }, [selectingRangeStart])
+
+  useEffect(() => {
+    setInternalFocusedDate(focusedDate)
+  }, [focusedDate])
+
   return (
     <div className={twMerge(
-      'p-4 bg-white rounded-xl shadow-md border',
+      'h-96 p-4 bg-white rounded-xl border',
       className
     )}>
-      <div className='flex items-center justify-between mb-4'>
+      <div className='flex items-center h-10 mb-4'>
         <Button
           variant='ghost'
           shape='circle'
           size='xl'
           iconButton
-          onClick={() => { setShownDayjs(shownDayjs.subtract(1, 'month')) }}
+          className={twMerge(!showPreviosMonthButton && 'opacity-0 pointer-events-none')}
+          onClick={() => {
+            if (viewDate != null) {
+              onPreviosMonthButtonClick?.()
+              return
+            }
+            setViewDayjs(viewDayjs.subtract(1, 'month'))
+          }}
         >
           <MdArrowBack />
         </Button>
-        <span className='text-lg font-semibold'>{shownDayjs.format('MMMM YYYY')}</span>
+        <span className='flex-1 text-center text-lg font-semibold'>{viewDayjs.format('MMMM YYYY')}</span>
         <Button
           variant='ghost'
           shape='circle'
           size='xl'
           iconButton
-          onClick={() => { setShownDayjs(shownDayjs.add(1, 'month')) }}
+          className={twMerge(!showNextMonthButton && 'opacity-0 pointer-events-none')}
+          onClick={() => {
+            if (viewDate != null) {
+              onNextMonthButtonClick?.()
+              return
+            }
+            setViewDayjs(viewDayjs.add(1, 'month'))
+          }}
         >
           <MdArrowForward />
         </Button>
@@ -243,7 +287,7 @@ export default function Calendar ({
 
         {previousMonthDays.map(day => (
           <Button
-            key={shownDayjs.subtract(1, 'month').date(day).format('YYYY-MM-DD')}
+            key={viewDayjs.subtract(1, 'month').date(day).format()}
             variant='ghost'
             shape='circle'
             color='dark'
@@ -256,16 +300,26 @@ export default function Calendar ({
         ))}
 
         {days.map(day => {
-          const thisDay = shownDayjs.date(day)
+          const thisDay = viewDayjs.date(day)
           return (
             <Button
-              key={thisDay.format('YYYY-MM-DD')}
+              key={thisDay.format()}
               variant={isSelected(thisDay) ? 'solid' : 'ghost'}
               shape='circle'
               color='dark'
               iconButton
-              onMouseEnter={() => { setHoveringDate(thisDay) }}
-              onMouseLeave={() => { setHoveringDate(undefined) }}
+              onMouseEnter={() => {
+                if (internalSelectingRangeStart != null) {
+                  setInternalFocusedDate(thisDay)
+                }
+                onFocusedDateChange?.(thisDay)
+              }}
+              onMouseLeave={() => {
+                if (internalSelectingRangeStart != null) {
+                  setInternalFocusedDate(undefined)
+                }
+                onFocusedDateChange?.(undefined)
+              }}
               className={twMerge(
                 'size-10',
                 isToday(thisDay) && !isSelected(thisDay) && !isInRange(thisDay) && 'border',
@@ -281,7 +335,7 @@ export default function Calendar ({
 
         {nextMonthDays.map(day => (
           <Button
-            key={shownDayjs.add(1, 'month').date(day).format('YYYY-MM-DD')}
+            key={viewDayjs.add(1, 'month').date(day).format()}
             variant='ghost'
             shape='circle'
             color='dark'

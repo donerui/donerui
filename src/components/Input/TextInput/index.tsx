@@ -27,11 +27,7 @@ export default forwardRef(function TextInput (props: TextInputProps, ref: Ref<HT
         </label>
       )}
 
-      {hasError && (
-        <p className={inputClasses.errorText.default}>{errorMessage}</p>
-      )}
-
-      <div className={twMerge(inputClasses.container.default, hasError && inputClasses.container.error)}>
+      <div className={twMerge(inputClasses.container.default, inputClasses.container.focusWithin, hasError && inputClasses.container.error, hasError && inputClasses.container.errorFocusWithin)}>
         {props.LeftComponent}
 
         <input
@@ -56,6 +52,10 @@ export default forwardRef(function TextInput (props: TextInputProps, ref: Ref<HT
 
         {props.RightComponent}
       </div>
+
+      {hasError && (
+        <p className={inputClasses.errorText.default}>{errorMessage}</p>
+      )}
     </div>
   )
 })

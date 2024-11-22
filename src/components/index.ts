@@ -1,5 +1,6 @@
 import Button from './Button'
 import Calendar from './Calendar'
+import DatePicker from './DatePicker'
 import Icon from './Icon'
 import LicencePlate from './LicencePlate'
 import Modal from './Modal'
@@ -28,6 +29,7 @@ export * from './Transition'
 export {
   Button,
   Calendar,
+  DatePicker,
   Icon,
   LicencePlate,
   Modal,

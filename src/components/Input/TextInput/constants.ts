@@ -7,17 +7,26 @@ export const inputClasses = {
   },
   container: {
     default: twMerge(
-      'w-full h-8 rounded-md border-0 shadow-sm ring-1 ring-gray-300',
-      'focus-within:ring-2 focus-within:ring-primary-600 text-sm sm:text-xs sm:leading-6',
+      'w-full h-8 rounded-md border-0 shadow-sm ring-1 ring-gray-300 text-sm sm:text-xs sm:leading-6',
       'has-[input:disabled]:bg-gray-100 has-[input:disabled]:text-gray-500 has-[input:disabled]:cursor-not-allowed',
       'transition duration-150 ease-in-out',
       'flex items-center overflow-hidden'
     ),
+    focusControlled: twMerge(
+      'ring-2 ring-primary-600'
+    ),
+    focusWithin: twMerge(
+      'focus-within:ring-2 focus-within:ring-primary-600'
+    ),
     error: twMerge(
-      'bg-red-50 ring-red-500 focus-within:ring-red-500',
-      'placeholder:text-red-500 text-red-700',
-      'focus-within:text-red-800 focus-within:ring-red-500',
+      'bg-red-50 ring-red-500 placeholder:text-red-500 text-red-700',
       'has-[input:disabled]:bg-red-100 has-[input:disabled]:text-red-900'
+    ),
+    errorFocusControlled: twMerge(
+      'ring-red-500 text-red-800'
+    ),
+    errorFocusWithin: twMerge(
+      'focus-within:ring-red-500 focus-within:text-red-800'
     )
   },
   label: {
