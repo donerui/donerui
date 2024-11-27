@@ -22,19 +22,22 @@ export default function Calendar ({
   onNextMonthButtonClick
 }: CalendarProps): ReactNode {
   const [internalValue, setInternalValue] = useState<typeof value>(value)
-  const [viewDayjs, setViewDayjs] = useState<Dayjs>(dayjs(viewDate))
+  const [viewDayjs, setViewDayjs] = useState<Dayjs>(dayjs(viewDate).date(1))
 
   const [internalSelectingRangeStart, setInternalSelectingRangeStart] = useState<Dayjs | undefined>(selectingRangeStart)
   const [internalFocusedDate, setInternalFocusedDate] = useState<Dayjs>()
 
-  const daysInMonth = viewDayjs.daysInMonth()
-  const startDay = viewDayjs.date(1).day()
-  const endDay = viewDayjs.date(daysInMonth).day()
-  const days = Array.from({ length: daysInMonth }, (_, i) => i + 1)
-  const previousMonthDays = Array.from({ length: startDay === 0 ? 7 : startDay }, (_, i) => i + 1)
-  const nextMonthDays = Array.from({ length: endDay === 6 ? 7 : 6 - endDay }, (_, i) => i + 1)
+  const startOfWeekLocale = dayjs().startOf('week').day()
+  const localizedDayNames = dayjs.weekdaysShort(true)
 
-  const localizedDayNames = dayjs.weekdaysShort()
+  const daysInMonth = viewDayjs.daysInMonth()
+  const startDay = (viewDayjs.date(1).day() - startOfWeekLocale + 7) % 7
+  const endDay = viewDayjs.date(daysInMonth).day() - startOfWeekLocale
+  const days = Array.from({ length: daysInMonth }, (_, i) => i + 1)
+  const previousDaySelector = Array.from({ length: startDay === 0 ? 7 : startDay }, (_, i) => i + 1)
+  const previousMonthDays = previousDaySelector.map((_, i) => viewDayjs.subtract(previousDaySelector.length - i, 'day'))
+  const nextDaysSelector = Array.from({ length: endDay === 6 ? 7 : 6 - endDay }, (_, i) => i + 1)
+  const nextMonthDays = nextDaysSelector.map((_, i) => viewDayjs.date(daysInMonth + i + 1))
 
   function isToday (date: Dayjs): boolean {
     return date.isSame(dayjs(), 'day')
@@ -231,7 +234,7 @@ export default function Calendar ({
   }, [value, type])
 
   useEffect(() => {
-    setViewDayjs(dayjs(viewDate))
+    setViewDayjs(dayjs(viewDate).date(1))
   }, [viewDate])
 
   useEffect(() => {
@@ -290,7 +293,7 @@ export default function Calendar ({
 
         {previousMonthDays.map(day => (
           <Button
-            key={viewDayjs.subtract(1, 'month').date(day).format()}
+            key={day.format()}
             variant='ghost'
             shape='circle'
             color='dark'
@@ -298,7 +301,7 @@ export default function Calendar ({
             disabled
             className='size-10 opacity-50 pointer-events-none'
           >
-            {day}
+            {day.date()}
           </Button>
         ))}
 
@@ -339,7 +342,7 @@ export default function Calendar ({
 
         {nextMonthDays.map(day => (
           <Button
-            key={viewDayjs.add(1, 'month').date(day).format()}
+            key={day.format()}
             variant='ghost'
             shape='circle'
             color='dark'
@@ -347,7 +350,7 @@ export default function Calendar ({
             disabled
             className='size-10 opacity-50 pointer-events-none'
           >
-            {day}
+            {day.date()}
           </Button>
         ))}
       </div>
