@@ -48,7 +48,8 @@ export default function Calendar ({
 
     switch (type) {
       case 'multiple':
-        return (internalValue as string[]).some((d) => dayjs(d).isSame(date, 'day'))
+        if (!Array.isArray(internalValue)) return false
+        return internalValue.some((d) => dayjs(d).isSame(date, 'day'))
       case 'range':
         return date.isAfter(dayjs((internalValue as DateRange).start).subtract(1, 'day'), 'day') && date.isBefore(dayjs((internalValue as DateRange).end).add(1, 'day'), 'day')
       default:
