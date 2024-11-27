@@ -24,6 +24,7 @@ export type CalendarTypedProps = ({ type: 'single' } & CalendarSingleValueProps)
 
 export type CalendarProps = CalendarTypedProps & {
   className?: string
+  readonly?: boolean
   viewDate?: string
   showPreviosMonthButton?: boolean
   showNextMonthButton?: boolean

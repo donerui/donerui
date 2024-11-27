@@ -10,6 +10,7 @@ export default function Calendar ({
   value,
   onChange,
   className,
+  readonly,
   viewDate,
   selectingRangeStart,
   onRangeStartSelected,
@@ -32,6 +33,8 @@ export default function Calendar ({
   const days = Array.from({ length: daysInMonth }, (_, i) => i + 1)
   const previousMonthDays = Array.from({ length: startDay === 0 ? 7 : startDay }, (_, i) => i + 1)
   const nextMonthDays = Array.from({ length: endDay === 6 ? 7 : 6 - endDay }, (_, i) => i + 1)
+
+  const localizedDayNames = dayjs.weekdaysShort()
 
   function isToday (date: Dayjs): boolean {
     return date.isSame(dayjs(), 'day')
@@ -241,7 +244,7 @@ export default function Calendar ({
 
   return (
     <div className={twMerge(
-      'h-96 p-4 bg-white rounded-xl border',
+      'p-4 bg-white rounded-xl border',
       className
     )}>
       <div className='flex items-center h-10 mb-4'>
@@ -250,7 +253,7 @@ export default function Calendar ({
           shape='circle'
           size='xl'
           iconButton
-          className={twMerge(!showPreviosMonthButton && 'opacity-0 pointer-events-none')}
+          className={twMerge((!showPreviosMonthButton || readonly === true) && 'opacity-0 pointer-events-none')}
           onClick={() => {
             if (viewDate != null) {
               onPreviosMonthButtonClick?.()
@@ -267,7 +270,7 @@ export default function Calendar ({
           shape='circle'
           size='xl'
           iconButton
-          className={twMerge(!showNextMonthButton && 'opacity-0 pointer-events-none')}
+          className={twMerge((!showNextMonthButton || readonly === true) && 'opacity-0 pointer-events-none')}
           onClick={() => {
             if (viewDate != null) {
               onNextMonthButtonClick?.()
@@ -281,7 +284,7 @@ export default function Calendar ({
       </div>
 
       <div className='grid grid-cols-7 gap-y-1 text-center text-sm text-gray-600'>
-        {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
+        {localizedDayNames.map(day => (
           <div key={day} className='font-medium'>{day}</div>
         ))}
 
@@ -293,7 +296,7 @@ export default function Calendar ({
             color='dark'
             iconButton
             disabled
-            className='size-10 opacity-50'
+            className='size-10 opacity-50 pointer-events-none'
           >
             {day}
           </Button>
@@ -324,7 +327,8 @@ export default function Calendar ({
                 'size-10',
                 isToday(thisDay) && !isSelected(thisDay) && !isInRange(thisDay) && 'border',
                 getInRangeClasses(thisDay),
-                getSelectedClasses(thisDay)
+                getSelectedClasses(thisDay),
+                readonly === true && 'pointer-events-none'
               )}
               onClick={() => { handleClick(thisDay) }}
             >
@@ -341,7 +345,7 @@ export default function Calendar ({
             color='dark'
             iconButton
             disabled
-            className='size-10'
+            className='size-10 opacity-50 pointer-events-none'
           >
             {day}
           </Button>
