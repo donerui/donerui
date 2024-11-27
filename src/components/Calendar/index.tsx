@@ -295,12 +295,17 @@ export default function Calendar ({
         {previousMonthDays.map(day => (
           <Button
             key={day.format()}
-            variant='ghost'
+            variant={isSelected(day) ? 'solid' : 'ghost'}
             shape='circle'
             color='dark'
             iconButton
             disabled
-            className='size-10 opacity-50 pointer-events-none'
+            className={twMerge(
+              'size-10 !opacity-25 pointer-events-none',
+              isToday(day) && !isSelected(day) && !isInRange(day) && 'border',
+              getInRangeClasses(day),
+              getSelectedClasses(day)
+            )}
           >
             {day.date()}
           </Button>
@@ -344,12 +349,17 @@ export default function Calendar ({
         {nextMonthDays.map(day => (
           <Button
             key={day.format()}
-            variant='ghost'
+            variant={isSelected(day) ? 'solid' : 'ghost'}
             shape='circle'
             color='dark'
             iconButton
             disabled
-            className='size-10 opacity-50 pointer-events-none'
+            className={twMerge(
+              'size-10 !opacity-25 pointer-events-none',
+              isToday(day) && !isSelected(day) && !isInRange(day) && 'border',
+              getInRangeClasses(day),
+              getSelectedClasses(day)
+            )}
           >
             {day.date()}
           </Button>
