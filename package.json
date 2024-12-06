@@ -1,6 +1,6 @@
 {
   "name": "@donerui/core",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "A modern UI library for React, styled with Tailwind CSS.",
   "main": "dist/index.js",
   "type": "module",
@@ -9,6 +9,7 @@
   ],
   "scripts": {
     "build": "tsc",
+    "watch": "tsc -w",
     "pack": "npm run build && npm pack",
     "lint": "eslint . --ext .ts,.tsx"
   },
@@ -29,12 +30,14 @@
   "peerDependencies": {
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
-    "tailwindcss": "^3.0.0"
+    "tailwindcss": "^3.4.0"
   },
   "dependencies": {
-    "@headlessui/react": "^1.7.17",
+    "@headlessui/react": "^2.2.0",
     "animate.css": "^4.1.1",
+    "country-flag-icons": "^1.5.12",
     "d3": "^7.8.5",
+    "dayjs": "^1.11.13",
     "lodash": "^4.17.21",
     "magic.css": "^1.4.8",
     "qrcode": "^1.5.3",
