@@ -4,6 +4,7 @@ export interface CreditCardProps {
   className?: string
   cardNumber?: string
   cardHolder?: string
+  cardHolderMaxLength?: number
   expiryMonth?: string
   expiryYear?: string
   cvv?: string

@@ -16,6 +16,7 @@ export default function CreditCard ({
   className,
   cardNumber = '0123 4567 8910 1112',
   cardHolder = 'John Doe',
+  cardHolderMaxLength = 20,
   expiryMonth = '01',
   expiryYear = '23',
   cvv = '123',
@@ -29,6 +30,14 @@ export default function CreditCard ({
 
   const nonSpaceCardNumber = cardNumber.replace(/\s/g, '').slice(0, 16)
   const spacedCardNumber = nonSpaceCardNumber.replace(/(.{4})/g, '$1 ')
+
+  const nonSpaceExpiryMonth = expiryMonth.replace(/\s/g, '').slice(0, 2).padStart(2, '0')
+  const validatedExpiryMonth = Math.min(Math.max(parseInt(nonSpaceExpiryMonth), 1), 12)
+
+  const nonSpaceExpiryYear = expiryYear.replace(/\s/g, '').slice(0, 2)
+  const nonSpaceCvv = cvv.replace(/\s/g, '').slice(0, 3)
+
+  const cardHolderClamped = cardHolder.slice(0, cardHolderMaxLength)
 
   const isVisa = spacedCardNumber?.startsWith('4')
   const isMastercard = spacedCardNumber?.startsWith('5')
@@ -83,11 +92,11 @@ export default function CreditCard ({
             <p>THRU</p>
           </div>
           <MdArrowRight className={twMerge('size-5 duration-200', activePreset.validThruArrowClassName)} />
-          <div className={twMerge('duration-200', activePreset.expiryClassName)}>{expiryMonth}/{expiryYear}</div>
+          <div className={twMerge('duration-200', activePreset.expiryClassName)}>{validatedExpiryMonth}/{nonSpaceExpiryYear}</div>
         </div>
 
         <div className="absolute bottom-4 left-6 right-6 h-8 flex justify-between items-center">
-          <span className={twMerge('duration-200', activePreset.cardHolderClassName)}>{cardHolder}</span>
+          <span className={twMerge('duration-200', activePreset.cardHolderClassName)}>{cardHolderClamped}</span>
 
           {isVisa && (
             <VisaLogo
@@ -116,7 +125,7 @@ export default function CreditCard ({
         <div className={twMerge('mt-6 h-8', activePreset.stripeClassName)} />
         <div className={twMerge('relative mt-6 h-8 ml-8 w-4/6', activePreset.cvvStripeClassName)} >
           <span className={twMerge('absolute top-0 bottom-0 right-2', activePreset.cvvClassName)}>
-            {cvv}
+            {nonSpaceCvv}
           </span>
         </div>
       </div>
