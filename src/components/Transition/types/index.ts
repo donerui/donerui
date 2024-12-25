@@ -2,9 +2,9 @@ import { type AnimatecssAnimation } from './animatecss'
 import { type MagiccssAnimation } from './magiccss'
 
 export interface ITransitionOptions {
-  children: React.ReactNode
+  children?: React.ReactNode
   className?: string
-  show: boolean
+  show?: boolean
   appear?: boolean
   beforeEnter?: () => void
   afterEnter?: () => void

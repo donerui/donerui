@@ -10,7 +10,7 @@ export interface ISwitchProps {
   checked?: boolean
   defaultChecked?: boolean
   disabled?: boolean
-  renderLabel?: (state: boolean | undefined) => React.ReactNode
+  label?: string | ((state: boolean | undefined) => React.ReactNode)
   labelClassName?: string
   labelPosition?: 'left' | 'right'
   onChange?: (checked: boolean, event: React.ChangeEvent<HTMLInputElement>) => void

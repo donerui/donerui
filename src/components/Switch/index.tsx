@@ -8,7 +8,7 @@ function Switch ({
   checked,
   defaultChecked,
   disabled,
-  renderLabel = () => '',
+  label,
   labelClassName,
   labelPosition = 'right',
   onChange
@@ -16,11 +16,17 @@ function Switch ({
   const controlled = checked !== undefined
   const [isChecked, setIsChecked] = useState<boolean | undefined>(controlled ? checked : defaultChecked)
 
-  const [label, setLabel] = useState(renderLabel(isChecked))
+  const [labelContent, setLabelContent] = useState<React.ReactNode>(
+    typeof label === 'function' ? label(isChecked) : label
+  )
 
   useEffect(() => {
-    setLabel(renderLabel(isChecked))
-  }, [isChecked, renderLabel])
+    if (typeof label === 'function') {
+      setLabelContent(label(isChecked))
+    } else {
+      setLabelContent(label)
+    }
+  }, [isChecked, label])
 
   useEffect(() => {
     if (controlled) {
@@ -35,14 +41,14 @@ function Switch ({
         className
       )}
     >
-      {label !== undefined && labelPosition === 'left' && (
+      {labelContent !== undefined && labelPosition === 'left' && (
         <div
           className={twMerge(
             'text-gray-700 font-medium',
             labelClassName
           )}
         >
-          {label}
+          {labelContent}
         </div>
       )}
 
@@ -68,7 +74,7 @@ function Switch ({
         />
 
         <div className={twMerge(
-          'w-14 h-8 flex items-center rounded-full duration-300 p-1',
+          'w-10 h-6 flex items-center rounded-full duration-300 p-1',
           switchClassName?.any,
           isChecked === undefined && 'bg-gray-300 hover:bg-gray-400',
           isChecked === false && 'bg-gray-400 hover:bg-gray-500',
@@ -94,14 +100,14 @@ function Switch ({
         </div>
       </label>
 
-      {label !== undefined && labelPosition === 'right' && (
+      {labelContent !== undefined && labelPosition === 'right' && (
         <div
           className={twMerge(
             'text-gray-700 font-medium',
             labelClassName
           )}
         >
-          {label}
+          {labelContent}
         </div>
       )}
     </div>
