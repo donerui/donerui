@@ -1,5 +1,6 @@
 import Button from './Button'
 import Calendar from './Calendar'
+import CreditCard from './CreditCard'
 import DatePicker from './DatePicker'
 import Icon from './Icon'
 import LicencePlate from './LicencePlate'
@@ -13,6 +14,7 @@ import Transition from './Transition'
 
 export * from './Button'
 export * from './Charts'
+export * from './CreditCard'
 export * from './Icon'
 export * from './Input'
 export * from './LicencePlate'
@@ -29,6 +31,7 @@ export * from './Transition'
 export {
   Button,
   Calendar,
+  CreditCard,
   DatePicker,
   Icon,
   LicencePlate,
