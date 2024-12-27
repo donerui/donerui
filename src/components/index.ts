@@ -1,5 +1,6 @@
 import Button from './Button'
 import Calendar from './Calendar'
+import Chip from './Chip'
 import CreditCard from './CreditCard'
 import DatePicker from './DatePicker'
 import Icon from './Icon'
@@ -14,6 +15,7 @@ import Transition from './Transition'
 
 export * from './Button'
 export * from './Charts'
+export * from './Chip'
 export * from './CreditCard'
 export * from './Dialog'
 export * from './Icon'
@@ -31,8 +33,7 @@ export * from './Transition'
 
 export {
   Button,
-  Calendar,
-  CreditCard,
+  Calendar, Chip, CreditCard,
   DatePicker,
   Icon,
   LicencePlate,

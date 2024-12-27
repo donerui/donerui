@@ -17,10 +17,12 @@ function Icon ({
         </span>
       )}
       {IconElement !== undefined && (
-        <IconElement className={twMerge(
-          'w-5 h-5',
-          className
-        )} />
+        <IconElement
+          className={twMerge(
+            'size-5',
+            className
+          )}
+        />
       )}
       {icon !== undefined && typeof icon === 'object' && (
         icon
