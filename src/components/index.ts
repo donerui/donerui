@@ -8,6 +8,7 @@ import Icon from './Icon'
 import LicencePlate from './LicencePlate'
 import Modal from './Modal'
 import Pagination from './Pagination'
+import ProgressBar from './ProgressBar'
 import QRCode from './QRCode'
 import Rating from './Rating'
 import Switch from './Switch'
@@ -25,6 +26,7 @@ export * from './Input'
 export * from './LicencePlate'
 export * from './Modal'
 export * from './Pagination'
+export * from './ProgressBar'
 export * from './QRCode'
 export * from './Rating'
 export * from './Svg'
@@ -39,8 +41,7 @@ export {
   Icon,
   LicencePlate,
   Modal,
-  Pagination,
-  QRCode,
+  Pagination, ProgressBar, QRCode,
   Rating,
   Switch,
   Tooltip,
