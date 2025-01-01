@@ -1,5 +1,5 @@
 import dayjs from 'dayjs'
-import { type CalendarTypedProps } from '../Calendar/types'
+import { type CalendarTypedProps } from '../../Calendar/types'
 
 export interface QuickSelectOption {
   label: string

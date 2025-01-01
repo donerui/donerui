@@ -3,11 +3,12 @@ import dayjs, { type Dayjs } from 'dayjs'
 import { Fragment, useEffect, useState, type ReactNode } from 'react'
 import { MdOutlineCalendarMonth } from 'react-icons/md'
 import { twMerge } from 'tailwind-merge'
-import Button from '../Button'
-import Calendar from '../Calendar'
-import { type CalendarTypedProps } from '../Calendar/types'
-import { inputClasses } from '../Input/TextInput/constants'
-import Transition from '../Transition'
+import Button from '../../Button'
+import Calendar from '../../Calendar'
+import { type CalendarTypedProps } from '../../Calendar/types'
+import Icon from '../../Icon'
+import Transition from '../../Transition'
+import { inputClasses } from '../TextInput/constants'
 import { quickSelectOptions } from './quickSelect'
 
 export type DatePickerProps = CalendarTypedProps & {
@@ -95,7 +96,7 @@ export default function DatePicker (props: DatePickerProps): ReactNode {
               <div className={twMerge(inputClasses.container.default, open && inputClasses.container.focusControlled, hasError && inputClasses.container.error, open && hasError && inputClasses.container.errorFocusControlled)}>
                 {props.LeftComponent}
 
-                <MdOutlineCalendarMonth className="size-4 ml-3 mr-2" />
+                <Icon icon={MdOutlineCalendarMonth} className="size-5 ml-3 mr-2" />
                 <input
                   className={twMerge(inputClasses.input.default, hasError && inputClasses.input.error, 'cursor-pointer')}
                   id={id ?? name}

@@ -3,7 +3,6 @@ import ButtonGroup from './ButtonGroup'
 import Calendar from './Calendar'
 import Chip from './Chip'
 import CreditCard from './CreditCard'
-import DatePicker from './DatePicker'
 import Icon from './Icon'
 import LicencePlate from './LicencePlate'
 import Modal from './Modal'
@@ -37,7 +36,6 @@ export * from './Transition'
 
 export {
   Button, ButtonGroup, Calendar, Chip, CreditCard,
-  DatePicker,
   Icon,
   LicencePlate,
   Modal,
