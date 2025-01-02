@@ -6,12 +6,13 @@ import { inputClasses } from './constants'
 import { type TextInputProps } from './types'
 
 export default forwardRef(function TextInput (props: TextInputProps, ref: Ref<HTMLInputElement>): ReactNode {
-  const { errorMessage, type, id, label, name, required, ...rest } = props
+  const { errorMessage, type, id, label, name, required, containerClassName, focused, ...rest } = props
 
   const hasError = errorMessage != null
   const hasLabel = label != null && label !== ''
   const isRequired = required === true
   const isPassword = type === 'password'
+  const isFocused = focused === true
 
   const [showPassword, setShowPassword] = useState(false)
 
@@ -27,7 +28,7 @@ export default forwardRef(function TextInput (props: TextInputProps, ref: Ref<HT
         </label>
       )}
 
-      <div className={twMerge(inputClasses.container.default, inputClasses.container.focusWithin, hasError && inputClasses.container.error, hasError && inputClasses.container.errorFocusWithin)}>
+      <div className={twMerge(inputClasses.container.default, inputClasses.container.focusWithin, isFocused && inputClasses.container.focusControlled, hasError && inputClasses.container.error, hasError && inputClasses.container.errorFocusWithin, isFocused && hasError && inputClasses.container.errorFocusControlled)}>
         {props.LeftComponent}
 
         <input

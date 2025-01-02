@@ -2,13 +2,12 @@ import { Popover, PopoverButton, PopoverPanel } from '@headlessui/react'
 import dayjs, { type Dayjs } from 'dayjs'
 import { Fragment, useEffect, useState, type ReactNode } from 'react'
 import { MdOutlineCalendarMonth } from 'react-icons/md'
-import { twMerge } from 'tailwind-merge'
+import { TextInput } from '../..'
 import Button from '../../Button'
 import Calendar from '../../Calendar'
 import { type CalendarTypedProps } from '../../Calendar/types'
 import Icon from '../../Icon'
 import Transition from '../../Transition'
-import { inputClasses } from '../TextInput/constants'
 import { quickSelectOptions } from './quickSelect'
 
 export type DatePickerProps = CalendarTypedProps & {
@@ -27,9 +26,6 @@ export default function DatePicker (props: DatePickerProps): ReactNode {
   const { type, value, onChange } = rest
 
   const isControlled = value !== undefined
-
-  const hasError = errorMessage != null
-  const hasLabel = label != null && label !== ''
   const isRequired = required === true
 
   const [internalValue, setInternalValue] = useState<typeof value>(value)
@@ -82,38 +78,20 @@ export default function DatePicker (props: DatePickerProps): ReactNode {
       {({ open }) => (
         <>
           <PopoverButton className='focus-visible:outline-none text-left'>
-            <div className={twMerge(inputClasses.wrapper.default, hasError && inputClasses.wrapper.error)}>
-              {hasLabel && (
-                <label
-                  className={twMerge(inputClasses.label.default, hasError && inputClasses.label.error)}
-                  htmlFor={id ?? name}
-                >
-                  {label}
-                  {isRequired && <span className="text-primary-500">*</span>}
-                </label>
-              )}
-
-              <div className={twMerge(inputClasses.container.default, open && inputClasses.container.focusControlled, hasError && inputClasses.container.error, open && hasError && inputClasses.container.errorFocusControlled)}>
-                {props.LeftComponent}
-
-                <Icon icon={MdOutlineCalendarMonth} className="size-5 ml-3 mr-2" />
-                <input
-                  className={twMerge(inputClasses.input.default, hasError && inputClasses.input.error, 'cursor-pointer')}
-                  id={id ?? name}
-                  name={name}
-                  readOnly
-                  value={inputValue}
-                  placeholder='Select A Date'
-                  title={inputValue}
-                />
-
-                {props.RightComponent}
-              </div>
-
-              {hasError && (
-                <p className={inputClasses.errorText.default}>{errorMessage}</p>
-              )}
-            </div>
+            <TextInput
+              id={id ?? name}
+              name={name}
+              label={label}
+              required={isRequired}
+              readOnly
+              focused={open}
+              value={inputValue}
+              placeholder='Select A Date'
+              title={inputValue}
+              errorMessage={errorMessage}
+              LeftComponent={<Icon icon={MdOutlineCalendarMonth} className="size-5 ml-2" />}
+              RightComponent={props.RightComponent}
+            />
           </PopoverButton>
           <PopoverPanel anchor='bottom' className="mt-2 z-10 p-2">
             <Transition

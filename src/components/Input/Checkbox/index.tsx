@@ -1,4 +1,4 @@
-import { forwardRef, isValidElement, type ReactNode, type Ref } from 'react'
+import { forwardRef, type ReactNode, type Ref } from 'react'
 import { twMerge } from 'tailwind-merge'
 import { checkboxClasses } from './constants'
 import { type CheckboxProps } from './types'
@@ -11,26 +11,6 @@ export default forwardRef(function Checkbox (props: CheckboxProps, ref: Ref<HTML
   const hasDescription = description != null
   const isRequired = required === true
   const isDisabled = disabled === true
-
-  const renderDescription = (): ReactNode => {
-    if (typeof description === 'string') {
-      return (
-        <p className={twMerge(checkboxClasses.description.default, hasError && checkboxClasses.description.error)}>
-          {description}
-        </p>
-      )
-    }
-
-    if (isValidElement(description)) {
-      return (
-        <div className={twMerge(checkboxClasses.description.default, hasError && checkboxClasses.description.error)}>
-          {description}
-        </div>
-      )
-    }
-
-    return description
-  }
 
   return (
     <div className={twMerge(checkboxClasses.wrapper.default, hasError && checkboxClasses.wrapper.error)}>
@@ -58,7 +38,9 @@ export default forwardRef(function Checkbox (props: CheckboxProps, ref: Ref<HTML
 
         {hasDescription && (
           <div className={twMerge(checkboxClasses.labelContainer.default, hasError && checkboxClasses.labelContainer.error)}>
-            {renderDescription()}
+            <div className={twMerge(checkboxClasses.description.default, hasError && checkboxClasses.description.error)}>
+              {description}
+            </div>
           </div>
         )}
       </div>

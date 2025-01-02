@@ -10,7 +10,6 @@ import Pagination from './Pagination'
 import ProgressBar from './ProgressBar'
 import QRCode from './QRCode'
 import Rating from './Rating'
-import Switch from './Switch'
 import Tooltip from './Tooltip'
 import Transition from './Transition'
 
@@ -22,6 +21,7 @@ export * from './CreditCard'
 export * from './Dialog'
 export * from './Icon'
 export * from './Input'
+export * from './Input/Switch'
 export * from './LicencePlate'
 export * from './Modal'
 export * from './Pagination'
@@ -29,7 +29,6 @@ export * from './ProgressBar'
 export * from './QRCode'
 export * from './Rating'
 export * from './Svg'
-export * from './Switch'
 export * from './Toast'
 export * from './Tooltip'
 export * from './Transition'
@@ -41,7 +40,6 @@ export {
   Modal,
   Pagination, ProgressBar, QRCode,
   Rating,
-  Switch,
   Tooltip,
   Transition
 }
