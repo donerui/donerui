@@ -6,7 +6,7 @@ import { twMerge } from 'tailwind-merge'
 import { TextInput } from '../..'
 import Button from '../../Button'
 import Calendar from '../../Calendar'
-import { type CalendarTypedProps } from '../../Calendar/types'
+import { type CalendarTypedProps, type DateRange } from '../../Calendar/types'
 import Icon from '../../Icon'
 import Transition from '../../Transition'
 import { type TextInputProps } from '../TextInput/types'
@@ -38,12 +38,16 @@ export default function DatePicker (props: DatePickerProps): ReactNode {
       case 'multiple':
         onChange?.(value as string[])
         break
-      case 'range':
-        if (selectedRangeStart != null) {
-          onChange?.(value as { start: string, end: string })
-        }
-        break
     }
+
+    if (!isControlled) {
+      setInternalValue(value)
+    }
+  }
+
+  function handleChangeRange (value: typeof internalValue, confirmed: boolean): void {
+    if (type !== 'range') return
+    onChange?.(value as DateRange, confirmed)
 
     if (!isControlled) {
       setInternalValue(value)
@@ -141,7 +145,7 @@ export default function DatePicker (props: DatePickerProps): ReactNode {
                               return
                             }
 
-                            handleChange(value)
+                            handleChangeRange(value, true)
                           }}
                         >
                           {option.label}
@@ -154,7 +158,7 @@ export default function DatePicker (props: DatePickerProps): ReactNode {
                   <Calendar
                     type={type}
                     value={internalValue as { start: string, end: string }}
-                    onChange={handleChange}
+                    onChange={handleChangeRange}
                     showNextMonthButton={false}
                     className='rounded-none'
                     viewDate={dayjs(viewDate).format()}
@@ -167,7 +171,7 @@ export default function DatePicker (props: DatePickerProps): ReactNode {
                   <Calendar
                     type={type}
                     value={internalValue as { start: string, end: string }}
-                    onChange={handleChange}
+                    onChange={handleChangeRange}
                     showPreviosMonthButton={false}
                     className='rounded-l-none'
                     viewDate={dayjs(viewDate).add(1, 'month').format()}

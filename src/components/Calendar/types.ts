@@ -17,7 +17,7 @@ export interface CalendarMultipleValueProps {
 
 export interface CalendarRangeValueProps {
   value?: DateRange
-  onChange?: (value: DateRange | undefined) => void
+  onChange?: (value: DateRange | undefined, confirmed: boolean) => void
 }
 
 export type CalendarTypedProps = ({ type: 'single' } & CalendarSingleValueProps) | ({ type: 'multiple' } & CalendarMultipleValueProps) | ({ type: 'range' } & CalendarRangeValueProps)

@@ -115,10 +115,10 @@ export default function Calendar ({
     }
   }
 
-  function handleChangeRange (value: DateRange | undefined): void {
+  function handleChangeRange (value: DateRange | undefined, confirmed: boolean): void {
     if (type === 'range') {
       setInternalValue(value)
-      onChange?.(value)
+      onChange?.(value, confirmed)
     }
   }
 
@@ -145,12 +145,12 @@ export default function Calendar ({
             setInternalSelectingRangeStart(date)
           }
 
-          handleChangeRange({ start: dateStr, end: dateStr })
+          handleChangeRange({ start: dateStr, end: dateStr }, false)
           return
         }
 
         if (internalSelectingRangeStart.isSame(date, 'day')) {
-          handleChangeRange(undefined)
+          handleChangeRange(undefined, false)
           onRangeStartSelected?.(undefined)
           if (selectingRangeStart == null) {
             setInternalSelectingRangeStart(undefined)
@@ -159,9 +159,9 @@ export default function Calendar ({
         }
 
         if (date.isBefore(internalSelectingRangeStart, 'day')) {
-          handleChangeRange({ start: dateStr, end: internalSelectingRangeStart.format() })
+          handleChangeRange({ start: dateStr, end: internalSelectingRangeStart.format() }, true)
         } else {
-          handleChangeRange({ start: internalSelectingRangeStart.format(), end: dateStr })
+          handleChangeRange({ start: internalSelectingRangeStart.format(), end: dateStr }, true)
         }
 
         onRangeStartSelected?.(undefined)
