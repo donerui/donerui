@@ -1,49 +1,64 @@
 import { twMerge } from 'tailwind-merge'
 
 export const selectClasses = {
-  wrapper: {
-    default: 'w-full flex flex-col gap-1',
-    error: ''
-  },
-  label: {
-    default: 'block text-sm font-medium leading-6 text-gray-900',
-    error: 'text-red-600'
-  },
-  select: {
-    default: twMerge(
-      'flex items-center justify-between gap-1',
-      'w-full h-8 px-2 py-1.5 text-sm sm:text-xs sm:leading-6 text-gray-900',
-      'bg-white border-0 rounded-md shadow-sm ring-1 ring-gray-300',
-      'cursor-pointer transition duration-150 ease-in-out'
-    ),
-    open: 'ring-2 ring-primary-600',
-    disabled: 'bg-gray-100 text-gray-500 cursor-not-allowed',
-    error: twMerge(
-      'bg-red-50 ring-red-500 text-red-700',
-      'disabled:bg-red-100 disabled:text-red-900'
-    ),
-    openError: 'ring-2 ring-red-500'
-  },
-  placeholder: {
-    default: 'text-gray-400',
-    error: 'text-red-300'
-  },
-  icon: {
-    default: 'text-lg text-gray-500 pointer-events-none transition-transform',
-    open: 'rotate-180',
-    clear: 'text-base text-gray-400 hover:text-gray-600 cursor-pointer'
-  },
-  dropdown: {
-    default: 'absolute left-0 w-full bg-white border border-gray-300 rounded-md shadow-lg overflow-y-auto z-50',
-    top: 'bottom-[calc(100%+0.25rem)]',
-    bottom: 'top-[calc(100%+0.25rem)]',
-    error: 'border-red-500'
-  },
-  option: {
-    default: 'px-2 py-1.5 text-sm sm:text-xs text-gray-900 cursor-pointer hover:bg-gray-100 data-[selected=true]:bg-primary-50 data-[selected=true]:text-primary-600 data-[disabled=true]:cursor-not-allowed data-[disabled=true]:text-gray-500 data-[disabled=true]:bg-gray-50',
-    error: ''
-  },
-  errorText: {
-    default: 'text-sm text-red-600'
-  }
+  wrapper: twMerge(
+    'w-full flex flex-col gap-1',
+    'data-[error=true]:text-red-600'
+  ),
+  label: twMerge(
+    'block text-sm font-medium leading-6 text-gray-900',
+    'data-[error=true]:text-red-600'
+  ),
+  select: twMerge(
+    'flex items-center justify-between gap-1',
+    'w-full h-8 px-2 py-1.5 text-sm sm:text-xs sm:leading-6 text-gray-900',
+    'bg-white border-0 rounded-md shadow-sm ring-1 ring-gray-300',
+    'cursor-pointer transition duration-150 ease-in-out',
+    'data-[open=true]:ring-2 data-[open=true]:ring-primary-600',
+    'data-[disabled=true]:bg-gray-100 data-[disabled=true]:text-gray-500 data-[disabled=true]:cursor-not-allowed',
+    'data-[error=true]:ring-red-500 data-[error=true]:bg-red-50 data-[error=true]:text-red-700',
+    'data-[error=true]:data-[disabled=true]:bg-red-100 data-[error=true]:data-[disabled=true]:text-red-900',
+    'data-[error=true]:data-[disabled=true]:ring-red-300',
+    'data-[error=true]:data-[open=true]:ring-red-500'
+  ),
+  searchInput: twMerge(
+    'flex-1 bg-transparent border-none outline-none',
+    'text-sm sm:text-xs sm:leading-6 p-0 focus:ring-0',
+    'data-[error=true]:text-red-700 data-[error=true]:placeholder:text-red-300'
+  ),
+  selectedOption: twMerge(
+    'text-gray-900',
+    'data-[error=true]:text-red-700'
+  ),
+  placeholder: twMerge(
+    'text-gray-400 text-nowrap text-ellipsis overflow-hidden',
+    'data-[error=true]:text-red-300'
+  ),
+  clearIcon: twMerge(
+    'text-base text-gray-400 hover:text-gray-600 cursor-pointer',
+    'data-[error=true]:text-red-500'
+  ),
+  dropdownIcon: twMerge(
+    'text-lg text-gray-500 pointer-events-none transition-transform',
+    'data-[open=true]:rotate-180',
+    'data-[clear=true]:text-base data-[clear=true]:text-gray-400 data-[clear=true]:hover:text-gray-600 data-[clear=true]:cursor-pointer',
+    'data-[error=true]:text-red-500',
+    'data-[disabled=true]:text-gray-400'
+  ),
+  dropdown: twMerge(
+    'absolute left-0 w-full bg-white border border-gray-300 rounded-md shadow-lg overflow-y-auto z-50',
+    'data-[position=top]:bottom-[calc(100%+0.25rem)]',
+    'data-[position=bottom]:top-[calc(100%+0.25rem)]',
+    'data-[error=true]:border-red-500'
+  ),
+  option: twMerge(
+    'px-2 py-1.5 text-sm sm:text-xs text-gray-900 cursor-pointer',
+    'hover:bg-gray-100',
+    'data-[selected=true]:bg-primary-50 data-[selected=true]:text-primary-600',
+    'data-[disabled=true]:cursor-not-allowed data-[disabled=true]:text-gray-500 data-[disabled=true]:bg-gray-50',
+    'data-[error=true]:data-[selected=true]:bg-red-50 data-[error=true]:data-[selected=true]:text-red-600'
+  ),
+  errorText: twMerge(
+    'text-sm text-red-600'
+  )
 }

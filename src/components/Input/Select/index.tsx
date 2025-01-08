@@ -1,9 +1,11 @@
-import { forwardRef, type ReactNode, type Ref, useEffect, useRef, useState } from 'react'
+import { forwardRef, Fragment, type ReactNode, type Ref, useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { MdClose, MdKeyboardArrowDown } from 'react-icons/md'
 import { twMerge } from 'tailwind-merge'
 import { selectClasses } from './constants'
 import { type SelectOption, type SelectProps } from './types'
+
+export * from './types'
 
 export default forwardRef(function Select<TValue = string, TData = unknown> (
   props: SelectProps<TValue, TData>,
@@ -52,7 +54,6 @@ export default forwardRef(function Select<TValue = string, TData = unknown> (
       return
     }
 
-    // Focus search input when dropdown opens
     if (searchable && searchInputRef.current !== null) {
       searchInputRef.current.focus()
     }
@@ -119,11 +120,9 @@ export default forwardRef(function Select<TValue = string, TData = unknown> (
     const dropdown = (
       <div
         ref={dropdownRef}
-        className={twMerge(
-          selectClasses.dropdown.default,
-          dropdownPlacement === 'top' ? selectClasses.dropdown.top : selectClasses.dropdown.bottom,
-          hasError && selectClasses.dropdown.error
-        )}
+        className={selectClasses.dropdown}
+        data-position={dropdownPlacement}
+        data-error={hasError}
         style={{
           maxHeight,
           ...(portal != null
@@ -140,14 +139,15 @@ export default forwardRef(function Select<TValue = string, TData = unknown> (
         <div className="flex flex-col h-full">
           <div className="flex-1 overflow-y-auto">
             {filteredOptions.map((option) => {
-              const isDisabledOption = isOptionDisabled?.(option) ?? false
+              const isDisabledOption = (isOptionDisabled?.(option) ?? false) || isDisabled
               return (
                 <div
                   key={String(option.value)}
-                  className={twMerge(selectClasses.option.default, hasError && selectClasses.option.error)}
+                  className={selectClasses.option}
                   onClick={() => { handleSelect(option) }}
                   data-selected={option.value === selectedValue}
                   data-disabled={isDisabledOption}
+                  data-error={hasError}
                 >
                   {option.label}
                 </div>
@@ -169,11 +169,12 @@ export default forwardRef(function Select<TValue = string, TData = unknown> (
   }
 
   return (
-    <div className={twMerge(selectClasses.wrapper.default, hasError && selectClasses.wrapper.error)}>
+    <div className={selectClasses.wrapper} data-error={hasError}>
       {hasLabel && (
         <label
           htmlFor={id ?? name}
-          className={twMerge(selectClasses.label.default, hasError && selectClasses.label.error)}
+          className={selectClasses.label}
+          data-error={hasError}
         >
           {label}
           {isRequired && <span className="text-primary-500">*</span>}
@@ -182,52 +183,54 @@ export default forwardRef(function Select<TValue = string, TData = unknown> (
 
       <div ref={containerRef} className="relative w-full">
         <div
-          className={twMerge(
-            selectClasses.select.default,
-            isOpen && selectClasses.select.open,
-            hasError && selectClasses.select.error,
-            isOpen && hasError && selectClasses.select.openError,
-            isDisabled && selectClasses.select.disabled,
-            className
-          )}
+          className={twMerge(selectClasses.select, className)}
           onClick={() => { !isDisabled && setIsOpen(!isOpen) }}
+          data-open={isOpen}
+          data-disabled={isDisabled}
+          data-error={hasError}
         >
           {isOpen && searchable
             ? (
               <input
                 ref={searchInputRef}
                 type="text"
-                className={twMerge(
-                  'flex-1 bg-transparent border-none outline-none',
-                  !searchable && 'pointer-events-none'
-                )}
+                className={selectClasses.searchInput}
                 placeholder={placeholder}
                 value={searchQuery}
                 onChange={(e) => { setSearchQuery(e.target.value) }}
                 onClick={(e) => { e.stopPropagation() }}
+                data-error={hasError}
               />
               )
             : (
-              <span className={twMerge(
-                selectedOption == null && selectClasses.placeholder.default,
-                selectedOption == null && hasError && selectClasses.placeholder.error
-              )}>
-                {selectedOption?.label ?? placeholder}
-              </span>
+              <Fragment>
+                {selectedOption != null
+                  ? (
+                    <span className={selectClasses.selectedOption} data-error={hasError}>
+                      {selectedOption.label}
+                    </span>
+                    )
+                  : (
+                    <span className={selectClasses.placeholder} data-error={hasError}>
+                      {placeholder}
+                    </span>
+                    )}
+              </Fragment>
               )}
 
           <span className="flex items-center gap-1">
             {clearable && selectedOption != null && (
               <MdClose
-                className={selectClasses.icon.clear}
+                className={selectClasses.clearIcon}
+                data-error={hasError}
                 onClick={handleClear}
               />
             )}
             <MdKeyboardArrowDown
-              className={twMerge(
-                selectClasses.icon.default,
-                isOpen && selectClasses.icon.open
-              )}
+              className={selectClasses.dropdownIcon}
+              data-open={isOpen}
+              data-error={hasError}
+              data-disabled={isDisabled}
             />
           </span>
         </div>
@@ -235,11 +238,9 @@ export default forwardRef(function Select<TValue = string, TData = unknown> (
         {renderDropdown()}
       </div>
 
-      {
-        hasError && (
-          <p className={selectClasses.errorText.default}>{errorMessage}</p>
-        )
-      }
-    </div >
+      {hasError && (
+        <p className={selectClasses.errorText}>{errorMessage}</p>
+      )}
+    </div>
   )
 })

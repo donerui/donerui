@@ -3,6 +3,8 @@ import { twMerge } from 'tailwind-merge'
 import { textAreaClasses } from './constants'
 import { type TextAreaProps } from './types'
 
+export * from './types'
+
 export default forwardRef(function TextArea (props: TextAreaProps, ref: Ref<HTMLTextAreaElement>): ReactNode {
   const { errorMessage, id, label, name, required, ...rest } = props
 
