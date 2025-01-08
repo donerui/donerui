@@ -1,7 +1,7 @@
 import { Popover, PopoverButton, PopoverPanel } from '@headlessui/react'
 import dayjs, { type Dayjs } from 'dayjs'
 import { Fragment, useEffect, useState, type ReactNode } from 'react'
-import { MdOutlineCalendarMonth } from 'react-icons/md'
+import { MdOutlineCalendarMonth, MdOutlineClear } from 'react-icons/md'
 import { twMerge } from 'tailwind-merge'
 import { TextInput } from '../..'
 import Button from '../../Button'
@@ -15,10 +15,11 @@ import { quickSelectOptions } from './quickSelect'
 export type DatePickerProps = CalendarTypedProps & {
   className?: string
   inputProps?: TextInputProps
+  clearable?: boolean
 }
 
 export default function DatePicker (props: DatePickerProps): ReactNode {
-  const { className, inputProps, ...rest } = props
+  const { className, inputProps, clearable, ...rest } = props
   const { type, value, onChange } = rest
 
   const isControlled = value !== undefined
@@ -87,12 +88,26 @@ export default function DatePicker (props: DatePickerProps): ReactNode {
             <TextInput
               {...inputProps}
               readOnly
-              containerClassName={twMerge('pointer-events-none', inputProps?.containerClassName)}
+              className={twMerge('pointer-events-none', inputProps?.containerClassName)}
               focused={inputProps?.focused ?? open}
               placeholder={inputProps?.placeholder ?? 'Select A Date'}
               value={inputValue}
               title={inputValue}
               LeftComponent={inputProps?.LeftComponent ?? <Icon icon={MdOutlineCalendarMonth} className="size-5 ml-2" />}
+              RightComponent={inputProps?.RightComponent ??
+                (clearable === true && inputValue !== ''
+                  ? (
+                    <span
+                      className="size-5 mr-2 cursor-pointer"
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        handleChange(undefined)
+                      }}
+                    >
+                      <Icon icon={MdOutlineClear} className="size-5" />
+                    </span>
+                    )
+                  : undefined)}
             />
           </PopoverButton>
           <PopoverPanel anchor='bottom' className="mt-2 z-10 p-2">
@@ -135,13 +150,13 @@ export default function DatePicker (props: DatePickerProps): ReactNode {
 
                             if (type === 'single') {
                               const valueString = value as string
-                              handleChange({ start: valueString, end: valueString })
+                              handleChangeRange({ start: valueString, end: valueString }, true)
                               return
                             }
 
                             if (type === 'multiple') {
                               const valueArr = value as string[]
-                              handleChange({ start: valueArr[0], end: valueArr[valueArr.length - 1] } as any)
+                              handleChangeRange({ start: valueArr[0], end: valueArr[valueArr.length - 1] } as any, true)
                               return
                             }
 
