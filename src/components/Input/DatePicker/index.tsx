@@ -71,17 +71,19 @@ export default function DatePicker (props: DatePickerProps): ReactNode {
   }, [internalValue])
 
   return (
-    <Popover className={twMerge(
-      'relative',
-      className
-    )}>
+    <Popover
+      className={twMerge(
+        'relative',
+        className
+      )}
+    >
       {({ open }) => (
         <>
-          <PopoverButton className='focus-visible:outline-none text-left'>
+          <PopoverButton className='focus-visible:outline-none text-left w-full'>
             <TextInput
               {...inputProps}
               readOnly
-              containerClassName='cursor-pointer'
+              containerClassName={twMerge('pointer-events-none', inputProps?.containerClassName)}
               focused={inputProps?.focused ?? open}
               placeholder={inputProps?.placeholder ?? 'Select A Date'}
               value={inputValue}

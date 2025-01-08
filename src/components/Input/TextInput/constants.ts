@@ -35,10 +35,10 @@ export const inputClasses = {
   },
   input: {
     default: twMerge(
-      'w-full overflow-hidden bg-transparent px-2 py-1.5',
+      'w-full overflow-hidden bg-transparent px-2 py-1.5 border-none',
+      'text-sm sm:text-xs sm:leading-6 placeholder:text-gray-400',
       'focus-visible:outline-none',
-      'disabled:cursor-not-allowed',
-      'placeholder:text-gray-400'
+      'disabled:cursor-not-allowed'
     ),
     error: twMerge(
       'placeholder:text-red-300'
