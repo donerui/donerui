@@ -2,31 +2,26 @@ import { Popover, PopoverButton, PopoverPanel } from '@headlessui/react'
 import dayjs, { type Dayjs } from 'dayjs'
 import { Fragment, useEffect, useState, type ReactNode } from 'react'
 import { MdOutlineCalendarMonth } from 'react-icons/md'
+import { twMerge } from 'tailwind-merge'
 import { TextInput } from '../..'
 import Button from '../../Button'
 import Calendar from '../../Calendar'
 import { type CalendarTypedProps } from '../../Calendar/types'
 import Icon from '../../Icon'
 import Transition from '../../Transition'
+import { type TextInputProps } from '../TextInput/types'
 import { quickSelectOptions } from './quickSelect'
 
 export type DatePickerProps = CalendarTypedProps & {
   className?: string
-  id?: string
-  name?: string
-  required?: boolean
-  label?: string
-  errorMessage?: string
-  LeftComponent?: ReactNode
-  RightComponent?: ReactNode
+  inputProps?: TextInputProps
 }
 
 export default function DatePicker (props: DatePickerProps): ReactNode {
-  const { errorMessage, id, label, name, required, ...rest } = props
+  const { className, inputProps, ...rest } = props
   const { type, value, onChange } = rest
 
   const isControlled = value !== undefined
-  const isRequired = required === true
 
   const [internalValue, setInternalValue] = useState<typeof value>(value)
   const [inputValue, setInputValue] = useState<string>('')
@@ -44,7 +39,9 @@ export default function DatePicker (props: DatePickerProps): ReactNode {
         onChange?.(value as string[])
         break
       case 'range':
-        onChange?.(value as { start: string, end: string })
+        if (selectedRangeStart != null) {
+          onChange?.(value as { start: string, end: string })
+        }
         break
     }
 
@@ -74,23 +71,22 @@ export default function DatePicker (props: DatePickerProps): ReactNode {
   }, [internalValue])
 
   return (
-    <Popover className="relative">
+    <Popover className={twMerge(
+      'relative',
+      className
+    )}>
       {({ open }) => (
         <>
           <PopoverButton className='focus-visible:outline-none text-left'>
             <TextInput
-              id={id ?? name}
-              name={name}
-              label={label}
-              required={isRequired}
+              {...inputProps}
               readOnly
-              focused={open}
+              containerClassName='cursor-pointer'
+              focused={inputProps?.focused ?? open}
+              placeholder={inputProps?.placeholder ?? 'Select A Date'}
               value={inputValue}
-              placeholder='Select A Date'
               title={inputValue}
-              errorMessage={errorMessage}
-              LeftComponent={<Icon icon={MdOutlineCalendarMonth} className="size-5 ml-2" />}
-              RightComponent={props.RightComponent}
+              LeftComponent={inputProps?.LeftComponent ?? <Icon icon={MdOutlineCalendarMonth} className="size-5 ml-2" />}
             />
           </PopoverButton>
           <PopoverPanel anchor='bottom' className="mt-2 z-10 p-2">

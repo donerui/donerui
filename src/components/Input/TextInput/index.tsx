@@ -6,7 +6,10 @@ import { inputClasses } from './constants'
 import { type TextInputProps } from './types'
 
 export default forwardRef(function TextInput (props: TextInputProps, ref: Ref<HTMLInputElement>): ReactNode {
-  const { errorMessage, type, id, label, name, required, containerClassName, focused, ...rest } = props
+  const {
+    errorMessage, type, id, label, name, required, className,
+    containerClassName, focused, LeftComponent, RightComponent, ...rest
+  } = props
 
   const hasError = errorMessage != null
   const hasLabel = label != null && label !== ''
@@ -28,8 +31,8 @@ export default forwardRef(function TextInput (props: TextInputProps, ref: Ref<HT
         </label>
       )}
 
-      <div className={twMerge(inputClasses.container.default, inputClasses.container.focusWithin, isFocused && inputClasses.container.focusControlled, hasError && inputClasses.container.error, hasError && inputClasses.container.errorFocusWithin, isFocused && hasError && inputClasses.container.errorFocusControlled)}>
-        {props.LeftComponent}
+      <div className={twMerge(inputClasses.container.default, inputClasses.container.focusWithin, isFocused && inputClasses.container.focusControlled, hasError && inputClasses.container.error, hasError && inputClasses.container.errorFocusWithin, isFocused && hasError && inputClasses.container.errorFocusControlled, containerClassName)}>
+        {LeftComponent}
 
         <input
           {...rest}
@@ -37,7 +40,7 @@ export default forwardRef(function TextInput (props: TextInputProps, ref: Ref<HT
           name={name}
           ref={ref}
           type={isPassword && showPassword ? 'text' : type}
-          className={twMerge(inputClasses.input.default, hasError && inputClasses.input.error)}
+          className={twMerge(inputClasses.input.default, hasError && inputClasses.input.error, className)}
         />
 
         {isPassword && (
@@ -51,7 +54,7 @@ export default forwardRef(function TextInput (props: TextInputProps, ref: Ref<HT
           </Button>
         )}
 
-        {props.RightComponent}
+        {RightComponent}
       </div>
 
       {hasError && (
