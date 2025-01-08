@@ -1,7 +1,6 @@
 import { useEffect } from 'react'
 import { twMerge } from 'tailwind-merge'
 import Transition from '../Transition'
-import { DefaultModalTransition } from './constants'
 import { type IModalProps } from './types'
 
 function Modal ({
@@ -12,7 +11,7 @@ function Modal ({
   closeOnOutsideClick = true,
   onOpen,
   onClose,
-  TransitionComponent = DefaultModalTransition
+  transitionProps
 }: IModalProps): JSX.Element {
   useEffect(() => {
     if (isOpen) {
@@ -42,7 +41,7 @@ function Modal ({
       <Transition
         show={isOpen}
         onClick={(e) => { e.stopPropagation() }}
-        TransitionComponent={TransitionComponent}
+        {...transitionProps}
       >
         {children}
       </Transition>

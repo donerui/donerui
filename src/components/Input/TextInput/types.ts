@@ -8,4 +8,6 @@ export type TextInputProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'type'>
   errorMessage?: string
   LeftComponent?: ReactNode
   RightComponent?: ReactNode
+  containerClassName?: string
+  focused?: boolean
 }

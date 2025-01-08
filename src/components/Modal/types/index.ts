@@ -1,4 +1,4 @@
-import { type ITransitionOptions } from '../../Transition/types'
+import { type ITransitionProps } from '../../Transition/types'
 
 export interface IModalProps {
   children: React.ReactNode
@@ -8,5 +8,5 @@ export interface IModalProps {
   closeOnOutsideClick?: boolean
   onOpen?: () => void
   onClose?: () => void
-  TransitionComponent?: React.ComponentType<ITransitionOptions>
+  transitionProps?: ITransitionProps
 }
