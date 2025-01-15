@@ -1,4 +1,4 @@
-import { forwardRef, Fragment, type ReactNode, type Ref, useEffect, useRef, useState } from 'react'
+import { type CSSProperties, forwardRef, Fragment, type ReactNode, type Ref, useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { MdClose, MdKeyboardArrowDown } from 'react-icons/md'
 import { twMerge } from 'tailwind-merge'
@@ -16,8 +16,11 @@ export default forwardRef(function Select<TValue = string, TData = unknown> (
     className, options, value, defaultValue, onChange, portal,
     placement = 'bottom', maxHeight = 250, placeholder = 'Select an option',
     isOptionDisabled, clearable = true, searchable = true,
-    onSearch
+    onSearch, closeOnSelect = true, closeOnScrollOutside = false,
+    closeOnBlur = true, closeOnEscape = true, closeOnClickOutside = true
   } = props
+
+  const portalElement = typeof portal === 'string' ? document.getElementById(portal) : portal
 
   const hasError = errorMessage != null
   const hasLabel = label != null && label !== ''
@@ -26,6 +29,8 @@ export default forwardRef(function Select<TValue = string, TData = unknown> (
   const isControlled = value !== undefined
 
   const [isOpen, setIsOpen] = useState(false)
+  const [isMouseInsideDropdown, setIsMouseInsideDropdown] = useState(false)
+
   const [selectedValue, setSelectedValue] = useState<TValue | undefined>(value ?? defaultValue)
   const [dropdownPlacement, setDropdownPlacement] = useState(placement)
   const [searchQuery, setSearchQuery] = useState('')
@@ -42,53 +47,45 @@ export default forwardRef(function Select<TValue = string, TData = unknown> (
       ))
     : options
 
-  useEffect(() => {
-    if (value !== undefined) {
-      setSelectedValue(value)
-    }
-  }, [value])
+  function handleMouseMove (event: MouseEvent): void {
+    const dropdownRect = dropdownRef.current?.getBoundingClientRect()
+    const isInsideDropdown = dropdownRect != null &&
+      event.clientY > dropdownRect.top &&
+      event.clientY < dropdownRect.bottom &&
+      event.clientX > dropdownRect.left &&
+      event.clientX < dropdownRect.right
 
-  useEffect(() => {
-    if (!isOpen) {
-      setSearchQuery('')
-      return
-    }
+    setIsMouseInsideDropdown(isInsideDropdown)
+  }
 
-    if (searchable && searchInputRef.current !== null) {
-      searchInputRef.current.focus()
-    }
-
-    function handleClickOutside (event: MouseEvent): void {
-      if (
+  function handleClickOutside (event: MouseEvent): void {
+    if (
+      !closeOnClickOutside || (
         containerRef.current != null &&
         !containerRef.current.contains(event.target as Node) &&
         dropdownRef.current != null &&
         !dropdownRef.current.contains(event.target as Node)
-      ) {
-        setIsOpen(false)
-      }
+      )
+    ) {
+      setIsOpen(false)
+    }
+  }
+
+  function handleScroll (event: Event): void {
+    if (containerRef.current == null || dropdownRef.current == null) return
+
+    if (closeOnScrollOutside && !isMouseInsideDropdown) {
+      setIsOpen(false)
     }
 
-    function handleScroll (): void {
-      if (containerRef.current == null || dropdownRef.current == null) return
+    const containerRect = containerRef.current.getBoundingClientRect()
 
-      const containerRect = containerRef.current.getBoundingClientRect()
-      const viewportHeight = window.innerHeight
-      const spaceBelow = viewportHeight - containerRect.bottom
-      const spaceAbove = containerRect.top
+    const viewportHeight = window.innerHeight
+    const spaceBelow = viewportHeight - containerRect.bottom
+    const spaceAbove = containerRect.top
 
-      setDropdownPlacement(spaceBelow >= maxHeight || spaceBelow >= spaceAbove ? 'bottom' : 'top')
-    }
-
-    document.addEventListener('mousedown', handleClickOutside)
-    document.addEventListener('scroll', handleScroll, true)
-    handleScroll()
-
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside)
-      document.removeEventListener('scroll', handleScroll, true)
-    }
-  }, [isOpen, maxHeight, searchable])
+    setDropdownPlacement(spaceBelow >= maxHeight || spaceBelow >= spaceAbove ? 'bottom' : 'top')
+  }
 
   function handleSelect (option: SelectOption<TValue, TData>): void {
     if (isDisabled) return
@@ -102,10 +99,12 @@ export default forwardRef(function Select<TValue = string, TData = unknown> (
       setSelectedValue(option.value)
     }
 
-    setIsOpen(false)
+    if (closeOnSelect) {
+      setIsOpen(false)
+    }
   }
 
-  function handleClear (event: React.MouseEvent): void {
+  function handleClear (event: React.MouseEvent<SVGElement>): void {
     event.stopPropagation()
     if (isDisabled) return
 
@@ -116,25 +115,52 @@ export default forwardRef(function Select<TValue = string, TData = unknown> (
     }
   }
 
+  function handleKeyDown (event: KeyboardEvent): void {
+    if (closeOnEscape && event.key === 'Escape') {
+      setIsOpen(false)
+    }
+  }
+
+  function handleBlur (event: FocusEvent): void {
+    if (
+      closeOnBlur &&
+      containerRef.current != null &&
+      !containerRef.current.contains(event.relatedTarget as Node) &&
+      dropdownRef.current != null &&
+      !dropdownRef.current.contains(event.relatedTarget as Node)
+    ) {
+      setIsOpen(false)
+    }
+  }
+
   function renderDropdown (): ReactNode {
+    const dropdownStyle: CSSProperties = {
+      maxHeight,
+      overscrollBehaviorY: 'none'
+    }
+    const containerElement = containerRef.current
+    if (containerElement == null) return
+    const containerRect = containerElement.getBoundingClientRect()
+
+    if (portalElement != null) {
+      dropdownStyle.position = 'absolute'
+      dropdownStyle.left = portalElement.offsetLeft + containerElement.offsetLeft
+      dropdownStyle.width = containerRect.width
+
+      if (dropdownPlacement === 'top') {
+        dropdownStyle.bottom = portalElement.offsetHeight + portalElement.offsetTop - containerElement.offsetTop
+      } else {
+        dropdownStyle.top = portalElement.offsetTop + containerElement.offsetTop + containerRect.height
+      }
+    }
+
     const dropdown = (
       <div
         ref={dropdownRef}
         className={selectClasses.dropdown}
         data-position={dropdownPlacement}
         data-error={hasError}
-        style={{
-          maxHeight,
-          ...(portal != null
-            ? {
-                position: 'fixed',
-                width: containerRef.current?.offsetWidth,
-                ...(dropdownPlacement === 'top'
-                  ? { bottom: window.innerHeight - (containerRef.current?.getBoundingClientRect().top ?? 0) }
-                  : { top: containerRef.current?.getBoundingClientRect().bottom })
-              }
-            : {})
-        }}
+        style={dropdownStyle}
       >
         <div className="flex flex-col h-full">
           <div className="flex-1 overflow-y-auto">
@@ -161,12 +187,39 @@ export default forwardRef(function Select<TValue = string, TData = unknown> (
       </div>
     )
 
-    if (portal != null && isOpen) {
-      return createPortal(dropdown, portal)
+    return isOpen && (portalElement != null ? createPortal(dropdown, portalElement) : dropdown)
+  }
+
+  useEffect(() => {
+    if (value !== undefined) {
+      setSelectedValue(value)
+    }
+  }, [value])
+
+  useEffect(() => {
+    if (!isOpen) {
+      setSearchQuery('')
+      return
     }
 
-    return isOpen && dropdown
-  }
+    if (searchable && searchInputRef.current !== null) {
+      searchInputRef.current.focus()
+    }
+
+    document.addEventListener('mousemove', handleMouseMove)
+    document.addEventListener('mousedown', handleClickOutside)
+    document.addEventListener('scroll', handleScroll, true)
+    document.addEventListener('keydown', handleKeyDown)
+    document.addEventListener('focusout', handleBlur)
+
+    return () => {
+      document.removeEventListener('mousemove', handleMouseMove)
+      document.removeEventListener('mousedown', handleClickOutside)
+      document.removeEventListener('scroll', handleScroll, true)
+      document.removeEventListener('keydown', handleKeyDown)
+      document.removeEventListener('focusout', handleBlur)
+    }
+  }, [isOpen, maxHeight, searchable, isMouseInsideDropdown, closeOnEscape, closeOnBlur, closeOnClickOutside])
 
   return (
     <div className={selectClasses.wrapper} data-error={hasError}>

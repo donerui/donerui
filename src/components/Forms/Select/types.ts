@@ -14,7 +14,7 @@ export type SelectProps<TValue = string, TData = unknown> = Omit<InputHTMLAttrib
   value?: TValue
   defaultValue?: TValue
   onChange?: (value: TValue | undefined) => void
-  portal?: HTMLElement
+  portal?: HTMLElement | string
   placement?: 'top' | 'bottom'
   maxHeight?: number
   placeholder?: string
@@ -22,4 +22,9 @@ export type SelectProps<TValue = string, TData = unknown> = Omit<InputHTMLAttrib
   clearable?: boolean
   searchable?: boolean
   onSearch?: (query: string, options: Array<SelectOption<TValue, TData>>) => Array<SelectOption<TValue, TData>>
+  closeOnSelect?: boolean
+  closeOnScrollOutside?: boolean
+  closeOnBlur?: boolean
+  closeOnEscape?: boolean
+  closeOnClickOutside?: boolean
 }
