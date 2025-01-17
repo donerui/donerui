@@ -118,6 +118,40 @@ export default forwardRef(function Select<TValue = string, TData = unknown> (
   function handleKeyDown (event: KeyboardEvent): void {
     const isTab = event.key === 'Tab'
     if (isTab) {
+      if (portalElement != null && isOpen) {
+        const activeElement = document.activeElement
+        const activeIsSelect = activeElement === selectRef.current || activeElement === searchInputRef.current
+        const activeIsDropdown = dropdownRef.current?.contains(activeElement) ?? false
+        if (activeIsSelect || activeIsDropdown) {
+          const options = dropdownRef.current?.querySelectorAll('[role="option"]') ?? []
+          const optionsArray = Array.from(options) as HTMLElement[]
+          const optionsWithTabIndex = optionsArray.filter(opt => opt.tabIndex !== -1)
+
+          if (optionsWithTabIndex.length === 0) {
+            const nextElementWithTabIndex = selectRef.current?.nextElementSibling as HTMLElement
+            if (nextElementWithTabIndex != null) {
+              nextElementWithTabIndex.focus()
+            }
+            return
+          }
+
+          const isFocusedLastOption = optionsWithTabIndex.length > 0 && optionsWithTabIndex[optionsWithTabIndex.length - 1] === document.activeElement
+          if (isFocusedLastOption) {
+            if (searchable) {
+              searchInputRef.current?.focus()
+            } else {
+              selectRef.current?.focus()
+            }
+            return
+          }
+
+          if (activeIsSelect) {
+            optionsWithTabIndex[0].focus()
+            event.preventDefault()
+            return
+          }
+        }
+      }
       return
     }
 
@@ -296,7 +330,7 @@ export default forwardRef(function Select<TValue = string, TData = unknown> (
 
       <div ref={containerRef} className="relative w-full">
         <div
-          tabIndex={0}
+          tabIndex={isDisabled ? -1 : 0}
           ref={selectRef}
           className={twMerge(selectClasses.select, className)}
           onClick={() => { !isDisabled && setIsOpen(!isOpen) }}
