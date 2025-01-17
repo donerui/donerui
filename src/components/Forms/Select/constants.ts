@@ -14,6 +14,7 @@ export const selectClasses = {
     'w-full h-8 px-2 py-1.5 text-sm sm:text-xs sm:leading-6 text-gray-900',
     'bg-white border-0 rounded-md shadow-sm ring-1 ring-gray-300',
     'cursor-pointer transition duration-150 ease-in-out',
+    'focus:outline-none focus:ring-1 focus:ring-primary-600',
     'data-[open=true]:ring-2 data-[open=true]:ring-primary-600',
     'data-[disabled=true]:bg-gray-100 data-[disabled=true]:text-gray-500 data-[disabled=true]:cursor-not-allowed',
     'data-[error=true]:ring-red-500 data-[error=true]:bg-red-50 data-[error=true]:text-red-700',
@@ -53,8 +54,8 @@ export const selectClasses = {
   ),
   option: twMerge(
     'px-2 py-1.5 text-sm sm:text-xs text-gray-900 cursor-pointer',
-    'hover:bg-gray-100',
-    'data-[selected=true]:bg-primary-50 data-[selected=true]:text-primary-600',
+    'hover:bg-primary-50 focus:bg-primary-50 focus-visible:outline-none',
+    'data-[selected=true]:bg-primary-100 data-[selected=true]:text-primary-600 data-[selected=true]:hover:bg-primary-50 data-[selected=true]:focus:bg-primary-50',
     'data-[disabled=true]:cursor-not-allowed data-[disabled=true]:text-gray-500 data-[disabled=true]:bg-gray-50',
     'data-[error=true]:data-[selected=true]:bg-red-50 data-[error=true]:data-[selected=true]:text-red-600'
   ),

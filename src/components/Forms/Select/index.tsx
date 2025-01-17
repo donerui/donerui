@@ -36,6 +36,7 @@ export default forwardRef(function Select<TValue = string, TData = unknown> (
   const [searchQuery, setSearchQuery] = useState('')
 
   const containerRef = useRef<HTMLDivElement>(null)
+  const selectRef = useRef<HTMLDivElement>(null)
   const dropdownRef = useRef<HTMLDivElement>(null)
   const searchInputRef = useRef<HTMLInputElement>(null)
 
@@ -58,14 +59,13 @@ export default forwardRef(function Select<TValue = string, TData = unknown> (
     setIsMouseInsideDropdown(isInsideDropdown)
   }
 
-  function handleClickOutside (event: MouseEvent): void {
+  function handleMouseDown (event: MouseEvent): void {
     if (
-      !closeOnClickOutside || (
-        containerRef.current != null &&
-        !containerRef.current.contains(event.target as Node) &&
-        dropdownRef.current != null &&
-        !dropdownRef.current.contains(event.target as Node)
-      )
+      closeOnClickOutside &&
+      containerRef.current != null &&
+      !containerRef.current.contains(event.target as Node) &&
+      dropdownRef.current != null &&
+      !dropdownRef.current.contains(event.target as Node)
     ) {
       setIsOpen(false)
     }
@@ -116,18 +116,73 @@ export default forwardRef(function Select<TValue = string, TData = unknown> (
   }
 
   function handleKeyDown (event: KeyboardEvent): void {
-    if (closeOnEscape && event.key === 'Escape') {
-      setIsOpen(false)
+    const isTab = event.key === 'Tab'
+    if (isTab) {
+      return
+    }
+
+    const isEnter = event.key === 'Enter'
+    if (isEnter) {
+      const activeElement = document.activeElement
+      if (activeElement === selectRef.current) {
+        setIsOpen(true)
+      } else if (dropdownRef.current != null && dropdownRef.current.contains(activeElement)) {
+        const focusedOption = activeElement as HTMLElement
+        focusedOption.click()
+      }
+    }
+
+    if (!isOpen) return
+
+    switch (event.key) {
+      case 'Escape': {
+        if (closeOnEscape) {
+          setIsOpen(false)
+        }
+        break
+      }
+      case 'ArrowDown': {
+        event.preventDefault()
+        const queryOptions = dropdownRef.current?.querySelectorAll('[role="option"]') ?? []
+        const options = (Array.from(queryOptions) as HTMLElement[]).filter(opt => opt.tabIndex !== -1)
+        if (options.length === 0) return
+
+        const currentIndex = Array.from(options).findIndex(opt => opt === document.activeElement)
+        const nextIndex = currentIndex === -1 ? 0 : Math.min(currentIndex + 1, options.length - 1)
+
+        if (document.activeElement === selectRef.current || document.activeElement === searchInputRef.current) {
+          options[0].focus()
+        } else {
+          options[nextIndex].focus()
+        }
+        break
+      }
+      case 'ArrowUp': {
+        event.preventDefault()
+        const queryOptions = dropdownRef.current?.querySelectorAll('[role="option"]') ?? []
+        const options = (Array.from(queryOptions) as HTMLElement[]).filter(opt => opt.tabIndex !== -1)
+        if (options.length === 0) return
+
+        const currentIndex = Array.from(options).findIndex(opt => opt === document.activeElement)
+        const prevIndex = currentIndex === -1 ? options.length - 1 : Math.max(currentIndex - 1, 0)
+
+        if (document.activeElement === selectRef.current || document.activeElement === searchInputRef.current) {
+          options[options.length - 1].focus()
+        } else {
+          options[prevIndex].focus()
+        }
+        break
+      }
     }
   }
 
   function handleBlur (event: FocusEvent): void {
+    const isNextFocusIsInsideDropdown = dropdownRef.current?.contains(event.relatedTarget as Node)
     if (
       closeOnBlur &&
       containerRef.current != null &&
       !containerRef.current.contains(event.relatedTarget as Node) &&
-      dropdownRef.current != null &&
-      !dropdownRef.current.contains(event.relatedTarget as Node)
+      isNextFocusIsInsideDropdown === false
     ) {
       setIsOpen(false)
     }
@@ -169,11 +224,13 @@ export default forwardRef(function Select<TValue = string, TData = unknown> (
               return (
                 <div
                   key={String(option.value)}
+                  tabIndex={isDisabledOption ? -1 : 0}
                   className={selectClasses.option}
                   onClick={() => { handleSelect(option) }}
                   data-selected={option.value === selectedValue}
                   data-disabled={isDisabledOption}
                   data-error={hasError}
+                  role="option"
                 >
                   {option.label}
                 </div>
@@ -199,22 +256,25 @@ export default forwardRef(function Select<TValue = string, TData = unknown> (
   useEffect(() => {
     if (!isOpen) {
       setSearchQuery('')
-      return
+      document.addEventListener('keydown', handleKeyDown)
+      return () => {
+        document.removeEventListener('keydown', handleKeyDown)
+      }
     }
+
+    document.addEventListener('keydown', handleKeyDown)
+    document.addEventListener('mousemove', handleMouseMove)
+    document.addEventListener('mousedown', handleMouseDown)
+    document.addEventListener('scroll', handleScroll, true)
+    document.addEventListener('focusout', handleBlur)
 
     if (searchable && searchInputRef.current !== null) {
       searchInputRef.current.focus()
     }
 
-    document.addEventListener('mousemove', handleMouseMove)
-    document.addEventListener('mousedown', handleClickOutside)
-    document.addEventListener('scroll', handleScroll, true)
-    document.addEventListener('keydown', handleKeyDown)
-    document.addEventListener('focusout', handleBlur)
-
     return () => {
       document.removeEventListener('mousemove', handleMouseMove)
-      document.removeEventListener('mousedown', handleClickOutside)
+      document.removeEventListener('mousedown', handleMouseDown)
       document.removeEventListener('scroll', handleScroll, true)
       document.removeEventListener('keydown', handleKeyDown)
       document.removeEventListener('focusout', handleBlur)
@@ -236,6 +296,8 @@ export default forwardRef(function Select<TValue = string, TData = unknown> (
 
       <div ref={containerRef} className="relative w-full">
         <div
+          tabIndex={0}
+          ref={selectRef}
           className={twMerge(selectClasses.select, className)}
           onClick={() => { !isDisabled && setIsOpen(!isOpen) }}
           data-open={isOpen}
