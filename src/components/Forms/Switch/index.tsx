@@ -3,6 +3,7 @@ import { twMerge } from 'tailwind-merge'
 import { switchClasses } from './constants'
 import { type SwitchProps } from './types'
 
+export * from './types'
 export default forwardRef(function Switch (props: SwitchProps, ref: Ref<HTMLInputElement>): ReactNode {
   const { errorMessage, label, description, id, name, required, disabled, className, ...rest } = props
 
