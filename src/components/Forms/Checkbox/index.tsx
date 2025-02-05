@@ -3,6 +3,8 @@ import { twMerge } from 'tailwind-merge'
 import { checkboxClasses } from './constants'
 import { type CheckboxProps } from './types'
 
+export * from './types'
+
 export default forwardRef(function Checkbox (props: CheckboxProps, ref: Ref<HTMLInputElement>): ReactNode {
   const { errorMessage, label, description, id, name, required, disabled, className, ...rest } = props
 

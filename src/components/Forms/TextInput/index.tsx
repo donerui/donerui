@@ -5,6 +5,8 @@ import Button from '../../Button'
 import { inputClasses } from './constants'
 import { type TextInputProps } from './types'
 
+export * from './types'
+
 export default forwardRef(function TextInput (props: TextInputProps, ref: Ref<HTMLInputElement>): ReactNode {
   const {
     errorMessage, type, id, label, name, required, className,
