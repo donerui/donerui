@@ -17,7 +17,7 @@ function Button ({
   return (
     <button
       className={twMerge(
-        'inline-flex items-center justify-center duration-150',
+        'inline-flex items-center justify-center duration-150 cursor-pointer',
         shapeClassnames[shape],
         (iconButton ? iconSizeClassnames : sizeClassnames)[size],
         colorClassnames[color][variant],

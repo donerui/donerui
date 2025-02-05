@@ -1,6 +1,8 @@
 import { twMerge } from 'tailwind-merge'
 import { type IIconProps } from './types'
 
+export * from './types'
+
 function Icon ({
   icon,
   className
