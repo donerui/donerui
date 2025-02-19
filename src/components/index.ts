@@ -2,6 +2,7 @@ import Button from './Button'
 import ButtonGroup from './ButtonGroup'
 import Calendar from './Calendar'
 import Chip from './Chip'
+import Countdown from './Countdown'
 import CreditCard from './CreditCard'
 import Icon from './Icon'
 import LicencePlate from './LicencePlate'
@@ -34,11 +35,18 @@ export * from './Tooltip'
 export * from './Transition'
 
 export {
-  Button, ButtonGroup, Calendar, Chip, CreditCard,
+  Button,
+  ButtonGroup,
+  Calendar,
+  Chip,
+  Countdown,
+  CreditCard,
   Icon,
   LicencePlate,
   Modal,
-  Pagination, ProgressBar, QRCode,
+  Pagination,
+  ProgressBar,
+  QRCode,
   Rating,
   Tooltip,
   Transition

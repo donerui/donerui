@@ -1,192 +1,206 @@
-import React, { ReactElement, useEffect, useState } from 'react'
+import dayjs from 'dayjs'
+import { type ReactElement, useEffect, useMemo, useState } from 'react'
 import { twMerge } from 'tailwind-merge'
+import { useInterval } from '../../hooks/useInterval'
+import { type ICountdownProps } from './Countdown.types'
+import { diffCalculation, formatDefault } from './utils'
 
-const timeCalculation = (countTo: number) => {
-  const totalRemaining = countTo - new Date().getTime()
-  if (totalRemaining <= 0) {
-    return { days: 0, hours: 0, minutes: 0, seconds: 0 }
-  }
+// TODO:
+// - Vertical
+// - Presetler, Number Transition (flap, vs)
+// - Type = Number
+// - reset? how?
 
-  const days = Math.floor(totalRemaining / (1000 * 60 * 60 * 24))
-  const hours = Math.floor((totalRemaining / (1000 * 60 * 60)) % 24)
-  const minutes = Math.floor((totalRemaining / (1000 * 60)) % 60)
-  const seconds = Math.floor((totalRemaining / 1000) % 60)
-
-  return {
-    days,
-    hours,
-    minutes,
-    seconds,
-  }
-}
-
-function Countdown ({
+function Countdown({
   className,
-  renderLabel = () => '',
-  labelClassName,
-  labelPosition = 'right',
+  partsClassName,
+  separatorClassName,
+  type,
+  mode,
+  date1 = dayjs().valueOf(),
+  date2 = dayjs().add(10, 'seconds').valueOf(),
+  value,
+  refreshRateMs = 1000,
+  isPaused = false,
+  parts: {
+    years: {
+      showPart: showPartYears = true,
+      showText: showTextYears = false,
+      showAs: showAsYears = false,
+      text: textYears = 'years',
+      format: formatYears = formatDefault
+    } = {},
+    months: {
+      showPart: showPartMonths = true,
+      showText: showTextMonths = false,
+      showAs: showAsMonths = false,
+      text: textMonths = 'months',
+      format: formatMonths = formatDefault
+    } = {},
+    weeks: {
+      showPart: showPartWeeks = true,
+      showText: showTextWeeks = false,
+      showAs: showAsWeeks = false,
+      text: textWeeks = 'weeks',
+      format: formatWeeks = formatDefault
+    } = {},
+    days: {
+      showPart: showPartDays = true,
+      showText: showTextDays = false,
+      showAs: showAsDays = false,
+      text: textDays = 'days',
+      format: formatDays = formatDefault
+    } = {},
+    hours: {
+      showPart: showPartHours = true,
+      showText: showTextHours = false,
+      showAs: showAsHours = false,
+      text: textHours = 'hours',
+      format: formatHours = formatDefault
+    } = {},
+    minutes: {
+      showPart: showPartMins = true,
+      showText: showTextMins = false,
+      showAs: showAsMins = false,
+      text: textMins = 'minutes',
+      format: formatMins = formatDefault
+    } = {},
+    seconds: {
+      showPart: showPartSecs = true,
+      showText: showTextSecs = false,
+      showAs: showAsSecs = false,
+      text: textSecs = 'seconds',
+      format: formatSecs = formatDefault
+    } = {},
+    milliseconds: {
+      showPart: showPartMs = true,
+      showText: showTextMs = false,
+      showAs: showAsMs = false,
+      text: textMs = 'ms',
+      format: formatMs = formatDefault
+    } = {}
+  } = {},
+  separator = ':',
   onChange,
-
-    countTo: number
-    onEnd?: () => void
-    className?: string
-
+  onEnd
 }: ICountdownProps): ReactElement {
-  const controlled = checked !== undefined
-  const [isChecked, setIsChecked] = useState<boolean | undefined>(controlled ? checked : defaultChecked)
+  const [from] = useState(Math.min(date1, date2))
+  const [to] = useState(Math.max(date1, date2))
+  const [counter, setCounter] = useState(mode === 'up' ? to : from)
+  const [countdown, setCountdown] = useState(diffCalculation(value ?? (to - counter), type))
+  const [clear, setClear] = useState(false)
 
-  const [label, setLabel] = useState(renderLabel(isChecked))
-
-  useEffect(() => {
-    setLabel(renderLabel(isChecked))
-  }, [isChecked, renderLabel])
-
-  useEffect(() => {
-    if (controlled) {
-      setIsChecked(checked)
+  useInterval(() => {
+    if (mode === 'up') {
+      setCounter(counter - refreshRateMs)
+    } else if (mode === 'down') {
+      setCounter(counter + refreshRateMs)
     }
-  }, [checked, controlled])
-
-  return (
-    <div
-      className={twMerge(
-        'flex items-center gap-2',
-        className
-      )}
-    >
-      {label !== undefined && labelPosition === 'left' && (
-        <div
-          className={twMerge(
-            'text-gray-700 font-medium',
-            labelClassName
-          )}
-        >
-          {label}
-        </div>
-      )}
-
-      <label
-        className={twMerge(
-          'relative cursor-pointer',
-          disabled === true && 'cursor-not-allowed'
-        )}
-      >
-        <input
-          type="checkbox"
-          className="sr-only"
-          checked={isChecked}
-          disabled={disabled}
-          onChange={(event) => {
-            const checked = event.target.checked
-            onChange?.(checked, event)
-
-            if (!controlled) {
-              setIsChecked(checked)
-            }
-          }}
-        />
-
-        <div className={twMerge(
-          'w-14 h-8 flex items-center rounded-full duration-300 p-1',
-          switchClassName?.any,
-          isChecked === undefined && 'bg-gray-300 hover:bg-gray-400',
-          isChecked === false && 'bg-gray-400 hover:bg-gray-500',
-          isChecked === true && 'bg-green-400 hover:bg-green-500',
-          isChecked === undefined && switchClassName?.indeterminate,
-          isChecked === false && switchClassName?.unchecked,
-          isChecked === true && switchClassName?.checked,
-          (disabled === true) && 'opacity-50 pointer-events-none',
-          (disabled === true) && switchClassName?.disabled
-        )}>
-          <span
-            className={twMerge(
-              'duration-200',
-              isChecked === undefined && 'flex-[0.5]',
-              isChecked === false && 'flex-none',
-              isChecked === true && 'flex-1'
-            )}
-          />
-
-          <span className={twMerge(
-            'h-full aspect-square rounded-full bg-white shadow'
-          )} />
-        </div>
-      </label>
-
-      {label !== undefined && labelPosition === 'right' && (
-        <div
-          className={twMerge(
-            'text-gray-700 font-medium',
-            labelClassName
-          )}
-        >
-          {label}
-        </div>
-      )}
-    </div>
-  )
-}
-
-export default Countdown
-
-
-
-
-
-
-
-const Countdown = (props: {
-  countTo: number
-  onEnd?: () => void
-  className?: string
-}): React.ReactElement => {
-  const [countdown, setCountdown] = useState(
-    timeCalculation(props.countTo),
-  )
+  }, isPaused ? undefined : refreshRateMs, clear)
 
   useEffect(() => {
-    const updateCountdown = setInterval(() => {
-      if (
-        countdown.days === 0 &&
-        countdown.hours === 0 &&
-        countdown.minutes === 0 &&
-        countdown.seconds === 0
-      ) {
-        clearInterval(updateCountdown)
-        props.onEnd?.()
-      } else {
-        const newCountdown = timeCalculation(props.countTo)
-        setCountdown(newCountdown)
-      }
-    }, 1000)
+    setCountdown(diffCalculation(value ?? (to - counter), type))
+  }, [value, counter, to, type])
 
-    return () => {
-      clearInterval(updateCountdown)
+  useEffect(() => {
+    const _clear = mode === 'up'
+      ? countdown.asMilliseconds >= date2 - date1
+      : countdown.asMilliseconds <= 0
+    setClear(_clear)
+    if (_clear) {
+      onEnd?.()
+    } else {
+      onChange?.(countdown)
     }
   }, [countdown])
 
-  useEffect(() => {
-    setCountdown(timeCalculation(props.countTo))
-  }, [props.countTo])
+  const _separator = useMemo(() => {
+    return (
+      <div className={twMerge('first:hidden mx-1', separatorClassName)}>
+        {separator}
+      </div>
+    )
+  }, [separator])
 
   return (
     <div
       className={twMerge(
-        'w-40 p-2 bg-filogo-red-500 rounded-full duration-150',
-        'flex items-center justify-center',
-        'text-white font-semibold shadow-sm',
-        'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-filogo-red-500',
-        'enabled:hover:bg-red-600 disabled:bg-opacity-50',
-        props.className,
+        'flex items-center justify-center tabular-nums',
+        className
       )}
     >
-      <span className="duration-150">
-        {countdown.minutes.toString().padStart(2, '0')}
-      </span>
-      :
-      <span className="duration-150">
-        {countdown.seconds.toString().padStart(2, '0')}
-      </span>
+      {showPartYears &&
+        <>
+          {_separator}
+          <div className={twMerge('flex flex-col items-center', partsClassName)}>
+            <span>{formatYears(showAsYears ? countdown.asYears : countdown.years)}</span>
+            {showTextYears && <span>{textYears}</span>}
+          </div>
+        </>
+      }
+      {showPartMonths &&
+        <>
+          {_separator}
+          <div className={twMerge('flex flex-col items-center', partsClassName)}>
+            <span>{formatMonths(showAsMonths ? countdown.asMonths : countdown.months)}</span>
+            {showTextMonths && <span>{textMonths}</span>}
+          </div>
+        </>
+      }
+      {showPartWeeks &&
+        <>
+          {_separator}
+          <div className={twMerge('flex flex-col items-center', partsClassName)}>
+            <span>{formatWeeks(showAsWeeks ? countdown.asWeeks : countdown.weeks)}</span>
+            {showTextWeeks && <span>{textWeeks}</span>}
+          </div>
+        </>
+      }
+      {showPartDays &&
+        <>
+          {_separator}
+          <div className={twMerge('flex flex-col items-center', partsClassName)}>
+            <span>{formatDays(showAsDays ? countdown.asDays : countdown.days)}</span>
+            {showTextDays && <span>{textDays}</span>}
+          </div>
+        </>
+      }
+      {showPartHours &&
+        <>
+          {_separator}
+          <div className={twMerge('flex flex-col items-center', partsClassName)}>
+            <span>{formatHours(showAsHours ? countdown.asHours : countdown.hours)}</span>
+            {showTextHours && <span>{textHours}</span>}
+          </div>
+        </>
+      }
+      {showPartMins &&
+        <>
+          {_separator}
+          <div className={twMerge('flex flex-col items-center', partsClassName)}>
+            <span>{formatMins(showAsMins ? countdown.asMinutes : countdown.minutes)}</span>
+            {showTextMins && <span>{textMins}</span>}
+          </div>
+        </>
+      }
+      {showPartSecs &&
+        <>
+          {_separator}
+          <div className={twMerge('flex flex-col items-center', partsClassName)}>
+            <span>{formatSecs(showAsSecs ? countdown.asSeconds : countdown.seconds)}</span>
+            {showTextSecs && <span>{textSecs}</span>}
+          </div>
+        </>
+      }
+      {showPartMs &&
+        <>
+          {_separator}
+          <div className={twMerge('flex flex-col items-center', partsClassName)}>
+            <span>{formatMs(showAsMs ? countdown.asMilliseconds : countdown.milliseconds)}</span>
+            {showTextMs && <span>{textMs}</span>}
+          </div>
+        </>
+      }
     </div>
   )
 }
