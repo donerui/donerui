@@ -1,5 +1,5 @@
 {
-  "name": "@donerui/core",
+  "name": "@donerui/donerui",
   "version": "0.3.2",
   "description": "A modern UI library for React, styled with Tailwind CSS.",
   "main": "dist/index.js",
@@ -23,9 +23,7 @@
     "ui library",
     "components"
   ],
-  "authors": [
-    "Oğuzhan Kalkuz <oguzhan@enterdigit.com>"
-  ],
+  "author": "Döner UI Team",
   "license": "MIT",
   "peerDependencies": {
     "react": "^18.0.0",
