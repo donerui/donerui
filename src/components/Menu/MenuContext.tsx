@@ -1,17 +1,39 @@
-import { createContext, useContext, useState, type ReactNode } from 'react'
+import { createContext, useContext, useEffect, useState, type ReactNode } from 'react'
 
 interface MenuContextValue {
   isOpen: boolean
-  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>
+  setIsOpen: (value: boolean) => void
 }
 
 const MenuContext = createContext<MenuContextValue | undefined>(undefined)
 
-export default function MenuProvider ({ children }: { children: ReactNode }): JSX.Element {
-  const [isOpen, setIsOpen] = useState(false)
+export interface MenuProviderProps {
+  children: ReactNode
+  defaultIsOpen?: boolean
+  isOpen?: boolean
+  onOpenChange?: (value: boolean) => void
+}
+
+export default function MenuProvider ({ children, defaultIsOpen = false, isOpen, onOpenChange }: MenuProviderProps): JSX.Element {
+  const isControlled = isOpen !== undefined
+  const [isOpenInternal, setIsOpenInternal] = useState(isControlled ? isOpen : defaultIsOpen)
+
+  function handleOpen (value: boolean): void {
+    if (isControlled) {
+      onOpenChange?.(value)
+    } else {
+      setIsOpenInternal(value)
+    }
+  }
+
+  useEffect(() => {
+    if (isControlled) {
+      setIsOpenInternal(isOpen)
+    }
+  }, [isOpen])
 
   return (
-    <MenuContext.Provider value={{ isOpen, setIsOpen }}>
+    <MenuContext.Provider value={{ isOpen: isOpenInternal, setIsOpen: handleOpen }}>
       {children}
     </MenuContext.Provider>
   )

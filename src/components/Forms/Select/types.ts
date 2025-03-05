@@ -1,4 +1,5 @@
 import { type InputHTMLAttributes, type ReactNode } from 'react'
+import { type MenuProps } from '../../Menu'
 
 export interface SelectOption<TValue = string, TData = unknown> {
   value: TValue
@@ -14,8 +15,7 @@ export type SelectProps<TValue = string, TData = unknown> = Omit<InputHTMLAttrib
   value?: TValue
   defaultValue?: TValue
   onChange?: (value: TValue | undefined) => void
-  portal?: HTMLElement | string
-  placement?: 'top' | 'bottom'
+  menuProps?: MenuProps
   maxHeight?: number
   placeholder?: string
   isOptionDisabled?: (option: SelectOption<TValue, TData>) => boolean

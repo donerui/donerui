@@ -1,7 +1,7 @@
 import { type CSSProperties, forwardRef, Fragment, type ReactNode, type Ref, useEffect, useRef, useState } from 'react'
-import { createPortal } from 'react-dom'
 import { MdClose, MdKeyboardArrowDown } from 'react-icons/md'
 import { twMerge } from 'tailwind-merge'
+import { Menu, MenuProvider } from '../../Menu'
 import { selectClasses } from './constants'
 import { type SelectOption, type SelectProps } from './types'
 
@@ -13,14 +13,13 @@ export default forwardRef(function Select<TValue = string, TData = unknown> (
 ): ReactNode {
   const {
     errorMessage, label, id, name, required, disabled,
-    className, options, value, defaultValue, onChange, portal,
-    placement = 'bottom', maxHeight = 250, placeholder = 'Select an option',
+    className, options, value, defaultValue, onChange, menuProps, maxHeight = 250, placeholder = 'Select an option',
     isOptionDisabled, clearable = true, searchable = true,
     onSearch, closeOnSelect = true, closeOnScrollOutside = false,
     closeOnBlur = true, closeOnEscape = true, closeOnClickOutside = true
   } = props
 
-  const portalElement = typeof portal === 'string' ? document.getElementById(portal) : portal
+  const portalElement = typeof menuProps?.portal === 'string' ? document.getElementById(menuProps.portal) : menuProps?.portal
 
   const hasError = errorMessage != null
   const hasLabel = label != null && label !== ''
@@ -32,7 +31,7 @@ export default forwardRef(function Select<TValue = string, TData = unknown> (
   const [isMouseInsideDropdown, setIsMouseInsideDropdown] = useState(false)
 
   const [selectedValue, setSelectedValue] = useState<TValue | undefined>(value ?? defaultValue)
-  const [dropdownPlacement, setDropdownPlacement] = useState(placement)
+  const [dropdownPlacement, setDropdownPlacement] = useState(menuProps?.position ?? 'bottom')
   const [searchQuery, setSearchQuery] = useState('')
 
   const containerRef = useRef<HTMLDivElement>(null)
@@ -244,7 +243,7 @@ export default forwardRef(function Select<TValue = string, TData = unknown> (
     }
 
     const dropdown = (
-      <div
+      <Menu
         ref={dropdownRef}
         className={selectClasses.dropdown}
         data-position={dropdownPlacement}
@@ -275,10 +274,10 @@ export default forwardRef(function Select<TValue = string, TData = unknown> (
             )}
           </div>
         </div>
-      </div>
+      </Menu>
     )
 
-    return isOpen && (portalElement != null ? createPortal(dropdown, portalElement) : dropdown)
+    return isOpen && dropdown
   }
 
   useEffect(() => {
@@ -316,80 +315,82 @@ export default forwardRef(function Select<TValue = string, TData = unknown> (
   }, [isOpen, maxHeight, searchable, isMouseInsideDropdown, closeOnEscape, closeOnBlur, closeOnClickOutside])
 
   return (
-    <div className={selectClasses.wrapper} data-error={hasError}>
-      {hasLabel && (
-        <label
-          htmlFor={id ?? name}
-          className={selectClasses.label}
-          data-error={hasError}
-        >
-          {label}
-          {isRequired && <span className="text-primary-500">*</span>}
-        </label>
-      )}
+    <MenuProvider isOpen={isOpen} onOpenChange={setIsOpen}>
+      <div className={selectClasses.wrapper} data-error={hasError}>
+        {hasLabel && (
+          <label
+            htmlFor={id ?? name}
+            className={selectClasses.label}
+            data-error={hasError}
+          >
+            {label}
+            {isRequired && <span className="text-primary-500">*</span>}
+          </label>
+        )}
 
-      <div ref={containerRef} className="relative w-full">
-        <div
-          tabIndex={isDisabled ? -1 : 0}
-          ref={selectRef}
-          className={twMerge(selectClasses.select, className)}
-          onClick={() => { !isDisabled && setIsOpen(!isOpen) }}
-          data-open={isOpen}
-          data-disabled={isDisabled}
-          data-error={hasError}
-        >
-          {isOpen && searchable
-            ? (
-              <input
-                ref={searchInputRef}
-                type="text"
-                className={selectClasses.searchInput}
-                placeholder={placeholder}
-                value={searchQuery}
-                onChange={(e) => { setSearchQuery(e.target.value) }}
-                onClick={(e) => { e.stopPropagation() }}
-                data-error={hasError}
-              />
-              )
-            : (
-              <Fragment>
-                {selectedOption != null
-                  ? (
-                    <span className={selectClasses.selectedOption} data-error={hasError}>
-                      {selectedOption.label}
-                    </span>
-                    )
-                  : (
-                    <span className={selectClasses.placeholder} data-error={hasError}>
-                      {placeholder}
-                    </span>
-                    )}
-              </Fragment>
+        <div ref={containerRef} className="relative w-full">
+          <div
+            tabIndex={isDisabled ? -1 : 0}
+            ref={selectRef}
+            className={twMerge(selectClasses.select, className)}
+            onClick={() => { !isDisabled && setIsOpen(!isOpen) }}
+            data-open={isOpen}
+            data-disabled={isDisabled}
+            data-error={hasError}
+          >
+            {isOpen && searchable
+              ? (
+                <input
+                  ref={searchInputRef}
+                  type="text"
+                  className={selectClasses.searchInput}
+                  placeholder={placeholder}
+                  value={searchQuery}
+                  onChange={(e) => { setSearchQuery(e.target.value) }}
+                  onClick={(e) => { e.stopPropagation() }}
+                  data-error={hasError}
+                />
+                )
+              : (
+                <Fragment>
+                  {selectedOption != null
+                    ? (
+                      <span className={selectClasses.selectedOption} data-error={hasError}>
+                        {selectedOption.label}
+                      </span>
+                      )
+                    : (
+                      <span className={selectClasses.placeholder} data-error={hasError}>
+                        {placeholder}
+                      </span>
+                      )}
+                </Fragment>
+                )}
+
+            <span className="flex items-center gap-1">
+              {clearable && selectedOption != null && (
+                <MdClose
+                  className={selectClasses.clearIcon}
+                  data-error={hasError}
+                  onClick={handleClear}
+                />
               )}
-
-          <span className="flex items-center gap-1">
-            {clearable && selectedOption != null && (
-              <MdClose
-                className={selectClasses.clearIcon}
+              <MdKeyboardArrowDown
+                className={selectClasses.dropdownIcon}
+                data-open={isOpen}
                 data-error={hasError}
-                onClick={handleClear}
+                data-disabled={isDisabled}
               />
-            )}
-            <MdKeyboardArrowDown
-              className={selectClasses.dropdownIcon}
-              data-open={isOpen}
-              data-error={hasError}
-              data-disabled={isDisabled}
-            />
-          </span>
+            </span>
+          </div>
+
+          {renderDropdown()}
         </div>
 
-        {renderDropdown()}
+        {hasError && (
+          <p className={selectClasses.errorText}>{errorMessage}</p>
+        )}
       </div>
-
-      {hasError && (
-        <p className={selectClasses.errorText}>{errorMessage}</p>
-      )}
-    </div>
+    </MenuProvider>
   )
 })
