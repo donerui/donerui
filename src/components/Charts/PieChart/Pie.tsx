@@ -1,10 +1,10 @@
+import { useTimeoutEffect } from '@donerui/base'
 import { useEffect, useId, useState } from 'react'
 import { dataSelector, type IChartPoint, type IPieProps } from '..'
-import { useTimeoutEffect } from '../../../hooks'
 import { Svg, defaultPositionCentered } from '../../Svg'
 import { usePieChart } from './hooks'
 
-function Pie ({
+function Pie({
   data,
   dataLabel,
   dataKey = 'value',
@@ -33,7 +33,7 @@ function Pie ({
 
   const [angleScale, setAngleScale] = useState<number>(1)
 
-  function getPieces (): void {
+  function getPieces(): void {
     if (data == null || dataKey == null) {
       if (pieces.length > 0) {
         setPieces([])
@@ -87,7 +87,7 @@ function Pie ({
     }
   }
 
-  function scalePieces (): void {
+  function scalePieces(): void {
     const _scaledPieces = pieces.map((piece) => {
       const pt: IChartPoint = {
         angle: {

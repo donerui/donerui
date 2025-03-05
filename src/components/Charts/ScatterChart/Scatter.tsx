@@ -1,12 +1,11 @@
+import { map, useTimeoutEffect } from '@donerui/base'
 import { max, min } from 'lodash'
 import { useEffect, useId, useState } from 'react'
 import { dataSelector, defaultColorRange, defaultSizeRange, mapColor, useAxis, type IChartPoint, type IScatterProps } from '..'
-import { useTimeoutEffect } from '../../../hooks'
-import { map } from '../../../utils'
 import { Svg } from '../../Svg'
 import { useScatterChart } from './hooks'
 
-function Scatter ({
+function Scatter({
   data,
   dataLabel,
   xAxisId = 'x-axis',
@@ -37,7 +36,7 @@ function Scatter ({
   const [points, setPoints] = useState<IChartPoint[]>([])
   const [scaledPoints, setScaledPoints] = useState<IChartPoint[]>([])
 
-  function getPoints (): void {
+  function getPoints(): void {
     if (xAxis == null || yAxis == null) return
 
     if (data == null || xAxis.dataKey === '' || yAxis.dataKey === '') {
@@ -95,7 +94,7 @@ function Scatter ({
     }
   }
 
-  function scalePoints (): void {
+  function scalePoints(): void {
     if (xAxis == null || yAxis == null) return
 
     const minSize = min(points.map((point) => point.size?.value)) ?? 0

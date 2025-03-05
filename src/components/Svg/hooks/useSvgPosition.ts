@@ -1,6 +1,6 @@
+import { multiplyWithPercentage } from '@donerui/base'
 import { useEffect, useState } from 'react'
 import { defaultPosition, useSVG, type IPoint } from '..'
-import { multiplyWithPercentage } from '../../../utils'
 
 export function useSvgPosition (point: IPoint<number | string>): IPoint<number> {
   const { viewBox } = useSVG()

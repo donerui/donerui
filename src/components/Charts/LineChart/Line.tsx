@@ -1,9 +1,9 @@
+import { useTimeoutEffect } from '@donerui/base'
 import { useEffect, useId, useState } from 'react'
 import { dataSelector, useAxis, useLineChart, type IChartPoint, type ILineProps } from '..'
-import { useTimeoutEffect } from '../../../hooks'
 import { Svg } from '../../Svg'
 
-function Line ({
+function Line({
   data,
   dataLabel,
   xAxisId = 'x-axis',
@@ -30,7 +30,7 @@ function Line ({
   const [points, setPoints] = useState<IChartPoint[]>([])
   const [scaledPoints, setScaledPoints] = useState<IChartPoint[]>([])
 
-  function getPoints (): void {
+  function getPoints(): void {
     if (xAxis == null || yAxis == null) return
 
     if (data == null || xAxis.dataKey === '' || yAxis.dataKey === '') {
@@ -72,7 +72,7 @@ function Line ({
     }
   }
 
-  function scalePoints (): void {
+  function scalePoints(): void {
     if (xAxis == null || yAxis == null) return
 
     const _scaledPoints = points.map((point) => ({

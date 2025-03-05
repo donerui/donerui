@@ -1,6 +1,6 @@
+import { clamp } from '@donerui/base'
 import { maxBy, minBy, uniqBy } from 'lodash'
 import { type DataType, type IChartPoint, type MinMax, type ValueLabel } from '..'
-import { clamp } from '../../../utils'
 
 export function segmentateAxis (
   scale: number,

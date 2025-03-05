@@ -1,7 +1,7 @@
+import { useTimeoutEffect } from '@donerui/base'
 import { useContext, useMemo } from 'react'
 import { LineChartContext, type UseLineChartReturnType } from '.'
 import { findClosestNumber, useAxisScaler, useChart } from '..'
-import { useTimeoutEffect } from '../../../hooks'
 
 export function useLineChart (
   xAxisId?: string,

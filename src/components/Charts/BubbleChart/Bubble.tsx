@@ -1,12 +1,11 @@
+import { map, useTimeoutEffect } from '@donerui/base'
 import { max, min } from 'lodash'
 import { useEffect, useId, useState } from 'react'
 import { type IBubbleProps } from '.'
 import { dataSelector, defaultColorRange, defaultSizeRange, mapColor, useAxis, useBubbleChart, type IChartPoint } from '..'
-import { useTimeoutEffect } from '../../../hooks'
-import { map } from '../../../utils'
 import { Svg } from '../../Svg'
 
-function Bubble ({
+function Bubble({
   data,
   dataLabel,
   xAxisId = 'x-axis',
@@ -36,7 +35,7 @@ function Bubble ({
   const [points, setPoints] = useState<IChartPoint[]>([])
   const [scaledPoints, setScaledPoints] = useState<IChartPoint[]>([])
 
-  function getPoints (): void {
+  function getPoints(): void {
     if (xAxis == null) return
 
     if (data == null || xAxis.dataKey === '') {
@@ -89,7 +88,7 @@ function Bubble ({
     }
   }
 
-  function scalePoints (): void {
+  function scalePoints(): void {
     if (xAxis == null) return
 
     const minSize = min(points.map((point) => point.size?.value)) ?? 0

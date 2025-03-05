@@ -1,7 +1,7 @@
+import { useTimeoutEffect } from '@donerui/base'
 import { useContext, useMemo } from 'react'
 import { ScatterChartContext, type UseScatterChartReturnType } from '.'
 import { findClosestNumber, useAxisScaler, useChart } from '..'
-import { useTimeoutEffect } from '../../../hooks'
 
 export function useScatterChart (
   xAxisId?: string,

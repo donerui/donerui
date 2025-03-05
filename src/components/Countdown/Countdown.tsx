@@ -1,7 +1,7 @@
+import { useInterval } from '@donerui/base'
 import dayjs from 'dayjs'
 import { type ReactElement, useEffect, useMemo, useState } from 'react'
 import { twMerge } from 'tailwind-merge'
-import { useInterval } from '../../hooks/useInterval'
 import { type ICountdownProps } from './Countdown.types'
 import { diffCalculation, formatDefault } from './utils'
 
@@ -9,7 +9,6 @@ import { diffCalculation, formatDefault } from './utils'
 // - Vertical
 // - Presetler, Number Transition (flap, vs)
 // - Type = Number
-// - reset? how?
 
 function Countdown({
   className,

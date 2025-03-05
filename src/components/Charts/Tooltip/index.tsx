@@ -1,12 +1,12 @@
+import { useTimeoutEffect } from '@donerui/base'
 import { Transition } from '@headlessui/react'
 import { Fragment, useEffect, useState } from 'react'
 import { twMerge } from 'tailwind-merge'
 import { useChart, type ITooltipProps } from '..'
-import { useTimeoutEffect } from '../../../hooks'
 
 export * from './types'
 
-function Tooltip ({
+function Tooltip({
   className
 }: ITooltipProps): JSX.Element {
   const { mouseCoordinates, tooltipData, setTooltipData } = useChart()
@@ -72,7 +72,7 @@ function Tooltip ({
           </div>
         </Transition>
       </div>
-      )
+    )
 }
 
 export default Tooltip
