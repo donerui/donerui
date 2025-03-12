@@ -1,4 +1,4 @@
-import { type CSSProperties, forwardRef, Fragment, type ReactNode, type Ref, useEffect, useRef, useState } from 'react'
+import { forwardRef, Fragment, type ReactNode, type Ref, useEffect, useRef, useState } from 'react'
 import { MdClose, MdKeyboardArrowDown } from 'react-icons/md'
 import { twMerge } from 'tailwind-merge'
 import { Menu, MenuProvider } from '../../Menu'
@@ -31,7 +31,6 @@ export default forwardRef(function Select<TValue = string, TData = unknown> (
   const [isMouseInsideDropdown, setIsMouseInsideDropdown] = useState(false)
 
   const [selectedValue, setSelectedValue] = useState<TValue | undefined>(value ?? defaultValue)
-  const [dropdownPlacement, setDropdownPlacement] = useState(menuProps?.position ?? 'bottom')
   const [searchQuery, setSearchQuery] = useState('')
 
   const containerRef = useRef<HTMLDivElement>(null)
@@ -76,14 +75,6 @@ export default forwardRef(function Select<TValue = string, TData = unknown> (
     if (closeOnScrollOutside && !isMouseInsideDropdown) {
       setIsOpen(false)
     }
-
-    const containerRect = containerRef.current.getBoundingClientRect()
-
-    const viewportHeight = window.innerHeight
-    const spaceBelow = viewportHeight - containerRect.bottom
-    const spaceAbove = containerRect.top
-
-    setDropdownPlacement(spaceBelow >= maxHeight || spaceBelow >= spaceAbove ? 'bottom' : 'top')
   }
 
   function handleSelect (option: SelectOption<TValue, TData>): void {
@@ -222,33 +213,20 @@ export default forwardRef(function Select<TValue = string, TData = unknown> (
   }
 
   function renderDropdown (): ReactNode {
-    const dropdownStyle: CSSProperties = {
-      maxHeight,
-      overscrollBehaviorY: 'none'
-    }
     const containerElement = containerRef.current
     if (containerElement == null) return
-    const containerRect = containerElement.getBoundingClientRect()
-
-    if (portalElement != null) {
-      dropdownStyle.position = 'absolute'
-      dropdownStyle.left = portalElement.offsetLeft + containerElement.offsetLeft
-      dropdownStyle.width = containerRect.width
-
-      if (dropdownPlacement === 'top') {
-        dropdownStyle.bottom = portalElement.offsetHeight + portalElement.offsetTop - containerElement.offsetTop
-      } else {
-        dropdownStyle.top = portalElement.offsetTop + containerElement.offsetTop + containerRect.height
-      }
-    }
 
     const dropdown = (
       <Menu
         ref={dropdownRef}
         className={selectClasses.dropdown}
-        data-position={dropdownPlacement}
+        {...menuProps}
+        reference={containerElement}
         data-error={hasError}
-        style={dropdownStyle}
+        style={{
+          maxHeight,
+          overscrollBehaviorY: 'none'
+        }}
       >
         <div className="flex flex-col h-full">
           <div className="flex-1 overflow-y-auto">

@@ -8,6 +8,7 @@ export default function MenuTrigger (props: MenuTriggerProps): JSX.Element {
 
   return (
     <Trigger
+      className='relative'
       onTrigger={setIsOpen}
       {...props}
     />

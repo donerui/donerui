@@ -9,6 +9,13 @@ export interface MenuProps {
   className?: string
   style?: CSSProperties
   portal?: HTMLElement | string
+  reference?: HTMLElement | string
+  /**
+   * If true, the menu will be repositioned to the reference element only when there is a portal present
+   * @default true
+   */
+  repositionToReference?: boolean
+  sameWidthAsReference?: boolean
   position?: MenuPosition
   TransitionComponent?: React.ComponentType<ITransitionOptions>
 }

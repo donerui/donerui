@@ -1,4 +1,4 @@
-import { forwardRef, type ReactNode } from 'react'
+import { type CSSProperties, forwardRef, type ReactNode } from 'react'
 import { createPortal } from 'react-dom'
 import { twMerge } from 'tailwind-merge'
 import Transition from '../Transition'
@@ -21,12 +21,51 @@ export default forwardRef<HTMLDivElement, MenuProps>(function Menu ({
   className,
   style,
   portal,
+  reference,
+  repositionToReference = true,
+  sameWidthAsReference = true,
   position = 'bottom',
   TransitionComponent = Transition
 }, ref): ReactNode {
   const { isOpen } = useMenu()
 
   const portalEl = portal !== undefined ? typeof portal === 'string' ? document.getElementById(portal) : portal : undefined
+  const referenceEl = reference !== undefined ? typeof reference === 'string' ? document.getElementById(reference) : reference : undefined
+
+  const internalStyle: CSSProperties = {}
+  if (referenceEl != null && portalEl != null) {
+    const referenceRect = referenceEl.getBoundingClientRect()
+    const portalRect = portalEl.getBoundingClientRect()
+
+    if (repositionToReference) {
+      internalStyle.position = 'absolute'
+
+      switch (position) {
+        case 'top':
+          internalStyle.bottom = (portalRect.height - referenceRect.height) + (referenceRect.top - portalRect.top)
+          internalStyle.left = referenceRect.left - portalRect.left
+          if (sameWidthAsReference) {
+            internalStyle.width = referenceRect.width
+          }
+          break
+        case 'left':
+          console.log(referenceRect, portalRect)
+          internalStyle.top = referenceRect.top - portalRect.top
+          internalStyle.right = portalRect.right - referenceRect.left
+          break
+        case 'right':
+          internalStyle.top = referenceRect.top - portalRect.top
+          internalStyle.left = referenceRect.right - portalRect.left
+          break
+        default:
+          internalStyle.top = referenceRect.height + (referenceRect.top - portalRect.top)
+          internalStyle.left = referenceRect.left - portalRect.left
+          if (sameWidthAsReference) {
+            internalStyle.width = referenceRect.width
+          }
+      }
+    }
+  }
 
   const menu = (
     <TransitionComponent
@@ -40,7 +79,7 @@ export default forwardRef<HTMLDivElement, MenuProps>(function Menu ({
           positionClasses[position],
           className
         )}
-        style={style}
+        style={{ ...internalStyle, ...style }}
         onClick={(e) => { e.stopPropagation() }}
       >
         {children}
