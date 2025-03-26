@@ -90,8 +90,12 @@ function Svg ({
     const screenCTM = e.currentTarget?.getScreenCTM()
     if (screenCTM == null) return
 
+    const boundingRect = e.currentTarget.getBoundingClientRect()
+
     const inSvgSpace = mousePos.matrixTransform(screenCTM.inverse())
     const inClientSpace = inSvgSpace.matrixTransform(screenCTM)
+    inClientSpace.x -= boundingRect.left
+    inClientSpace.y -= boundingRect.top
 
     setMouseCoordinates({
       inSvgSpace,
