@@ -47,9 +47,7 @@ export const selectClasses = {
     'data-[disabled=true]:text-gray-400'
   ),
   dropdown: twMerge(
-    'absolute left-0 w-full bg-white border border-gray-300 rounded-md shadow-lg overflow-y-auto z-50',
-    'data-[position=top]:bottom-full data-[position=top]:mb-2',
-    'data-[position=bottom]:top-full data-[position=bottom]:mt-2',
+    'absolute w-full bg-white border border-gray-300 rounded-md shadow-lg overflow-y-auto z-50',
     'data-[error=true]:border-red-500'
   ),
   option: twMerge(

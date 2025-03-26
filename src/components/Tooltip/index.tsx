@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import { twMerge } from 'tailwind-merge'
 import Transition from '../Transition'
+import Trigger from '../Trigger'
 import { DefaultTooltipRenderComponent } from './constants'
 import { type ITooltipProps } from './types'
 
@@ -9,40 +9,32 @@ function Tooltip ({
   className,
   data,
   position = 'top',
-  trigger = 'hover',
   onShow,
   onHide,
   TransitionComponent = Transition,
-  RenderComponent = DefaultTooltipRenderComponent
+  RenderComponent = DefaultTooltipRenderComponent,
+  ...rest
 }: ITooltipProps): JSX.Element {
   const [show, setShow] = useState<boolean>(false)
 
-  const showTooltip = (): void => {
-    setShow(true)
-    onShow?.()
-  }
-
-  const hideTooltip = (): void => {
-    setShow(false)
-    onHide?.()
+  function onTrigger (show: boolean): void {
+    setShow(show)
+    if (show) {
+      onShow?.()
+    } else {
+      onHide?.()
+    }
   }
 
   return (
-    <div
-      className={twMerge(
-        'relative'
-      )}
-      onMouseEnter={trigger === 'hover' ? showTooltip : undefined}
-      onMouseLeave={trigger === 'hover' ? hideTooltip : undefined}
-      onClick={trigger === 'click' ? () => { setShow((prev) => !prev) } : undefined}
+    <Trigger
+      onTrigger={onTrigger}
+      {...rest}
     >
       {children}
 
       <TransitionComponent
         show={show}
-        appear
-        beforeEnter={showTooltip}
-        afterLeave={hideTooltip}
       >
         <RenderComponent
           data={data}
@@ -50,7 +42,7 @@ function Tooltip ({
           className={className}
         />
       </TransitionComponent>
-    </div>
+    </Trigger>
   )
 }
 
