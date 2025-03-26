@@ -18,7 +18,6 @@ import Trigger from './Trigger'
 
 export * from './Button'
 export * from './ButtonGroup'
-export * from './Charts'
 export * from './Chip'
 export * from './CreditCard'
 export * from './Dialog'
