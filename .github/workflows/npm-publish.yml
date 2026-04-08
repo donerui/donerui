@@ -24,7 +24,7 @@ jobs:
           scope: '@donerui'
 
       - name: Install dependencies
-        run: npm ci
+        run: npm i
 
       - name: Check if version has changed
         id: version-check
