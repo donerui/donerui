@@ -1,6 +1,9 @@
-import { type InputHTMLAttributes, type ReactNode } from 'react'
+import type { InputHTMLAttributes, ReactNode } from 'react'
 
-export type CheckboxProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'type'> & {
+export type CheckboxProps = Omit<
+  InputHTMLAttributes<HTMLInputElement>,
+  'type'
+> & {
   label?: string
   errorMessage?: string
   description?: ReactNode

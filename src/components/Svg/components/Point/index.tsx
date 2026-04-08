@@ -1,24 +1,27 @@
-import { useEffect, useState } from 'react'
+import { type JSX, useEffect, useState } from 'react'
 import { twMerge } from 'tailwind-merge'
+import { type IStrokeOptions, useSVG, useSvgPosition } from '../..'
 import { defaultPointStrokeOptions, type ISvgPointProps } from '..'
-import { useSVG, useSvgPosition, type IStrokeOptions } from '../..'
 
 export * from './constants'
 export * from './types'
 
-function Point ({
+function Point({
   point,
   className,
   strokeOptions = defaultPointStrokeOptions,
   fill = 'transparent',
   radius = 0.5,
-  interactionRadius = 0
+  interactionRadius = 0,
 }: ISvgPointProps): JSX.Element {
   const { zoom } = useSVG()
 
   const position = useSvgPosition(point)
   const [hovered, setHovered] = useState(false)
-  const [strokeOpts, setStrokeOpts] = useState<IStrokeOptions>({ ...defaultPointStrokeOptions, ...strokeOptions })
+  const [strokeOpts, setStrokeOpts] = useState<IStrokeOptions>({
+    ...defaultPointStrokeOptions,
+    ...strokeOptions,
+  })
 
   const onMouseEnter = (): void => {
     setHovered(true)
@@ -39,8 +42,8 @@ function Point ({
           cx={position.x}
           cy={position.y}
           r={interactionRadius}
-          stroke='transparent'
-          fill='transparent'
+          stroke="transparent"
+          fill="transparent"
           strokeWidth={0}
           onMouseEnter={onMouseEnter}
           onMouseLeave={onMouseLeave}
@@ -48,10 +51,7 @@ function Point ({
       )}
 
       <circle
-        className={twMerge(
-          'duration-150 pointer-events-none',
-          className
-        )}
+        className={twMerge('duration-150 pointer-events-none', className)}
         cx={position.x}
         cy={position.y}
         r={(hovered ? radius * 1.5 : radius) * zoom}

@@ -1,4 +1,4 @@
-import { type ITransitionProps } from '../../Transition/types'
+import type { ITransitionProps } from '../../Transition/types'
 
 export interface IModalProps {
   children: React.ReactNode

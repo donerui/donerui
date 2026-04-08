@@ -56,5 +56,5 @@ export {
   Rating,
   Tooltip,
   Transition,
-  Trigger
+  Trigger,
 }

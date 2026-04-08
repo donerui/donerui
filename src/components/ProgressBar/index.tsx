@@ -1,11 +1,7 @@
-import * as React from 'react'
+import type * as React from 'react'
 import { twMerge } from 'tailwind-merge'
-import {
-  colorClassnames,
-  sizeClassnames,
-  valueClassnames
-} from './constants'
-import { type IProgressBarProps } from './types'
+import { colorClassnames, sizeClassnames, valueClassnames } from './constants'
+import type { IProgressBarProps } from './types'
 
 export const ProgressBar: React.FC<IProgressBarProps> = ({
   className,
@@ -19,10 +15,18 @@ export const ProgressBar: React.FC<IProgressBarProps> = ({
   valueFormatter = (value, max) => `${Math.round((value / max) * 100)}%`,
   ...props
 }) => {
-  const allProps = { value, max, size, color, showValue, valuePosition, valueFormatter, ...props }
-  const computedClassName = typeof className === 'function'
-    ? className(allProps)
-    : className
+  const allProps = {
+    value,
+    max,
+    size,
+    color,
+    showValue,
+    valuePosition,
+    valueFormatter,
+    ...props,
+  }
+  const computedClassName =
+    typeof className === 'function' ? className(allProps) : className
 
   const percentage = Math.min(100, Math.max(0, (value / max) * 100))
 
@@ -30,15 +34,18 @@ export const ProgressBar: React.FC<IProgressBarProps> = ({
     <div
       className={twMerge(
         'absolute text-center text-nowrap',
-        valuePosition === 'top' && 'left-1/2 -translate-x-1/2 top-0 -translate-y-full mb-1',
-        valuePosition === 'bottom' && 'left-1/2 -translate-x-1/2 bottom-0 translate-y-full mt-1',
-        valuePosition === 'inside' && 'left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 text-white font-medium',
+        valuePosition === 'top' &&
+          'left-1/2 -translate-x-1/2 top-0 -translate-y-full mb-1',
+        valuePosition === 'bottom' &&
+          'left-1/2 -translate-x-1/2 bottom-0 translate-y-full mt-1',
+        valuePosition === 'inside' &&
+          'left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 text-white font-medium',
         valuePosition === 'left' && 'right-full top-1/2 -translate-y-1/2 mr-2',
         valuePosition === 'right' && 'left-full top-1/2 -translate-y-1/2 ml-2',
         valueClassnames[size],
         typeof valueClassName === 'function'
           ? valueClassName(allProps)
-          : valueClassName
+          : valueClassName,
       )}
     >
       {valueFormatter(value, max)}
@@ -51,14 +58,14 @@ export const ProgressBar: React.FC<IProgressBarProps> = ({
         className={twMerge(
           'w-full rounded-full overflow-hidden bg-gray-200 dark:bg-gray-700',
           sizeClassnames[size],
-          computedClassName
+          computedClassName,
         )}
         {...props}
       >
         <div
           className={twMerge(
             'h-full rounded-full transition-all duration-700 ease-in-out relative',
-            colorClassnames[color]
+            colorClassnames[color],
           )}
           style={{ width: `${percentage}%` }}
         >

@@ -1,4 +1,4 @@
-import { type IButtonProps } from '../../Button'
+import type { IButtonProps } from '../../Button'
 
 export interface IPaginationProps {
   maxPages: number

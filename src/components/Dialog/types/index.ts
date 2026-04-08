@@ -1,4 +1,4 @@
-import { type IModalProps } from '../../Modal/types'
+import type { IModalProps } from '../../Modal/types'
 
 export interface IDialogRenderProps {
   id?: string

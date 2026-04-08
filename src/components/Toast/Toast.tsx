@@ -1,12 +1,16 @@
-import { useEffect, useState } from 'react'
+import { type JSX, useEffect, useState } from 'react'
 
 import Transition from '../Transition'
-import { DefaultDurationTransition, DefaultToastRenderComponent, DefaultToastTransition } from './constants'
+import {
+  DefaultDurationTransition,
+  DefaultToastRenderComponent,
+  DefaultToastTransition,
+} from './constants'
 import { useToaster } from './hooks'
-import { type IToastProps } from './types'
+import type { IToastProps } from './types'
 import { ConvertPromiseTypeToToastType } from './utils'
 
-function Toast ({
+function Toast({
   id,
   type,
   data,
@@ -18,7 +22,7 @@ function Toast ({
   Icon,
   TransitionComponent = DefaultToastTransition,
   DurationTransitionComponent = DefaultDurationTransition,
-  RenderComponent = DefaultToastRenderComponent
+  RenderComponent = DefaultToastRenderComponent,
 }: IToastProps): JSX.Element {
   const isPromise = typeof data !== 'string' && data.promise instanceof Promise
 
@@ -26,9 +30,15 @@ function Toast ({
   const toastProps = getToast(id)
 
   const [isShowing, setIsShowing] = useState<boolean>(true)
-  const [toastData, setToastData] = useState<string>(isPromise ? data.loading : data)
-  const [promiseState, setPromiseState] = useState<'pending' | 'resolved' | 'rejected' | null>(isPromise ? 'pending' : null)
-  const [toastDuration, setToastDuration] = useState<number>(isPromise ? Infinity : duration)
+  const [toastData, setToastData] = useState<string>(
+    isPromise ? data.loading : data,
+  )
+  const [promiseState, setPromiseState] = useState<
+    'pending' | 'resolved' | 'rejected' | null
+  >(isPromise ? 'pending' : null)
+  const [toastDuration, setToastDuration] = useState<number>(
+    isPromise ? Infinity : duration,
+  )
 
   const durationValid = toastDuration > 0 && toastDuration < Infinity
 
@@ -72,7 +82,9 @@ function Toast ({
   useEffect(() => {
     const timeout = setTimeout(handlePromise, 100)
 
-    return () => { clearTimeout(timeout) }
+    return () => {
+      clearTimeout(timeout)
+    }
   }, [data])
 
   useEffect(() => {
@@ -83,17 +95,21 @@ function Toast ({
         setIsShowing(false)
       }, duration)
 
-      return () => { clearTimeout(timer) }
+      return () => {
+        clearTimeout(timer)
+      }
     }
 
-    return () => { }
+    return () => {}
   }, [durationValid])
 
   return (
     <Transition
       show={isShowing}
       appear
-      afterLeave={() => { removeToast(id) }}
+      afterLeave={() => {
+        removeToast(id)
+      }}
       animation={animation}
       TransitionComponent={TransitionComponent}
     >

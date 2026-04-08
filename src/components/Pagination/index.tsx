@@ -1,15 +1,24 @@
-import { useEffect, useState } from 'react'
+import { type JSX, useEffect, useState } from 'react'
 import {
-  MdKeyboardArrowDown, MdKeyboardArrowLeft, MdKeyboardArrowRight, MdKeyboardArrowUp,
-  MdKeyboardDoubleArrowDown, MdKeyboardDoubleArrowLeft, MdKeyboardDoubleArrowRight, MdKeyboardDoubleArrowUp
+  MdKeyboardArrowDown,
+  MdKeyboardArrowLeft,
+  MdKeyboardArrowRight,
+  MdKeyboardArrowUp,
+  MdKeyboardDoubleArrowDown,
+  MdKeyboardDoubleArrowLeft,
+  MdKeyboardDoubleArrowRight,
+  MdKeyboardDoubleArrowUp,
 } from 'react-icons/md'
 import { twMerge } from 'tailwind-merge'
 import Button, { type IButtonProps } from '../Button'
 import Icon from '../Icon'
-import { defaultPaginationActiveButtonProps, defaultPaginationButtonProps } from './constants'
-import { type IPaginationProps } from './types'
+import {
+  defaultPaginationActiveButtonProps,
+  defaultPaginationButtonProps,
+} from './constants'
+import type { IPaginationProps } from './types'
 
-function Pagination ({
+function Pagination({
   maxPages,
   page,
   defaultPage = 0,
@@ -23,15 +32,19 @@ function Pagination ({
   buttonProps,
   activeButtonProps,
   alignment = 'horizontal',
-  showUtilityButtons = 'hover'
+  showUtilityButtons = 'hover',
 }: IPaginationProps): JSX.Element {
   const isControlled = page !== undefined
 
-  const [currentPage, setCurrentPage] = useState<number>(isControlled ? page : defaultPage)
+  const [currentPage, setCurrentPage] = useState<number>(
+    isControlled ? page : defaultPage,
+  )
   const [visiblePages, setVisiblePages] = useState<number[]>([])
 
-  const [paginationButtonProps, setPaginationButtonProps] = useState<IButtonProps>(defaultPaginationButtonProps)
-  const [paginationActiveButtonProps, setPaginationActiveButtonProps] = useState<IButtonProps>(defaultPaginationActiveButtonProps)
+  const [paginationButtonProps, setPaginationButtonProps] =
+    useState<IButtonProps>(defaultPaginationButtonProps)
+  const [paginationActiveButtonProps, setPaginationActiveButtonProps] =
+    useState<IButtonProps>(defaultPaginationActiveButtonProps)
 
   const firstVisible = visiblePages[0]
   const lastVisible = visiblePages[visiblePages.length - 1]
@@ -48,11 +61,17 @@ function Pagination ({
   const hasEllipsisNext = lastVisible < lastPage - 1
 
   useEffect(() => {
-    setPaginationButtonProps({ ...defaultPaginationButtonProps, ...buttonProps })
+    setPaginationButtonProps({
+      ...defaultPaginationButtonProps,
+      ...buttonProps,
+    })
   }, [buttonProps])
 
   useEffect(() => {
-    setPaginationActiveButtonProps({ ...defaultPaginationActiveButtonProps, ...activeButtonProps })
+    setPaginationActiveButtonProps({
+      ...defaultPaginationActiveButtonProps,
+      ...activeButtonProps,
+    })
   }, [activeButtonProps])
 
   useEffect(() => {
@@ -65,7 +84,11 @@ function Pagination ({
     const newVisiblePages = []
 
     const visibleStart = Math.max(startPage, currentPage - visibleAmount)
-    for (let i = visibleStart; i <= Math.min(lastPage, currentPage + visibleAmount); i++) {
+    for (
+      let i = visibleStart;
+      i <= Math.min(lastPage, currentPage + visibleAmount);
+      i++
+    ) {
       newVisiblePages.push(i)
     }
 
@@ -73,17 +96,22 @@ function Pagination ({
   }, [lastPage, visibleAmount, startPage, currentPage])
 
   return (
-    <span className={twMerge(
-      'group flex justify-between',
-      alignment === 'vertical' && 'flex-col h-full w-fit',
-      showUtilityButtons === false && 'justify-center'
-    )}>
-      <span className={twMerge(
-        'flex gap-2',
-        alignment === 'vertical' && 'flex-col',
-        showUtilityButtons === 'hover' && 'duration-200 opacity-25 group-hover:opacity-100',
-        showUtilityButtons === false && 'hidden'
-      )}>
+    <span
+      className={twMerge(
+        'group flex justify-between',
+        alignment === 'vertical' && 'flex-col h-full w-fit',
+        showUtilityButtons === false && 'justify-center',
+      )}
+    >
+      <span
+        className={twMerge(
+          'flex gap-2',
+          alignment === 'vertical' && 'flex-col',
+          showUtilityButtons === 'hover' &&
+            'duration-200 opacity-25 group-hover:opacity-100',
+          showUtilityButtons === false && 'hidden',
+        )}
+      >
         {jumpPreviousButton && (
           <Button
             {...paginationButtonProps}
@@ -101,7 +129,13 @@ function Pagination ({
               }
             }}
           >
-            <Icon icon={alignment === 'vertical' ? MdKeyboardDoubleArrowUp : MdKeyboardDoubleArrowLeft} />
+            <Icon
+              icon={
+                alignment === 'vertical'
+                  ? MdKeyboardDoubleArrowUp
+                  : MdKeyboardDoubleArrowLeft
+              }
+            />
           </Button>
         )}
 
@@ -122,15 +156,23 @@ function Pagination ({
               }
             }}
           >
-            <Icon icon={alignment === 'vertical' ? MdKeyboardArrowUp : MdKeyboardArrowLeft} />
+            <Icon
+              icon={
+                alignment === 'vertical'
+                  ? MdKeyboardArrowUp
+                  : MdKeyboardArrowLeft
+              }
+            />
           </Button>
         )}
       </span>
 
-      <span className={twMerge(
-        'flex gap-2',
-        alignment === 'vertical' && 'flex-col'
-      )}>
+      <span
+        className={twMerge(
+          'flex gap-2',
+          alignment === 'vertical' && 'flex-col',
+        )}
+      >
         {renderFirst && (
           <Button
             {...paginationButtonProps}
@@ -147,13 +189,17 @@ function Pagination ({
         )}
 
         {hasEllipsisPrevious && (
-          <span className="flex justify-center bg-white text-sm font-semibold text-gray-700 rounded-lg px-2 py-1 duration-200 h-8 min-w-[2rem]">...</span>
+          <span className="flex justify-center bg-white text-sm font-semibold text-gray-700 rounded-lg px-2 py-1 duration-200 h-8 min-w-[2rem]">
+            ...
+          </span>
         )}
 
         {visiblePages.map((p) => (
           <Button
             key={p}
-            {...(p === currentPage ? paginationActiveButtonProps : paginationButtonProps)}
+            {...(p === currentPage
+              ? paginationActiveButtonProps
+              : paginationButtonProps)}
             onClick={() => {
               if (!isControlled) {
                 setCurrentPage(p)
@@ -167,7 +213,9 @@ function Pagination ({
         ))}
 
         {hasEllipsisNext && (
-          <span className="flex justify-center bg-white text-sm font-semibold text-gray-700 rounded-lg px-2 py-1 duration-200 h-8 min-w-[2rem]">...</span>
+          <span className="flex justify-center bg-white text-sm font-semibold text-gray-700 rounded-lg px-2 py-1 duration-200 h-8 min-w-[2rem]">
+            ...
+          </span>
         )}
 
         {renderLast && (
@@ -186,12 +234,15 @@ function Pagination ({
         )}
       </span>
 
-      <span className={twMerge(
-        'flex gap-2',
-        alignment === 'vertical' && 'flex-col',
-        showUtilityButtons === 'hover' && 'duration-200 opacity-25 group-hover:opacity-100',
-        showUtilityButtons === false && 'hidden'
-      )}>
+      <span
+        className={twMerge(
+          'flex gap-2',
+          alignment === 'vertical' && 'flex-col',
+          showUtilityButtons === 'hover' &&
+            'duration-200 opacity-25 group-hover:opacity-100',
+          showUtilityButtons === false && 'hidden',
+        )}
+      >
         {nextButton && (
           <Button
             {...paginationButtonProps}
@@ -199,7 +250,10 @@ function Pagination ({
             disabled={isLast}
             onClick={() => {
               if (!isLast) {
-                const newPage = Math.min(startPage + maxPages - 1, currentPage + 1)
+                const newPage = Math.min(
+                  startPage + maxPages - 1,
+                  currentPage + 1,
+                )
 
                 if (!isControlled) {
                   setCurrentPage(newPage)
@@ -209,7 +263,13 @@ function Pagination ({
               }
             }}
           >
-            <Icon icon={alignment === 'vertical' ? MdKeyboardArrowDown : MdKeyboardArrowRight} />
+            <Icon
+              icon={
+                alignment === 'vertical'
+                  ? MdKeyboardArrowDown
+                  : MdKeyboardArrowRight
+              }
+            />
           </Button>
         )}
 
@@ -220,7 +280,10 @@ function Pagination ({
             disabled={isLast}
             onClick={() => {
               if (!isLast) {
-                const newPage = Math.min(startPage + maxPages - 1, currentPage + visibleAmount)
+                const newPage = Math.min(
+                  startPage + maxPages - 1,
+                  currentPage + visibleAmount,
+                )
 
                 if (!isControlled) {
                   setCurrentPage(newPage)
@@ -230,7 +293,13 @@ function Pagination ({
               }
             }}
           >
-            <Icon icon={alignment === 'vertical' ? MdKeyboardDoubleArrowDown : MdKeyboardDoubleArrowRight} />
+            <Icon
+              icon={
+                alignment === 'vertical'
+                  ? MdKeyboardDoubleArrowDown
+                  : MdKeyboardDoubleArrowRight
+              }
+            />
           </Button>
         )}
       </span>

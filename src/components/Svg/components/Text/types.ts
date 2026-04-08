@@ -1,4 +1,4 @@
-import { type IPoint } from '../..'
+import type { IPoint } from '../..'
 
 export interface ISvgTextProps {
   point?: IPoint<number | string>
@@ -8,8 +8,8 @@ export interface ISvgTextProps {
   fontSize?: number
   fontFamily?: string
   fontWeight?: string
-  textAnchor?: string
-  dominantBaseline?: string
+  textAnchor?: React.SVGAttributes<SVGTextElement>['textAnchor']
+  dominantBaseline?: React.SVGAttributes<SVGTextElement>['dominantBaseline']
   rotate?: number
   format?: (value: string) => string
 }

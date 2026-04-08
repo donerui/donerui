@@ -1,4 +1,4 @@
-import { type creditCardPresets } from './presets'
+import type { creditCardPresets } from './presets'
 
 export interface CreditCardProps {
   className?: string

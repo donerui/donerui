@@ -1,11 +1,11 @@
 import dayjs, { type Dayjs } from 'dayjs'
-import { useEffect, useState, type ReactNode } from 'react'
+import { type ReactNode, useEffect, useState } from 'react'
 import { MdArrowBack, MdArrowForward } from 'react-icons/md'
 import { twMerge } from 'tailwind-merge'
 import Button from '../Button'
-import { type CalendarProps, type DateRange } from './types'
+import type { CalendarProps, DateRange } from './types'
 
-export default function Calendar ({
+export default function Calendar({
   type,
   value,
   onChange,
@@ -19,12 +19,13 @@ export default function Calendar ({
   showPreviosMonthButton = true,
   showNextMonthButton = true,
   onPreviosMonthButtonClick,
-  onNextMonthButtonClick
+  onNextMonthButtonClick,
 }: CalendarProps): ReactNode {
   const [internalValue, setInternalValue] = useState<typeof value>(value)
   const [viewDayjs, setViewDayjs] = useState<Dayjs>(dayjs(viewDate).date(1))
 
-  const [internalSelectingRangeStart, setInternalSelectingRangeStart] = useState<Dayjs | undefined>(selectingRangeStart)
+  const [internalSelectingRangeStart, setInternalSelectingRangeStart] =
+    useState<Dayjs | undefined>(selectingRangeStart)
   const [internalFocusedDate, setInternalFocusedDate] = useState<Dayjs>()
 
   const startOfWeekLocale = dayjs().startOf('week').day()
@@ -34,16 +35,26 @@ export default function Calendar ({
   const startDay = (viewDayjs.date(1).day() - startOfWeekLocale + 7) % 7
   const endDay = viewDayjs.date(daysInMonth).day() - startOfWeekLocale
   const days = Array.from({ length: daysInMonth }, (_, i) => i + 1)
-  const previousDaySelector = Array.from({ length: startDay === 0 ? 7 : startDay }, (_, i) => i + 1)
-  const previousMonthDays = previousDaySelector.map((_, i) => viewDayjs.subtract(previousDaySelector.length - i, 'day'))
-  const nextDaysSelector = Array.from({ length: endDay === 6 ? 7 : 6 - endDay }, (_, i) => i + 1)
-  const nextMonthDays = nextDaysSelector.map((_, i) => viewDayjs.date(daysInMonth + i + 1))
+  const previousDaySelector = Array.from(
+    { length: startDay === 0 ? 7 : startDay },
+    (_, i) => i + 1,
+  )
+  const previousMonthDays = previousDaySelector.map((_, i) =>
+    viewDayjs.subtract(previousDaySelector.length - i, 'day'),
+  )
+  const nextDaysSelector = Array.from(
+    { length: endDay === 6 ? 7 : 6 - endDay },
+    (_, i) => i + 1,
+  )
+  const nextMonthDays = nextDaysSelector.map((_, i) =>
+    viewDayjs.date(daysInMonth + i + 1),
+  )
 
-  function isToday (date: Dayjs): boolean {
+  function isToday(date: Dayjs): boolean {
     return date.isSame(dayjs(), 'day')
   }
 
-  function isSelected (date: Dayjs): boolean {
+  function isSelected(date: Dayjs): boolean {
     if (internalValue === undefined) return false
 
     switch (type) {
@@ -51,38 +62,51 @@ export default function Calendar ({
         if (!Array.isArray(internalValue)) return false
         return internalValue.some((d) => dayjs(d).isSame(date, 'day'))
       case 'range':
-        return date.isAfter(dayjs((internalValue as DateRange).start).subtract(1, 'day'), 'day') && date.isBefore(dayjs((internalValue as DateRange).end).add(1, 'day'), 'day')
+        return (
+          date.isAfter(
+            dayjs((internalValue as DateRange).start).subtract(1, 'day'),
+            'day',
+          ) &&
+          date.isBefore(
+            dayjs((internalValue as DateRange).end).add(1, 'day'),
+            'day',
+          )
+        )
       default:
         return date.isSame(dayjs(internalValue as string), 'day')
     }
   }
 
-  function isPreviousSelected (date: Dayjs): boolean {
+  function isPreviousSelected(date: Dayjs): boolean {
     return isSelected(date.subtract(1, 'day'))
   }
 
-  function isNextSelected (date: Dayjs): boolean {
+  function isNextSelected(date: Dayjs): boolean {
     return isSelected(date.add(1, 'day'))
   }
 
-  function isInRange (date: Dayjs): boolean {
+  function isInRange(date: Dayjs): boolean {
     if (internalValue === undefined) return false
     if (internalSelectingRangeStart === undefined) return false
     if (internalFocusedDate === undefined) return false
 
-    return (date.isAfter(internalSelectingRangeStart.subtract(1, 'day'), 'day') && date.isBefore(internalFocusedDate.add(1, 'day'), 'day')) ||
-      (date.isAfter(internalFocusedDate.subtract(1, 'day'), 'day') && date.isBefore(internalSelectingRangeStart.add(1, 'day'), 'day'))
+    return (
+      (date.isAfter(internalSelectingRangeStart.subtract(1, 'day'), 'day') &&
+        date.isBefore(internalFocusedDate.add(1, 'day'), 'day')) ||
+      (date.isAfter(internalFocusedDate.subtract(1, 'day'), 'day') &&
+        date.isBefore(internalSelectingRangeStart.add(1, 'day'), 'day'))
+    )
   }
 
-  function isPreviousInRange (date: Dayjs): boolean {
+  function isPreviousInRange(date: Dayjs): boolean {
     return isInRange(date.subtract(1, 'day'))
   }
 
-  function isNextInRange (date: Dayjs): boolean {
+  function isNextInRange(date: Dayjs): boolean {
     return isInRange(date.add(1, 'day'))
   }
 
-  function getSelectedClasses (date: Dayjs): string {
+  function getSelectedClasses(date: Dayjs): string {
     if (!isSelected(date)) return ''
     if (isPreviousSelected(date) && isNextSelected(date)) return 'rounded-none'
     if (isPreviousSelected(date)) return 'rounded-l-none'
@@ -90,39 +114,45 @@ export default function Calendar ({
     return ''
   }
 
-  function getInRangeClasses (date: Dayjs): string {
+  function getInRangeClasses(date: Dayjs): string {
     if (!isInRange(date)) return ''
 
     const selected = isSelected(date)
 
-    if (isPreviousInRange(date) && isNextInRange(date)) return twMerge('rounded-none', !selected && 'bg-neutral-200')
-    if (isPreviousInRange(date)) return twMerge('rounded-l-none', !selected && 'bg-neutral-200')
-    if (isNextInRange(date)) return twMerge('rounded-r-none', !selected && 'bg-neutral-200')
+    if (isPreviousInRange(date) && isNextInRange(date))
+      return twMerge('rounded-none', !selected && 'bg-neutral-200')
+    if (isPreviousInRange(date))
+      return twMerge('rounded-l-none', !selected && 'bg-neutral-200')
+    if (isNextInRange(date))
+      return twMerge('rounded-r-none', !selected && 'bg-neutral-200')
     return ''
   }
 
-  function handleChangeSingle (value: string | undefined): void {
+  function handleChangeSingle(value: string | undefined): void {
     if (type === 'single') {
       setInternalValue(value)
       onChange?.(value)
     }
   }
 
-  function handleChangeMultiple (value: string[] | undefined): void {
+  function handleChangeMultiple(value: string[] | undefined): void {
     if (type === 'multiple') {
       setInternalValue(value)
       onChange?.(value)
     }
   }
 
-  function handleChangeRange (value: DateRange | undefined, confirmed: boolean): void {
+  function handleChangeRange(
+    value: DateRange | undefined,
+    confirmed: boolean,
+  ): void {
     if (type === 'range') {
       setInternalValue(value)
       onChange?.(value, confirmed)
     }
   }
 
-  function handleClick (date: Dayjs): void {
+  function handleClick(date: Dayjs): void {
     const dateStr = date.format()
     const internalValueArr = internalValue as string[]
     switch (type) {
@@ -133,7 +163,7 @@ export default function Calendar ({
         }
 
         if (internalValueArr.includes(dateStr)) {
-          handleChangeMultiple(internalValueArr.filter(d => d !== dateStr))
+          handleChangeMultiple(internalValueArr.filter((d) => d !== dateStr))
         } else {
           handleChangeMultiple([...internalValueArr, dateStr])
         }
@@ -159,9 +189,15 @@ export default function Calendar ({
         }
 
         if (date.isBefore(internalSelectingRangeStart, 'day')) {
-          handleChangeRange({ start: dateStr, end: internalSelectingRangeStart.format() }, true)
+          handleChangeRange(
+            { start: dateStr, end: internalSelectingRangeStart.format() },
+            true,
+          )
         } else {
-          handleChangeRange({ start: internalSelectingRangeStart.format(), end: dateStr }, true)
+          handleChangeRange(
+            { start: internalSelectingRangeStart.format(), end: dateStr },
+            true,
+          )
         }
 
         onRangeStartSelected?.(undefined)
@@ -247,17 +283,17 @@ export default function Calendar ({
   }, [focusedDate])
 
   return (
-    <div className={twMerge(
-      'p-4 bg-white rounded-xl border',
-      className
-    )}>
-      <div className='flex items-center h-10 mb-4'>
+    <div className={twMerge('p-4 bg-white rounded-xl border', className)}>
+      <div className="flex items-center h-10 mb-4">
         <Button
-          variant='ghost'
-          shape='circle'
-          size='xl'
+          variant="ghost"
+          shape="circle"
+          size="xl"
           iconButton
-          className={twMerge((!showPreviosMonthButton || readonly === true) && 'opacity-0 pointer-events-none')}
+          className={twMerge(
+            (!showPreviosMonthButton || readonly === true) &&
+              'opacity-0 pointer-events-none',
+          )}
           onClick={() => {
             if (viewDate != null) {
               onPreviosMonthButtonClick?.()
@@ -268,13 +304,18 @@ export default function Calendar ({
         >
           <MdArrowBack />
         </Button>
-        <span className='flex-1 text-center text-lg font-semibold'>{viewDayjs.format('MMMM YYYY')}</span>
+        <span className="flex-1 text-center text-lg font-semibold">
+          {viewDayjs.format('MMMM YYYY')}
+        </span>
         <Button
-          variant='ghost'
-          shape='circle'
-          size='xl'
+          variant="ghost"
+          shape="circle"
+          size="xl"
           iconButton
-          className={twMerge((!showNextMonthButton || readonly === true) && 'opacity-0 pointer-events-none')}
+          className={twMerge(
+            (!showNextMonthButton || readonly === true) &&
+              'opacity-0 pointer-events-none',
+          )}
           onClick={() => {
             if (viewDate != null) {
               onNextMonthButtonClick?.()
@@ -287,38 +328,40 @@ export default function Calendar ({
         </Button>
       </div>
 
-      <div className='grid grid-cols-7 gap-y-1 text-center text-sm text-gray-600'>
-        {localizedDayNames.map(day => (
-          <div key={day} className='font-medium'>{day}</div>
+      <div className="grid grid-cols-7 gap-y-1 text-center text-sm text-gray-600">
+        {localizedDayNames.map((day) => (
+          <div key={day} className="font-medium">
+            {day}
+          </div>
         ))}
 
-        {previousMonthDays.map(day => (
+        {previousMonthDays.map((day) => (
           <Button
             key={day.format()}
             variant={isSelected(day) ? 'solid' : 'ghost'}
-            shape='circle'
-            color='dark'
+            shape="circle"
+            color="dark"
             iconButton
             disabled
             className={twMerge(
               'size-10 !opacity-25 pointer-events-none',
               isToday(day) && !isSelected(day) && !isInRange(day) && 'border',
               getInRangeClasses(day),
-              getSelectedClasses(day)
+              getSelectedClasses(day),
             )}
           >
             {day.date()}
           </Button>
         ))}
 
-        {days.map(day => {
+        {days.map((day) => {
           const thisDay = viewDayjs.date(day)
           return (
             <Button
               key={thisDay.format()}
               variant={isSelected(thisDay) ? 'solid' : 'ghost'}
-              shape='circle'
-              color='dark'
+              shape="circle"
+              color="dark"
               iconButton
               onMouseEnter={() => {
                 if (internalSelectingRangeStart != null) {
@@ -334,31 +377,36 @@ export default function Calendar ({
               }}
               className={twMerge(
                 'size-10',
-                isToday(thisDay) && !isSelected(thisDay) && !isInRange(thisDay) && 'border',
+                isToday(thisDay) &&
+                  !isSelected(thisDay) &&
+                  !isInRange(thisDay) &&
+                  'border',
                 getInRangeClasses(thisDay),
                 getSelectedClasses(thisDay),
-                readonly === true && 'pointer-events-none'
+                readonly === true && 'pointer-events-none',
               )}
-              onClick={() => { handleClick(thisDay) }}
+              onClick={() => {
+                handleClick(thisDay)
+              }}
             >
               {day}
             </Button>
           )
         })}
 
-        {nextMonthDays.map(day => (
+        {nextMonthDays.map((day) => (
           <Button
             key={day.format()}
             variant={isSelected(day) ? 'solid' : 'ghost'}
-            shape='circle'
-            color='dark'
+            shape="circle"
+            color="dark"
             iconButton
             disabled
             className={twMerge(
               'size-10 !opacity-25 pointer-events-none',
               isToday(day) && !isSelected(day) && !isInRange(day) && 'border',
               getInRangeClasses(day),
-              getSelectedClasses(day)
+              getSelectedClasses(day),
             )}
           >
             {day.date()}

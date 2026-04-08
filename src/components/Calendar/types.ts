@@ -1,4 +1,4 @@
-import { type Dayjs } from 'dayjs'
+import type { Dayjs } from 'dayjs'
 
 export interface DateRange {
   start: string
@@ -20,7 +20,10 @@ export interface CalendarRangeValueProps {
   onChange?: (value: DateRange | undefined, confirmed: boolean) => void
 }
 
-export type CalendarTypedProps = ({ type: 'single' } & CalendarSingleValueProps) | ({ type: 'multiple' } & CalendarMultipleValueProps) | ({ type: 'range' } & CalendarRangeValueProps)
+export type CalendarTypedProps =
+  | ({ type: 'single' } & CalendarSingleValueProps)
+  | ({ type: 'multiple' } & CalendarMultipleValueProps)
+  | ({ type: 'range' } & CalendarRangeValueProps)
 
 export type CalendarProps = CalendarTypedProps & {
   className?: string

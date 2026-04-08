@@ -4,8 +4,4 @@ import { useDialog } from './hooks'
 
 export * from './types'
 
-export {
-  Dialog,
-  DialogProvider,
-  useDialog
-}
+export { Dialog, DialogProvider, useDialog }

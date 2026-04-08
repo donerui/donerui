@@ -1,4 +1,4 @@
-import { type IPoint, type IStrokeOptions, type ISvgTextProps } from '../..'
+import type { IPoint, IStrokeOptions, ISvgTextProps } from '../..'
 
 export interface ISvgSectorProps {
   className?: string

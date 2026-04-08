@@ -1,8 +1,16 @@
-import { type CSSProperties, type ReactNode } from 'react'
-import { type ITransitionOptions } from '../Transition/types'
-import { type TriggerProps } from '../Trigger'
+import type { CSSProperties, ReactNode } from 'react'
+import type { ITransitionOptions } from '../Transition/types'
+import type { TriggerProps } from '../Trigger'
 
-export type MenuPosition = 'top' | 'top-right' | 'top-left' | 'bottom' | 'bottom-right' | 'bottom-left' | 'left' | 'right'
+export type MenuPosition =
+  | 'top'
+  | 'top-right'
+  | 'top-left'
+  | 'bottom'
+  | 'bottom-right'
+  | 'bottom-left'
+  | 'left'
+  | 'right'
 
 export interface MenuProps {
   children?: ReactNode
@@ -20,5 +28,4 @@ export interface MenuProps {
   TransitionComponent?: React.ComponentType<ITransitionOptions>
 }
 
-export interface MenuTriggerProps extends TriggerProps {
-}
+export interface MenuTriggerProps extends TriggerProps {}

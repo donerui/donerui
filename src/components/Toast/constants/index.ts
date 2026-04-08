@@ -1,5 +1,9 @@
-import { type IToasterContext } from '../types'
-import { DefaultDurationTransition, DefaultToastRenderComponent, DefaultToastTransition } from './ToastDefaults'
+import type { IToasterContext } from '../types'
+import {
+  DefaultDurationTransition,
+  DefaultToastRenderComponent,
+  DefaultToastTransition,
+} from './ToastDefaults'
 
 export const toastContainerPositions = {
   'top-left': 'top-2 left-2',
@@ -20,7 +24,7 @@ export const toastContainerPositions = {
   'outer-top': 'bottom-full left-1/2 -translate-x-1/2 mb-2',
   'outer-bottom': 'top-full left-1/2 -translate-x-1/2 mt-2',
   'outer-left': 'right-full mr-2',
-  'outer-right': 'left-full ml-2'
+  'outer-right': 'left-full ml-2',
 }
 
 export const defaultToasterContext: IToasterContext = {
@@ -28,7 +32,11 @@ export const defaultToasterContext: IToasterContext = {
   createToast: () => {},
   removeToast: () => {},
   updateToast: () => {},
-  getToast: () => undefined
+  getToast: () => undefined,
 }
 
-export { DefaultDurationTransition, DefaultToastRenderComponent, DefaultToastTransition }
+export {
+  DefaultDurationTransition,
+  DefaultToastRenderComponent,
+  DefaultToastTransition,
+}

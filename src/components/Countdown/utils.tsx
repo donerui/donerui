@@ -1,7 +1,10 @@
 import dayjs from 'dayjs'
-import { type ICountdownData } from './Countdown.types'
+import type { ICountdownData } from './Countdown.types'
 
-export const diffCalculation = (value: number, type: 'time' | 'number'): ICountdownData => {
+export const diffCalculation = (
+  value: number,
+  type: 'time' | 'number',
+): ICountdownData => {
   if (type === 'time') {
     const remaining = dayjs.duration(value, 'milliseconds')
 
@@ -21,7 +24,7 @@ export const diffCalculation = (value: number, type: 'time' | 'number'): ICountd
       seconds: remaining.seconds(),
       asSeconds: remaining.asSeconds(),
       milliseconds: remaining.milliseconds(),
-      asMilliseconds: remaining.asMilliseconds()
+      asMilliseconds: remaining.asMilliseconds(),
     }
   } else if (type === 'number') {
     // --
@@ -43,8 +46,9 @@ export const diffCalculation = (value: number, type: 'time' | 'number'): ICountd
     seconds: 0,
     asSeconds: 0,
     milliseconds: 0,
-    asMilliseconds: 0
+    asMilliseconds: 0,
   }
 }
 
-export const formatDefault = (value: number): string => Math.round(value).toString().padStart(2, '0')
+export const formatDefault = (value: number): string =>
+  Math.round(value).toString().padStart(2, '0')

@@ -1,4 +1,4 @@
-import { type ReactNode } from 'react'
+import type { ReactNode } from 'react'
 
 export interface TriggerProps {
   children: ReactNode
@@ -11,5 +11,5 @@ export interface TriggerProps {
   disableOnMouseLeave?: boolean
   disableOnBlur?: boolean
   disableHoverDelay?: number
-  onTrigger?: ((isTriggered: boolean) => void)
+  onTrigger?: (isTriggered: boolean) => void
 }

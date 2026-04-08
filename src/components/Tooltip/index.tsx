@@ -1,10 +1,10 @@
-import { useState } from 'react'
+import { type JSX, useState } from 'react'
 import Transition from '../Transition'
 import Trigger from '../Trigger'
 import { DefaultTooltipRenderComponent } from './constants'
-import { type ITooltipProps } from './types'
+import type { ITooltipProps } from './types'
 
-function Tooltip ({
+function Tooltip({
   children,
   className,
   data,
@@ -17,7 +17,7 @@ function Tooltip ({
 }: ITooltipProps): JSX.Element {
   const [show, setShow] = useState<boolean>(false)
 
-  function onTrigger (show: boolean): void {
+  function onTrigger(show: boolean): void {
     setShow(show)
     if (show) {
       onShow?.()
@@ -27,15 +27,10 @@ function Tooltip ({
   }
 
   return (
-    <Trigger
-      onTrigger={onTrigger}
-      {...rest}
-    >
+    <Trigger onTrigger={onTrigger} {...rest}>
       {children}
 
-      <TransitionComponent
-        show={show}
-      >
+      <TransitionComponent show={show}>
         <RenderComponent
           data={data}
           position={position}

@@ -1,9 +1,9 @@
-import { useRef, useState } from 'react'
-import { type TriggerProps } from './types'
+import { type JSX, useRef, useState } from 'react'
+import type { TriggerProps } from './types'
 
 export * from './types'
 
-export default function Trigger ({
+export default function Trigger({
   children,
   className,
   enableOnClick = true,
@@ -14,14 +14,14 @@ export default function Trigger ({
   disableOnMouseLeave = true,
   disableOnBlur = true,
   disableHoverDelay = 600,
-  onTrigger
+  onTrigger,
 }: TriggerProps): JSX.Element {
   const [isTriggered, setIsTriggered] = useState(false)
 
-  const actionTimeout = useRef<NodeJS.Timeout>()
+  const actionTimeout = useRef<NodeJS.Timeout>(undefined)
   const focusedByClick = useRef(false)
 
-  function onAction (action: boolean, delay = 0): void {
+  function onAction(action: boolean, delay = 0): void {
     if (actionTimeout.current != null) {
       clearTimeout(actionTimeout.current)
     }
@@ -39,37 +39,37 @@ export default function Trigger ({
     }
   }
 
-  function handleClick (): void {
+  function handleClick(): void {
     if (enableOnClick || disableOnClick) {
       onAction(!isTriggered, 0)
     }
   }
 
-  function handleMouseEnter (): void {
+  function handleMouseEnter(): void {
     if (enableOnHover) {
       onAction(true, enableHoverDelay)
     }
   }
 
-  function handleMouseLeave (): void {
+  function handleMouseLeave(): void {
     if (disableOnMouseLeave) {
       onAction(false, disableHoverDelay)
     }
   }
 
-  function handleFocus (): void {
+  function handleFocus(): void {
     if (enableOnFocus && !focusedByClick.current) {
       onAction(true, 0)
     }
   }
 
-  function handleBlur (): void {
+  function handleBlur(): void {
     if (disableOnBlur) {
       onAction(false, 0)
     }
   }
 
-  function handleMouseDown (): void {
+  function handleMouseDown(): void {
     focusedByClick.current = true
   }
 

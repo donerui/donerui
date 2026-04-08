@@ -1,9 +1,9 @@
-import { useEffect } from 'react'
+import { type JSX, useEffect } from 'react'
 import { twMerge } from 'tailwind-merge'
 import Transition from '../Transition'
-import { type IModalProps } from './types'
+import type { IModalProps } from './types'
 
-function Modal ({
+function Modal({
   children,
   className,
   isOpen,
@@ -11,7 +11,7 @@ function Modal ({
   closeOnOutsideClick = true,
   onOpen,
   onClose,
-  transitionProps
+  transitionProps,
 }: IModalProps): JSX.Element {
   useEffect(() => {
     if (isOpen) {
@@ -24,8 +24,10 @@ function Modal ({
       className={twMerge(
         'fixed top-0 left-0 !m-0 z-50 w-screen h-screen bg-black/50 duration-500',
         'flex items-center justify-center',
-        isOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none',
-        className
+        isOpen
+          ? 'opacity-100 pointer-events-auto'
+          : 'opacity-0 pointer-events-none',
+        className,
       )}
       onClick={() => {
         if (closeOnOutsideClick) {
@@ -40,7 +42,9 @@ function Modal ({
     >
       <Transition
         show={isOpen}
-        onClick={(e) => { e.stopPropagation() }}
+        onClick={(e) => {
+          e.stopPropagation()
+        }}
         {...transitionProps}
       >
         {children}

@@ -1,8 +1,16 @@
+import type { JSX } from 'react'
 import { twMerge } from 'tailwind-merge'
-import { colorClassnames, disabledClassnames, iconSizeClassnames, shapeClassnames, sizeClassnames, variantClassnames } from './constants'
-import { type IButtonProps } from './types'
+import {
+  colorClassnames,
+  disabledClassnames,
+  iconSizeClassnames,
+  shapeClassnames,
+  sizeClassnames,
+  variantClassnames,
+} from './constants'
+import type { IButtonProps } from './types'
 
-function Button ({
+function Button({
   children,
   className,
   shape = 'rounded',
@@ -24,7 +32,16 @@ function Button ({
         variantClassnames[variant],
         disabled === true && disabledClassnames,
         typeof className === 'string' && className,
-        typeof className === 'function' && className({ shape, size, color, variant, iconButton, disabled, ...rest })
+        typeof className === 'function' &&
+          className({
+            shape,
+            size,
+            color,
+            variant,
+            iconButton,
+            disabled,
+            ...rest,
+          }),
       )}
       type={type}
       disabled={disabled}

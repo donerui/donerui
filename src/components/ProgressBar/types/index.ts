@@ -1,4 +1,5 @@
-export interface IProgressBarProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'className'> {
+export interface IProgressBarProps
+  extends Omit<React.HTMLAttributes<HTMLDivElement>, 'className'> {
   className?: string | ((props: IProgressBarProps) => string)
   valueClassName?: string | ((props: IProgressBarProps) => string)
   value: number

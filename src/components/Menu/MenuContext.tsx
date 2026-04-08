@@ -1,4 +1,11 @@
-import { createContext, useContext, useEffect, useState, type ReactNode } from 'react'
+import {
+  createContext,
+  type JSX,
+  type ReactNode,
+  useContext,
+  useEffect,
+  useState,
+} from 'react'
 
 interface MenuContextValue {
   isOpen: boolean
@@ -14,11 +21,18 @@ export interface MenuProviderProps {
   onOpenChange?: (value: boolean) => void
 }
 
-export default function MenuProvider ({ children, defaultIsOpen = false, isOpen, onOpenChange }: MenuProviderProps): JSX.Element {
+export default function MenuProvider({
+  children,
+  defaultIsOpen = false,
+  isOpen,
+  onOpenChange,
+}: MenuProviderProps): JSX.Element {
   const isControlled = isOpen !== undefined
-  const [isOpenInternal, setIsOpenInternal] = useState(isControlled ? isOpen : defaultIsOpen)
+  const [isOpenInternal, setIsOpenInternal] = useState(
+    isControlled ? isOpen : defaultIsOpen,
+  )
 
-  function handleOpen (value: boolean): void {
+  function handleOpen(value: boolean): void {
     if (isControlled) {
       onOpenChange?.(value)
     } else {
@@ -33,13 +47,15 @@ export default function MenuProvider ({ children, defaultIsOpen = false, isOpen,
   }, [isOpen])
 
   return (
-    <MenuContext.Provider value={{ isOpen: isOpenInternal, setIsOpen: handleOpen }}>
+    <MenuContext.Provider
+      value={{ isOpen: isOpenInternal, setIsOpen: handleOpen }}
+    >
       {children}
     </MenuContext.Provider>
   )
 }
 
-export function useMenu (): MenuContextValue {
+export function useMenu(): MenuContextValue {
   const context = useContext(MenuContext)
   if (context === undefined) {
     throw new Error('useMenu must be used within a MenuProvider')

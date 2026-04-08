@@ -1,22 +1,25 @@
-import { useEffect, useState } from 'react'
+import { type JSX, useEffect, useState } from 'react'
+import { type IStrokeOptions, useSVG } from '../..'
 import { defaultLineStrokeOptions, type ISvgRectangleProps } from '..'
-import { useSVG, type IStrokeOptions } from '../..'
 
 export * from './types'
 
-function Rectangle ({
+function Rectangle({
   rect,
   className,
   strokeOptions = defaultLineStrokeOptions,
   fill = 'none',
-  cornerRadius = 0
+  cornerRadius = 0,
 }: ISvgRectangleProps): JSX.Element {
   const { zoom } = useSVG()
 
   const pathLength = 1
   const [strokeDashoffset, setStrokeDashoffset] = useState(pathLength)
 
-  const [strokeOpts, setStrokeOpts] = useState<IStrokeOptions>({ ...defaultLineStrokeOptions, ...strokeOptions })
+  const [strokeOpts, setStrokeOpts] = useState<IStrokeOptions>({
+    ...defaultLineStrokeOptions,
+    ...strokeOptions,
+  })
 
   useEffect(() => {
     setStrokeDashoffset(0)
@@ -39,7 +42,7 @@ function Rectangle ({
       strokeWidth={(strokeOpts.strokeWidth ?? 0) * zoom}
       strokeDasharray={strokeOpts.strokeDasharray ?? pathLength}
       strokeDashoffset={strokeDashoffset}
-      pathLength={(strokeOpts.strokeDasharray != null) ? undefined : pathLength}
+      pathLength={strokeOpts.strokeDasharray != null ? undefined : pathLength}
     />
   )
 }

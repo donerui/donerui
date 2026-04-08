@@ -13,7 +13,9 @@ export type PlateConfigType =
 export interface ICodeContainer {
   position: number
   className?: string
-  children?: React.ReactNode | ((props: ILicencePlateCodeContainerProps) => React.ReactNode)
+  children?:
+    | React.ReactNode
+    | ((props: ILicencePlateCodeContainerProps) => React.ReactNode)
   Component?: React.ComponentType<ILicencePlateCodeContainerProps>
 }
 
@@ -35,7 +37,8 @@ export interface ILicencePlateProps {
   licenceContainerClassName?: string
 }
 
-export interface ILicencePlateCodeContainerProps extends Omit<ICodeContainer, 'Component'> {
+export interface ILicencePlateCodeContainerProps
+  extends Omit<ICodeContainer, 'Component'> {
   locale: IPlateConfig
   regionCode?: string
 }

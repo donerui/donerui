@@ -1,12 +1,8 @@
 {
-  "editor.codeActionsOnSave": [
-    "source.organizeImports",
-    "source.fixAll.eslint"
-  ],
-  "eslint.validate": [
-    "typescript",
-    "typescriptreact"
-  ],
+  "editor.codeActionsOnSave": {
+    "source.formatDocuments.biome": "explicit",
+    "source.fixAll.biome": "explicit"
+  },
   "editor.tabSize": 2,
   "typescript.tsserver.experimental.enableProjectDiagnostics": true
 }

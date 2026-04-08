@@ -1,4 +1,4 @@
-import { type IButtonProps } from '../../Button/types'
+import type { IButtonProps } from '../../Button/types'
 
 export interface IButtonGroupProps {
   className?: string

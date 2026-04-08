@@ -1,7 +1,8 @@
 import { Transition } from '@headlessui/react'
-import { type ITransitionOptions } from '../types'
+import type { JSX } from 'react'
+import type { ITransitionOptions } from '../types'
 
-export function DefaultTransition ({
+export function DefaultTransition({
   children,
   className,
   show,
@@ -9,7 +10,7 @@ export function DefaultTransition ({
   beforeEnter,
   afterEnter,
   beforeLeave,
-  afterLeave
+  afterLeave,
 }: ITransitionOptions): JSX.Element {
   return (
     <Transition
@@ -17,10 +18,10 @@ export function DefaultTransition ({
       show={show}
       appear={appear}
       className={className}
-      enter='duration-150'
+      enter="duration-150"
       enterFrom="opacity-0"
       enterTo="opacity-100"
-      leave='duration-150'
+      leave="duration-150"
       leaveFrom="opacity-100"
       leaveTo="opacity-0"
       beforeEnter={beforeEnter}

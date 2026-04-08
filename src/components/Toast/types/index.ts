@@ -1,5 +1,10 @@
 import type React from 'react'
-import { type AnimatecssAnimation, type ITransitionOptions, type MagiccssAnimation } from '../../Transition/types'
+import type { JSX } from 'react'
+import type {
+  AnimatecssAnimation,
+  ITransitionOptions,
+  MagiccssAnimation,
+} from '../../Transition/types'
 
 export type IToastType =
   | 'default'
@@ -17,14 +22,14 @@ export interface IDurationTransitionProps {
 export interface IToastOptions {
   type?: IToastType
   data:
-  | string
-  | {
-    promise: Promise<any>
-    loading: string
-    success: string | ((data: string) => string)
-    error: string | ((error: Error) => string)
-  }
-  | any
+    | string
+    | {
+        promise: Promise<any>
+        loading: string
+        success: string | ((data: string) => string)
+        error: string | ((error: Error) => string)
+      }
+    | any
   className?: string
   containerId?: string
   duration?: number

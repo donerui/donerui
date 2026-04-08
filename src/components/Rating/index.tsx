@@ -1,12 +1,12 @@
-import { useEffect, useState } from 'react'
+import { type JSX, useEffect, useState } from 'react'
 import { MdStar, MdStarBorder } from 'react-icons/md'
 import { twMerge } from 'tailwind-merge'
 import { v4 as uuidv4 } from 'uuid'
 
 import Icon from '../Icon'
-import { type IRatingProps } from './types'
+import type { IRatingProps } from './types'
 
-function Rating ({
+function Rating({
   value,
   defaultValue = 0,
   precision = 1,
@@ -20,7 +20,7 @@ function Rating ({
   inactiveIconClassNames,
   activateOnlySelected,
   renderLabel = () => 'Label',
-  labelClassName
+  labelClassName,
 }: IRatingProps): JSX.Element {
   const [keys] = useState(Array.from({ length: count }).map(() => uuidv4()))
 
@@ -31,12 +31,16 @@ function Rating ({
 
   const [label, setLabel] = useState(renderLabel(rating))
 
-  function calculateRatingOnMouse (e: React.MouseEvent<HTMLElement, MouseEvent>): number {
-    const percentage = (e.nativeEvent.offsetX / e.currentTarget.offsetWidth)
+  function calculateRatingOnMouse(
+    e: React.MouseEvent<HTMLElement, MouseEvent>,
+  ): number {
+    const percentage = e.nativeEvent.offsetX / e.currentTarget.offsetWidth
     const totalRating = percentage * count
-    const totalRatingLimited = totalRating - (totalRating % precision) + precision
+    const totalRatingLimited =
+      totalRating - (totalRating % precision) + precision
     const totalRatingClamped = Math.min(Math.max(totalRatingLimited, 0), count)
-    const hoverRating = Math.round(totalRatingClamped * (1 / precision)) / (1 / precision)
+    const hoverRating =
+      Math.round(totalRatingClamped * (1 / precision)) / (1 / precision)
     return hoverRating
   }
 
@@ -47,16 +51,13 @@ function Rating ({
   }, [value, controlled])
 
   return (
-    <div
-      className={twMerge(
-        'flex items-center gap-2',
-        className
-      )}
-    >
+    <div className={twMerge('flex items-center gap-2', className)}>
       <span
         className={twMerge(
           'flex',
-          (disabled === true) ? 'opacity-75 cursor-not-allowed' : 'cursor-pointer'
+          disabled === true
+            ? 'opacity-75 cursor-not-allowed'
+            : 'cursor-pointer',
         )}
         onClick={(e) => {
           if (disabled === true) {
@@ -90,10 +91,18 @@ function Rating ({
         }}
       >
         {keys.map((key, index) => {
-          const activeIcon = Array.isArray(activeIcons) ? activeIcons[index] : activeIcons
-          const activeIconClassName = Array.isArray(activeIconClassNames) ? activeIconClassNames[index] : activeIconClassNames
-          const inactiveIcon = Array.isArray(inactiveIcons) ? inactiveIcons[index] : inactiveIcons
-          const inactiveIconClassName = Array.isArray(inactiveIconClassNames) ? inactiveIconClassNames[index] : inactiveIconClassNames
+          const activeIcon = Array.isArray(activeIcons)
+            ? activeIcons[index]
+            : activeIcons
+          const activeIconClassName = Array.isArray(activeIconClassNames)
+            ? activeIconClassNames[index]
+            : activeIconClassNames
+          const inactiveIcon = Array.isArray(inactiveIcons)
+            ? inactiveIcons[index]
+            : inactiveIcons
+          const inactiveIconClassName = Array.isArray(inactiveIconClassNames)
+            ? inactiveIconClassNames[index]
+            : inactiveIconClassNames
 
           const targetRating = hoverRating === 0 ? rating : hoverRating
           const diff = targetRating - index
@@ -105,7 +114,7 @@ function Rating ({
               key={key}
               className={twMerge(
                 'relative pointer-events-none',
-                (disabled === true) && 'opacity-75 cursor-not-allowed'
+                disabled === true && 'opacity-75 cursor-not-allowed',
               )}
             >
               <Icon
@@ -114,7 +123,7 @@ function Rating ({
                   'w-6 h-6 text-gray-400 duration-200',
                   insideHoverRating && 'scale-150',
                   inactiveIconClassName,
-                  (disabled === true) && 'cursor-not-allowed'
+                  disabled === true && 'cursor-not-allowed',
                 )}
               />
 
@@ -122,20 +131,20 @@ function Rating ({
                 className={twMerge(
                   'absolute top-0 left-0 w-full h-full duration-200',
                   insideHoverRating && 'scale-150',
-                  (activateOnlySelected === true) && diff > 1 && 'opacity-0'
+                  activateOnlySelected === true && diff > 1 && 'opacity-0',
                 )}
               >
                 <span
                   className="block h-full overflow-hidden duration-200"
                   style={{
-                    width: `${(activateOnlySelected === true) && diff > 1 ? 0 : partialRating * 100}%`
+                    width: `${(activateOnlySelected === true) && diff > 1 ? 0 : partialRating * 100}%`,
                   }}
                 >
                   <Icon
                     icon={activeIcon}
                     className={twMerge(
                       'w-6 h-6 text-yellow-400',
-                      activeIconClassName
+                      activeIconClassName,
                     )}
                   />
                 </span>
@@ -146,10 +155,9 @@ function Rating ({
       </span>
 
       {label !== undefined && (
-        <span className={twMerge(
-          'inline text-sm text-gray-500',
-          labelClassName
-        )}>
+        <span
+          className={twMerge('inline text-sm text-gray-500', labelClassName)}
+        >
           {label}
         </span>
       )}

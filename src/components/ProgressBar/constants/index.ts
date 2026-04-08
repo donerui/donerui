@@ -3,7 +3,7 @@ export const sizeClassnames = {
   sm: 'h-1.5',
   md: 'h-2',
   lg: 'h-3',
-  xl: 'h-4'
+  xl: 'h-4',
 }
 
 export const colorClassnames = {
@@ -12,7 +12,7 @@ export const colorClassnames = {
   success: 'bg-green-500',
   danger: 'bg-red-500',
   warning: 'bg-yellow-500',
-  info: 'bg-sky-500'
+  info: 'bg-sky-500',
 }
 
 export const valueClassnames = {
@@ -20,5 +20,5 @@ export const valueClassnames = {
   sm: 'text-xs',
   md: 'text-sm',
   lg: 'text-base',
-  xl: 'text-lg'
+  xl: 'text-lg',
 }

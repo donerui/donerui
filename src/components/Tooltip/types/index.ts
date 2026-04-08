@@ -1,5 +1,5 @@
-import { type ITransitionOptions } from '../../Transition/types'
-import { type TriggerProps } from '../../Trigger'
+import type { ITransitionOptions } from '../../Transition/types'
+import type { TriggerProps } from '../../Trigger'
 
 export type TooltipPosition = 'top' | 'bottom' | 'left' | 'right'
 

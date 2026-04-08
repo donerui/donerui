@@ -6,7 +6,7 @@ export const createSectorPath = (
   innerRadius: number,
   outerRadius: number,
   startAngle: number,
-  endAngle: number
+  endAngle: number,
 ): string => {
   const startAngleRad = degreesToRadians(startAngle)
   const endAngleRad = degreesToRadians(endAngle)
@@ -37,7 +37,7 @@ export const createSectorPath = (
 }
 
 export const getTextAnchor = (angle: number): 'start' | 'middle' | 'end' => {
-  if ((angle > 0 && angle < 75) || (angle > 285)) {
+  if ((angle > 0 && angle < 75) || angle > 285) {
     return 'start'
   } else if (angle > 105 && angle < 255) {
     return 'end'
