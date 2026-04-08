@@ -43,9 +43,6 @@
     "tailwind-merge": "^2.6.1",
     "uuid": "^13.0.0"
   },
-  "optionalDependencies": {
-    "@donerui/base": "file:../base"
-  },
   "devDependencies": {
     "@biomejs/biome": "2.4.10",
     "@types/d3": "^7.4.3",
