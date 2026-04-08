@@ -1,26 +1,23 @@
-import { useInterval } from '@donerui/base'
-import dayjs from 'dayjs'
-import { type ReactElement, useEffect, useMemo, useState } from 'react'
+import { useCountdown } from '@donerui/base'
+import { type ReactElement, useMemo } from 'react'
 import { twMerge } from 'tailwind-merge'
+import Flip from '../Flip'
 import { type ICountdownProps } from './Countdown.types'
-import { diffCalculation, formatDefault } from './utils'
-
-// TODO:
-// - Vertical
-// - Presetler, Number Transition (flap, vs)
-// - Type = Number
+import CountdownNumber from './CountdownNumber'
+import { formatDefault } from './utils'
 
 function Countdown({
   className,
   partsClassName,
+  digitClassName,
+  textClassName,
   separatorClassName,
   type,
-  mode,
-  date1 = dayjs().valueOf(),
-  date2 = dayjs().add(10, 'seconds').valueOf(),
+  from,
+  to,
   value,
-  refreshRateMs = 1000,
-  isPaused = false,
+  refreshRateMs,
+  isPaused,
   parts: {
     years: {
       showPart: showPartYears = true,
@@ -80,38 +77,25 @@ function Countdown({
     } = {}
   } = {},
   separator = ':',
+  numberProps: {
+    text,
+    incrementBy,
+    format: formatNumber
+  } = {},
   onChange,
   onEnd
 }: ICountdownProps): ReactElement {
-  const [from] = useState(Math.min(date1, date2))
-  const [to] = useState(Math.max(date1, date2))
-  const [counter, setCounter] = useState(mode === 'up' ? to : from)
-  const [countdown, setCountdown] = useState(diffCalculation(value ?? (to - counter), type))
-  const [clear, setClear] = useState(false)
-
-  useInterval(() => {
-    if (mode === 'up') {
-      setCounter(counter - refreshRateMs)
-    } else if (mode === 'down') {
-      setCounter(counter + refreshRateMs)
-    }
-  }, isPaused ? undefined : refreshRateMs, clear)
-
-  useEffect(() => {
-    setCountdown(diffCalculation(value ?? (to - counter), type))
-  }, [value, counter, to, type])
-
-  useEffect(() => {
-    const _clear = mode === 'up'
-      ? countdown.asMilliseconds >= date2 - date1
-      : countdown.asMilliseconds <= 0
-    setClear(_clear)
-    if (_clear) {
-      onEnd?.()
-    } else {
-      onChange?.(countdown)
-    }
-  }, [countdown])
+  const countdown = useCountdown({
+    from,
+    to,
+    type,
+    refreshRateMs,
+    isPaused,
+    value,
+    incrementBy,
+    onChange,
+    onEnd
+  })
 
   const _separator = useMemo(() => {
     return (
@@ -121,6 +105,18 @@ function Countdown({
     )
   }, [separator])
 
+  if (type === 'number') {
+    return <CountdownNumber
+      className={className}
+      partsClassName={partsClassName}
+      digitClassName={digitClassName}
+      textClassName={textClassName}
+      value={countdown.asMilliseconds}
+      text={text}
+      format={formatNumber}
+    />
+  }
+
   return (
     <div
       className={twMerge(
@@ -128,12 +124,17 @@ function Countdown({
         className
       )}
     >
+      <Flip
+        front={'40'}
+        back={'39'}
+        startFlip={isPaused}
+      />
       {showPartYears &&
         <>
           {_separator}
           <div className={twMerge('flex flex-col items-center', partsClassName)}>
-            <span>{formatYears(showAsYears ? countdown.asYears : countdown.years)}</span>
-            {showTextYears && <span>{textYears}</span>}
+            <span className={digitClassName}>{formatYears(showAsYears ? countdown.asYears : countdown.years)}</span>
+            {showTextYears && <span className={textClassName}>{textYears}</span>}
           </div>
         </>
       }
@@ -141,8 +142,8 @@ function Countdown({
         <>
           {_separator}
           <div className={twMerge('flex flex-col items-center', partsClassName)}>
-            <span>{formatMonths(showAsMonths ? countdown.asMonths : countdown.months)}</span>
-            {showTextMonths && <span>{textMonths}</span>}
+            <span className={digitClassName}>{formatMonths(showAsMonths ? countdown.asMonths : countdown.months)}</span>
+            {showTextMonths && <span className={textClassName}>{textMonths}</span>}
           </div>
         </>
       }
@@ -150,8 +151,8 @@ function Countdown({
         <>
           {_separator}
           <div className={twMerge('flex flex-col items-center', partsClassName)}>
-            <span>{formatWeeks(showAsWeeks ? countdown.asWeeks : countdown.weeks)}</span>
-            {showTextWeeks && <span>{textWeeks}</span>}
+            <span className={digitClassName}>{formatWeeks(showAsWeeks ? countdown.asWeeks : countdown.weeks)}</span>
+            {showTextWeeks && <span className={textClassName}>{textWeeks}</span>}
           </div>
         </>
       }
@@ -159,8 +160,8 @@ function Countdown({
         <>
           {_separator}
           <div className={twMerge('flex flex-col items-center', partsClassName)}>
-            <span>{formatDays(showAsDays ? countdown.asDays : countdown.days)}</span>
-            {showTextDays && <span>{textDays}</span>}
+            <span className={digitClassName}>{formatDays(showAsDays ? countdown.asDays : countdown.days)}</span>
+            {showTextDays && <span className={textClassName}>{textDays}</span>}
           </div>
         </>
       }
@@ -168,8 +169,8 @@ function Countdown({
         <>
           {_separator}
           <div className={twMerge('flex flex-col items-center', partsClassName)}>
-            <span>{formatHours(showAsHours ? countdown.asHours : countdown.hours)}</span>
-            {showTextHours && <span>{textHours}</span>}
+            <span className={digitClassName}>{formatHours(showAsHours ? countdown.asHours : countdown.hours)}</span>
+            {showTextHours && <span className={textClassName}>{textHours}</span>}
           </div>
         </>
       }
@@ -177,8 +178,8 @@ function Countdown({
         <>
           {_separator}
           <div className={twMerge('flex flex-col items-center', partsClassName)}>
-            <span>{formatMins(showAsMins ? countdown.asMinutes : countdown.minutes)}</span>
-            {showTextMins && <span>{textMins}</span>}
+            <span className={digitClassName}>{formatMins(showAsMins ? countdown.asMinutes : countdown.minutes)}</span>
+            {showTextMins && <span className={textClassName}>{textMins}</span>}
           </div>
         </>
       }
@@ -186,8 +187,8 @@ function Countdown({
         <>
           {_separator}
           <div className={twMerge('flex flex-col items-center', partsClassName)}>
-            <span>{formatSecs(showAsSecs ? countdown.asSeconds : countdown.seconds)}</span>
-            {showTextSecs && <span>{textSecs}</span>}
+            <span className={digitClassName}>{formatSecs(showAsSecs ? countdown.asSeconds : countdown.seconds)}</span>
+            {showTextSecs && <span className={textClassName}>{textSecs}</span>}
           </div>
         </>
       }
@@ -195,8 +196,8 @@ function Countdown({
         <>
           {_separator}
           <div className={twMerge('flex flex-col items-center', partsClassName)}>
-            <span>{formatMs(showAsMs ? countdown.asMilliseconds : countdown.milliseconds)}</span>
-            {showTextMs && <span>{textMs}</span>}
+            <span className={digitClassName}>{formatMs(showAsMs ? countdown.asMilliseconds : countdown.milliseconds)}</span>
+            {showTextMs && <span className={textClassName}>{textMs}</span>}
           </div>
         </>
       }

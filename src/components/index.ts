@@ -4,6 +4,7 @@ import Calendar from './Calendar'
 import Chip from './Chip'
 import Countdown from './Countdown'
 import CreditCard from './CreditCard'
+import Flip from './Flip'
 import Icon from './Icon'
 import LicencePlate from './LicencePlate'
 import { Menu, MenuProvider, MenuTrigger } from './Menu'
@@ -19,6 +20,7 @@ import Trigger from './Trigger'
 export * from './Button'
 export * from './ButtonGroup'
 export * from './Chip'
+export * from './Countdown'
 export * from './CreditCard'
 export * from './Dialog'
 export * from './Forms'
@@ -44,6 +46,7 @@ export {
   Chip,
   Countdown,
   CreditCard,
+  Flip,
   Icon,
   LicencePlate,
   Menu,

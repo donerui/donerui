@@ -1,3 +1,5 @@
+import { type IUseCountdownProps } from '@donerui/base'
+
 interface IPartData {
   showPart?: boolean
   showText?: boolean
@@ -6,17 +8,12 @@ interface IPartData {
   format?: (value: number) => string
 }
 
-export interface ICountdownProps {
+export interface ICountdownProps extends IUseCountdownProps {
   className?: string
   partsClassName?: string
+  digitClassName?: string
+  textClassName?: string
   separatorClassName?: string
-  type: 'time' | 'number'
-  mode: 'up' | 'down'
-  date1?: number
-  date2?: number
-  value?: number
-  refreshRateMs?: number
-  isPaused?: boolean
   parts?: {
     years?: IPartData
     months?: IPartData
@@ -28,25 +25,27 @@ export interface ICountdownProps {
     milliseconds?: IPartData
   }
   separator?: React.ReactNode
-  onChange?: (data: ICountdownData) => void
-  onEnd?: () => void
+  numberProps?: {
+    text?: string
+    incrementBy?: number
+    format?: (value: number) => string
+  }
 }
 
-export interface ICountdownData {
-  years: number
-  asYears: number
-  months: number
-  asMonths: number
-  weeks: number
-  asWeeks: number
-  days: number
-  asDays: number
-  hours: number
-  asHours: number
-  minutes: number
-  asMinutes: number
-  seconds: number
-  asSeconds: number
-  milliseconds: number
-  asMilliseconds: number
+export interface ICountdownNumberProps {
+  className?: string
+  partsClassName?: string
+  digitClassName?: string
+  textClassName?: string
+  value: number
+  text?: string
+  format?: (value: number) => string
+}
+
+export interface ICountdownClasses {
+  className?: string
+  partsClassName?: string
+  separatorClassName?: string
+  digitClassName?: string
+  textClassName?: string
 }
