@@ -1,4 +1,4 @@
-import { type IPoint, type IStrokeOptions } from '../..'
+import type { IPoint, IStrokeOptions } from '../..'
 
 export interface ISvgPointProps {
   point: IPoint<number | string>

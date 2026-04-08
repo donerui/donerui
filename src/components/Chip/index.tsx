@@ -1,7 +1,7 @@
-import * as React from 'react'
+import type * as React from 'react'
 import { twMerge } from 'tailwind-merge'
 import { colorClassnames, sizeClassnames } from './constants'
-import { type IChipProps } from './types'
+import type { IChipProps } from './types'
 
 export const Chip: React.FC<IChipProps> = ({
   className,
@@ -11,9 +11,10 @@ export const Chip: React.FC<IChipProps> = ({
   children,
   ...props
 }) => {
-  const computedClassName = typeof className === 'function'
-    ? className({ variant, color, size, children, ...props })
-    : className
+  const computedClassName =
+    typeof className === 'function'
+      ? className({ variant, color, size, children, ...props })
+      : className
 
   return (
     <div
@@ -21,7 +22,7 @@ export const Chip: React.FC<IChipProps> = ({
         'inline-flex items-center gap-1 font-medium rounded-full',
         sizeClassnames[size],
         colorClassnames[color][variant],
-        computedClassName
+        computedClassName,
       )}
       {...props}
     >

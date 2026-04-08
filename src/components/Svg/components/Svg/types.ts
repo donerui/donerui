@@ -1,4 +1,4 @@
-import { type IRectangle, type ISvgMouseCoordinates } from '../..'
+import type { IRectangle, ISvgMouseCoordinates } from '../..'
 
 export interface ISvgProps {
   children?: React.ReactNode

@@ -2,17 +2,20 @@ import {
   curveBasis,
   curveBasisClosed,
   curveBasisOpen,
-  curveBundle, curveCardinal,
+  curveBundle,
+  curveCardinal,
   curveCardinalClosed,
   curveCardinalOpen,
   curveCatmullRom,
   curveCatmullRomClosed,
   curveCatmullRomOpen,
   curveLinear,
-  curveMonotoneX, curveMonotoneY, curveNatural,
+  curveMonotoneX,
+  curveMonotoneY,
+  curveNatural,
   curveStep,
   curveStepAfter,
-  curveStepBefore
+  curveStepBefore,
 } from 'd3'
 
 export const curveInterpolators = {
@@ -32,5 +35,5 @@ export const curveInterpolators = {
   catmullRomClosed: curveCatmullRomClosed.alpha(0.5),
   monotoneX: curveMonotoneX,
   monotoneY: curveMonotoneY,
-  natural: curveNatural
+  natural: curveNatural,
 }

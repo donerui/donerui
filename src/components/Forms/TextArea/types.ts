@@ -1,4 +1,4 @@
-import { type ReactNode, type TextareaHTMLAttributes } from 'react'
+import type { ReactNode, TextareaHTMLAttributes } from 'react'
 
 export type TextAreaProps = TextareaHTMLAttributes<HTMLTextAreaElement> & {
   label?: string

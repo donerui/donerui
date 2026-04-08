@@ -1,4 +1,4 @@
-import { type IRectangle } from '../..'
+import type { IRectangle } from '../..'
 
 export const stringifyViewBox = (viewBox: IRectangle): string => {
   const { x, y, width, height } = viewBox

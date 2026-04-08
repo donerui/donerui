@@ -9,13 +9,13 @@ To use @donerui in your project, you need to have Tailwind CSS installed. If you
 After setting up Tailwind CSS, you can install @donerui via npm:
 
 ```bash
-npm install @donerui/core
+npm install @donerui/donerui
 ```
 
 or using yarn:
 
 ```bash
-yarn add @donerui/core
+yarn add @donerui/donerui
 ```
 
 ## Configuring Tailwind CSS
@@ -72,7 +72,7 @@ module.exports = {
 Once you have included @donerui in your project and configured Tailwind CSS, you can start using the components as follows:
 
 ```jsx
-import { Button, Rating } from '@donerui/core';
+import { Button, Rating } from '@donerui/donerui';
 
 function App() {
   return (

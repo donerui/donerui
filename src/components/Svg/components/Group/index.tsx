@@ -1,19 +1,16 @@
-import { type ISvgGroupProps } from '..'
+import type { JSX } from 'react'
+import type { ISvgGroupProps } from '..'
 
 export * from './types'
 
-function Group ({
+function Group({
   children,
   id,
   className,
-  transform
+  transform,
 }: ISvgGroupProps): JSX.Element {
   return (
-    <g
-      className={className}
-      id={id}
-      transform={transform}
-    >
+    <g className={className} id={id} transform={transform}>
       {children}
     </g>
   )

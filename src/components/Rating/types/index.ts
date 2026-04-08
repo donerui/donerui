@@ -1,4 +1,4 @@
-import { type IconType } from '../../Icon/types'
+import type { IconType } from '../../Icon/types'
 
 export interface IRatingProps {
   value?: number

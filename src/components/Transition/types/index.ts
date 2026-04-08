@@ -1,5 +1,5 @@
-import { type AnimatecssAnimation } from './animatecss'
-import { type MagiccssAnimation } from './magiccss'
+import type { AnimatecssAnimation } from './animatecss'
+import type { MagiccssAnimation } from './magiccss'
 
 export interface ITransitionOptions {
   children?: React.ReactNode

@@ -1,4 +1,4 @@
-import { type QRCodeErrorCorrectionLevel } from 'qrcode'
+import type { QRCodeErrorCorrectionLevel } from 'qrcode'
 
 export interface IQRCodeProps {
   className?: string

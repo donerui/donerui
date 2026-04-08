@@ -1,25 +1,25 @@
 import { Transition } from '@headlessui/react'
-import { Fragment, forwardRef } from 'react'
+import { Fragment, forwardRef, type JSX } from 'react'
 import { twMerge } from 'tailwind-merge'
 
-import { type ITransitionOptions } from '../../Transition/types'
-import { type IDurationTransitionProps, type IToastRenderProps } from '../types'
+import type { ITransitionOptions } from '../../Transition/types'
+import type { IDurationTransitionProps, IToastRenderProps } from '../types'
 import { ToastIcon } from '../utils'
 
-export function DefaultToastTransition ({
+export function DefaultToastTransition({
   children,
   show,
-  afterLeave
+  afterLeave,
 }: ITransitionOptions): JSX.Element {
   return (
     <Transition
       as={Fragment}
       show={show}
       appear
-      enter='duration-150'
+      enter="duration-150"
       enterFrom="opacity-0 scale-0"
       enterTo="opacity-100 scale-100"
-      leave='duration-150'
+      leave="duration-150"
       leaveFrom="opacity-100 scale-100"
       leaveTo="opacity-0 scale-0"
       afterLeave={afterLeave}
@@ -29,9 +29,9 @@ export function DefaultToastTransition ({
   )
 }
 
-export function DefaultDurationTransition ({
+export function DefaultDurationTransition({
   isShowing,
-  duration
+  duration,
 }: IDurationTransitionProps): JSX.Element {
   return (
     <Transition
@@ -39,7 +39,7 @@ export function DefaultDurationTransition ({
       show={isShowing}
       appear
       className={twMerge(
-        'absolute bottom-0 left-0 h-1 ease-linear bg-white/50 backdrop-filter backdrop-brightness-50'
+        'absolute bottom-0 left-0 h-1 ease-linear bg-white/50 backdrop-filter backdrop-brightness-50',
       )}
       enterFrom="w-full"
       enterTo="w-0"
@@ -48,24 +48,27 @@ export function DefaultDurationTransition ({
   )
 }
 
-function _DefaultToastRenderComponent ({
-  data,
-  type,
-  className,
-  duration,
-  durationValid,
-  isShowingTransition,
-  onClick,
-  Icon,
-  DurationTransitionComponent = DefaultDurationTransition
-}: IToastRenderProps, ref: React.ForwardedRef<any>): JSX.Element {
+function _DefaultToastRenderComponent(
+  {
+    data,
+    type,
+    className,
+    duration,
+    durationValid,
+    isShowingTransition,
+    onClick,
+    Icon,
+    DurationTransitionComponent = DefaultDurationTransition,
+  }: IToastRenderProps,
+  ref: React.ForwardedRef<any>,
+): JSX.Element {
   return (
     <div
       ref={ref}
       className={twMerge(
         'relative flex items-center gap-2 px-4 py-3 rounded cursor-pointer overflow-hidden bg-gray-200 text-black/75',
         'hover:bg-gray-300',
-        className
+        className,
       )}
       onClick={() => {
         if (onClick !== undefined) {
@@ -73,15 +76,11 @@ function _DefaultToastRenderComponent ({
         }
       }}
     >
-      <ToastIcon
-        className="w-6 h-6"
-        icon={Icon}
-        type={type}
-      />
+      <ToastIcon className="w-6 h-6" icon={Icon} type={type} />
 
       <span>{data.toString()}</span>
 
-      {(durationValid === true) && (
+      {durationValid === true && (
         <DurationTransitionComponent
           isShowing={isShowingTransition}
           duration={duration}
@@ -91,4 +90,6 @@ function _DefaultToastRenderComponent ({
   )
 }
 
-export const DefaultToastRenderComponent = forwardRef(_DefaultToastRenderComponent)
+export const DefaultToastRenderComponent = forwardRef(
+  _DefaultToastRenderComponent,
+)

@@ -1,10 +1,11 @@
 import { Transition } from '@headlessui/react'
-import { type ITransitionOptions } from '../../Transition/types'
+import type { JSX } from 'react'
+import type { ITransitionOptions } from '../../Transition/types'
 
-export function DefaultModalTransition ({
+export function DefaultModalTransition({
   children,
   onClick,
-  show
+  show,
 }: ITransitionOptions): JSX.Element {
   return (
     <Transition

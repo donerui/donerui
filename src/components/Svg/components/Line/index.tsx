@@ -1,22 +1,25 @@
-import { useEffect, useState } from 'react'
+import { type JSX, useEffect, useState } from 'react'
 import { twMerge } from 'tailwind-merge'
+import { type IStrokeOptions, useSVG } from '../..'
 import { defaultLineStrokeOptions, type ISvgLineProps } from '..'
-import { useSVG, type IStrokeOptions } from '../..'
 
 export * from './constants'
 export * from './types'
 
-function Line ({
+function Line({
   points,
   className,
-  strokeOptions = defaultLineStrokeOptions
+  strokeOptions = defaultLineStrokeOptions,
 }: ISvgLineProps): JSX.Element {
   const { zoom } = useSVG()
 
   const pathLength = 1
 
   const [strokeDashoffset, setStrokeDashoffset] = useState(pathLength)
-  const [strokeOpts, setStrokeOpts] = useState<IStrokeOptions>({ ...defaultLineStrokeOptions, ...strokeOptions })
+  const [strokeOpts, setStrokeOpts] = useState<IStrokeOptions>({
+    ...defaultLineStrokeOptions,
+    ...strokeOptions,
+  })
 
   useEffect(() => {
     setStrokeDashoffset(0)
@@ -28,20 +31,18 @@ function Line ({
 
   return (
     <polyline
-      className={twMerge(
-        'fill-none',
-        className
-      )}
+      className={twMerge('fill-none', className)}
       style={{
-        transition: 'stroke-dashoffset 2000ms ease-in-out, stroke 150ms ease-out, stroke-width 150ms ease-out'
+        transition:
+          'stroke-dashoffset 2000ms ease-in-out, stroke 150ms ease-out, stroke-width 150ms ease-out',
       }}
-      points={points.map(point => `${point.x},${point.y}`).join(' ')}
-      fill='none'
+      points={points.map((point) => `${point.x},${point.y}`).join(' ')}
+      fill="none"
       stroke={strokeOpts.stroke}
       strokeWidth={(strokeOpts.strokeWidth ?? 0) * zoom}
       strokeDasharray={strokeOpts.strokeDasharray ?? pathLength}
       strokeDashoffset={strokeDashoffset}
-      pathLength={(strokeOpts.strokeDasharray != null) ? undefined : pathLength}
+      pathLength={strokeOpts.strokeDasharray != null ? undefined : pathLength}
     />
   )
 }

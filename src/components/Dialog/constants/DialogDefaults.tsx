@@ -1,9 +1,10 @@
+import type { JSX } from 'react'
 import { twMerge } from 'tailwind-merge'
 import Button from '../../Button'
 import { DefaultModalTransition } from '../../Modal/constants'
-import { type IDialogRenderProps } from '../types'
+import type { IDialogRenderProps } from '../types'
 
-export function DefaultDialogRenderComponent ({
+export function DefaultDialogRenderComponent({
   title,
   description,
   children,
@@ -11,14 +12,14 @@ export function DefaultDialogRenderComponent ({
   onConfirm,
   onCancel,
   confirmText = 'Confirm',
-  cancelText = 'Cancel'
+  cancelText = 'Cancel',
 }: IDialogRenderProps): JSX.Element {
   return (
     <div
       className={twMerge(
         'bg-white rounded-lg shadow-xl p-6 max-w-md w-full',
         'flex flex-col gap-2',
-        className
+        className,
       )}
     >
       {title !== undefined && (
@@ -32,22 +33,12 @@ export function DefaultDialogRenderComponent ({
 
       <div className="flex justify-end gap-2 mt-4">
         {onCancel !== undefined && (
-          <Button
-            color='danger'
-            variant="ghost"
-            size='sm'
-            onClick={onCancel}
-          >
+          <Button color="danger" variant="ghost" size="sm" onClick={onCancel}>
             {cancelText}
           </Button>
         )}
         {onConfirm !== undefined && (
-          <Button
-            color='info'
-            variant="solid"
-            size='sm'
-            onClick={onConfirm}
-          >
+          <Button color="info" variant="solid" size="sm" onClick={onConfirm}>
             {confirmText}
           </Button>
         )}

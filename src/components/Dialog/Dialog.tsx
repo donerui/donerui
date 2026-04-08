@@ -1,10 +1,13 @@
-import { useEffect, useState } from 'react'
+import { type JSX, useEffect, useState } from 'react'
 import Modal from '../Modal'
-import { DefaultDialogRenderComponent, DefaultModalTransition } from './constants'
+import {
+  DefaultDialogRenderComponent,
+  DefaultModalTransition,
+} from './constants'
 import { useDialog } from './hooks'
-import { type IDialogProps } from './types'
+import type { IDialogProps } from './types'
 
-function Dialog ({
+function Dialog({
   id,
   isOpen,
   modalProps,
@@ -29,10 +32,10 @@ function Dialog ({
         TransitionComponent: DefaultModalTransition,
         afterLeave: () => {
           removeDialog(id)
-        }
+        },
       }}
     >
-      <RenderComponent className='min-w-80' {...props} />
+      <RenderComponent className="min-w-80" {...props} />
     </Modal>
   )
 }

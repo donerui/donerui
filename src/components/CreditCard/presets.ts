@@ -1,4 +1,4 @@
-import { type CreditCardPreset } from './types'
+import type { CreditCardPreset } from './types'
 
 export const creditCardPresets: Record<string, CreditCardPreset> = {
   default: {
@@ -11,20 +11,20 @@ export const creditCardPresets: Record<string, CreditCardPreset> = {
     cardHolderClassName: 'text-gray-800 text-lg font-semibold',
     stripeClassName: 'bg-gray-800',
     cvvStripeClassName: 'bg-gray-800',
-    cvvClassName: 'text-xl font-semibold text-white'
+    cvvClassName: 'text-xl font-semibold text-white',
   },
   521807: {
     simCardChipIcon: {
       backgroundColor: 'lightgray',
-      foregroundColor: 'gray'
+      foregroundColor: 'gray',
     },
     mastercardLogo: {
       leftCircleColor: '#ccc',
       rightCircleColor: '#eee',
-      middleCircleColor: '#ddd'
+      middleCircleColor: '#ddd',
     },
     visaLogo: {
-      color: 'white'
+      color: 'white',
     },
     cardClassName: 'bg-amber-400',
     brandNameClassName: 'text-white text-2xl font-bold',
@@ -35,6 +35,6 @@ export const creditCardPresets: Record<string, CreditCardPreset> = {
     cardHolderClassName: 'text-white text-lg font-semibold',
     stripeClassName: 'bg-gray-100',
     cvvStripeClassName: 'bg-gray-100',
-    cvvClassName: 'text-xl font-semibold text-gray-500'
-  }
+    cvvClassName: 'text-xl font-semibold text-gray-500',
+  },
 }

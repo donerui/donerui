@@ -1,4 +1,4 @@
-import { type IRectangle, type IStrokeOptions } from '../..'
+import type { IRectangle, IStrokeOptions } from '../..'
 
 export interface ISvgRectangleProps {
   rect: IRectangle

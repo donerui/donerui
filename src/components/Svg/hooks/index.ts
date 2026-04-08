@@ -3,7 +3,4 @@ import { useSvgPosition } from './useSvgPosition'
 
 export * from './types'
 
-export {
-  useSVG,
-  useSvgPosition
-}
+export { useSVG, useSvgPosition }

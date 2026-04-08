@@ -1,7 +1,9 @@
-import { type IToastType } from '../types'
+import type { IToastType } from '../types'
 import ToastIcon from './ToastIcon'
 
-export function ConvertPromiseTypeToToastType (promiseState: 'pending' | 'resolved' | 'rejected' | null): IToastType {
+export function ConvertPromiseTypeToToastType(
+  promiseState: 'pending' | 'resolved' | 'rejected' | null,
+): IToastType {
   switch (promiseState) {
     case 'pending':
       return 'loading'

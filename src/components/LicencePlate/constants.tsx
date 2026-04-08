@@ -1,6 +1,6 @@
 import { GB, RU, TR } from 'country-flag-icons/react/3x2'
 import { GiEuropeanFlag } from 'react-icons/gi'
-import { type IPlateConfig, type PlateConfigType } from './types'
+import type { IPlateConfig, PlateConfigType } from './types'
 
 export const configs: Record<PlateConfigType, IPlateConfig> = {
   deutschland: {
@@ -10,12 +10,14 @@ export const configs: Record<PlateConfigType, IPlateConfig> = {
       {
         position: 0,
         className: 'bg-blue-800',
-        children: (props) => <>
-          <GiEuropeanFlag className='w-7 h-7 fill-amber-400' />
-          <span>{props.locale.countryCode}</span>
-        </>
-      }
-    ]
+        children: (props) => (
+          <>
+            <GiEuropeanFlag className="w-7 h-7 fill-amber-400" />
+            <span>{props.locale.countryCode}</span>
+          </>
+        ),
+      },
+    ],
   },
   france: {
     name: 'France',
@@ -24,19 +26,23 @@ export const configs: Record<PlateConfigType, IPlateConfig> = {
       {
         position: 0,
         className: 'bg-blue-800',
-        children: (props) => <>
-          <GiEuropeanFlag className='w-7 h-7 fill-amber-400' />
-          <span>{props.locale.countryCode}</span>
-        </>
+        children: (props) => (
+          <>
+            <GiEuropeanFlag className="w-7 h-7 fill-amber-400" />
+            <span>{props.locale.countryCode}</span>
+          </>
+        ),
       },
       {
         position: -1,
         className: 'bg-blue-800',
-        children: (props) => <>
-          <span>{props.regionCode}</span>
-        </>
-      }
-    ]
+        children: (props) => (
+          <>
+            <span>{props.regionCode}</span>
+          </>
+        ),
+      },
+    ],
   },
   italy: {
     name: 'Italy',
@@ -45,13 +51,17 @@ export const configs: Record<PlateConfigType, IPlateConfig> = {
       {
         position: 1,
         className: 'bg-blue-800 py-1',
-        children: (props) => <>
-          <GiEuropeanFlag className='w-7 h-7 fill-amber-400' />
-          <span className='text-sm'>PS</span>
-          <span className='border rounded-full aspect-square text-xs'>{props.locale.countryCode}</span>
-        </>
-      }
-    ]
+        children: (props) => (
+          <>
+            <GiEuropeanFlag className="w-7 h-7 fill-amber-400" />
+            <span className="text-sm">PS</span>
+            <span className="border rounded-full aspect-square text-xs">
+              {props.locale.countryCode}
+            </span>
+          </>
+        ),
+      },
+    ],
   },
   netherlands: {
     name: 'Netherlands',
@@ -61,12 +71,14 @@ export const configs: Record<PlateConfigType, IPlateConfig> = {
       {
         position: 0,
         className: 'bg-blue-800',
-        children: (props) => <>
-          <GiEuropeanFlag className='w-7 h-7 fill-amber-400' />
-          <span>{props.locale.countryCode}</span>
-        </>
-      }
-    ]
+        children: (props) => (
+          <>
+            <GiEuropeanFlag className="w-7 h-7 fill-amber-400" />
+            <span>{props.locale.countryCode}</span>
+          </>
+        ),
+      },
+    ],
   },
   spain: {
     name: 'Spain',
@@ -75,12 +87,14 @@ export const configs: Record<PlateConfigType, IPlateConfig> = {
       {
         position: 0,
         className: 'bg-blue-800',
-        children: (props) => <>
-          <GiEuropeanFlag className='w-7 h-7 fill-amber-400' />
-          <span>{props.locale.countryCode}</span>
-        </>
-      }
-    ]
+        children: (props) => (
+          <>
+            <GiEuropeanFlag className="w-7 h-7 fill-amber-400" />
+            <span>{props.locale.countryCode}</span>
+          </>
+        ),
+      },
+    ],
   },
   uk: {
     name: 'United Kingdom',
@@ -90,12 +104,14 @@ export const configs: Record<PlateConfigType, IPlateConfig> = {
       {
         position: 0,
         className: 'bg-blue-800',
-        children: (props) => <>
-          <GB className='w-7 h-7 px-1' />
-          <span className='text-amber-400'>{props.locale.countryCode}</span>
-        </>
-      }
-    ]
+        children: (props) => (
+          <>
+            <GB className="w-7 h-7 px-1" />
+            <span className="text-amber-400">{props.locale.countryCode}</span>
+          </>
+        ),
+      },
+    ],
   },
   russia: {
     name: 'Russia',
@@ -105,15 +121,17 @@ export const configs: Record<PlateConfigType, IPlateConfig> = {
       {
         position: -1,
         className: 'border-l border-black text-black',
-        children: (props) => <>
-          <span className='text-4xl font-bold'>{props.regionCode}</span>
-          <div className='flex gap-1 text-xs mx-1'>
-            <span>{props.locale.countryCode}</span>
-            <RU className='w-4 h-4' />
-          </div>
-        </>
-      }
-    ]
+        children: (props) => (
+          <>
+            <span className="text-4xl font-bold">{props.regionCode}</span>
+            <div className="flex gap-1 text-xs mx-1">
+              <span>{props.locale.countryCode}</span>
+              <RU className="w-4 h-4" />
+            </div>
+          </>
+        ),
+      },
+    ],
   },
   turkey: {
     name: 'Turkey',
@@ -122,12 +140,14 @@ export const configs: Record<PlateConfigType, IPlateConfig> = {
       {
         position: 0,
         className: 'bg-blue-800',
-        children: (props) => <>
-          <TR className='w-7 h-7 px-1' />
-          <span>{props.regionCode}</span>
-        </>
-      }
-    ]
+        children: (props) => (
+          <>
+            <TR className="w-7 h-7 px-1" />
+            <span>{props.regionCode}</span>
+          </>
+        ),
+      },
+    ],
   },
   'turkey-private-1': {
     name: 'Turkey',
@@ -137,12 +157,14 @@ export const configs: Record<PlateConfigType, IPlateConfig> = {
       {
         position: 0,
         className: 'bg-blue-800',
-        children: (props) => <>
-          <TR className='w-7 h-7 px-1' />
-          <span>{props.regionCode}</span>
-        </>
-      }
-    ]
+        children: (props) => (
+          <>
+            <TR className="w-7 h-7 px-1" />
+            <span>{props.regionCode}</span>
+          </>
+        ),
+      },
+    ],
   },
   'turkey-private-2': {
     name: 'Turkey',
@@ -152,11 +174,13 @@ export const configs: Record<PlateConfigType, IPlateConfig> = {
       {
         position: 0,
         className: 'bg-black text-white',
-        children: (props) => <>
-          <TR className='w-7 h-7 px-1' />
-          <span>{props.regionCode}</span>
-        </>
-      }
-    ]
-  }
+        children: (props) => (
+          <>
+            <TR className="w-7 h-7 px-1" />
+            <span>{props.regionCode}</span>
+          </>
+        ),
+      },
+    ],
+  },
 }

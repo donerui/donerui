@@ -1,11 +1,31 @@
-import { forwardRef, type ReactNode, type Ref, useEffect, useRef, useState } from 'react'
+import {
+  forwardRef,
+  type ReactNode,
+  type Ref,
+  useEffect,
+  useRef,
+  useState,
+} from 'react'
 import { twMerge } from 'tailwind-merge'
 import { switchClasses } from './constants'
-import { type SwitchProps } from './types'
+import type { SwitchProps } from './types'
 
 export * from './types'
-export default forwardRef(function Switch (props: SwitchProps, ref: Ref<HTMLInputElement>): ReactNode {
-  const { errorMessage, label, description, id, name, required, disabled, className, ...rest } = props
+export default forwardRef(function Switch(
+  props: SwitchProps,
+  ref: Ref<HTMLInputElement>,
+): ReactNode {
+  const {
+    errorMessage,
+    label,
+    description,
+    id,
+    name,
+    required,
+    disabled,
+    className,
+    ...rest
+  } = props
 
   const hasError = errorMessage != null
   const hasLabel = label != null && label !== ''
@@ -19,7 +39,9 @@ export default forwardRef(function Switch (props: SwitchProps, ref: Ref<HTMLInpu
   const [isIndeterminate, setIsIndeterminate] = useState<boolean>(false)
 
   useEffect(() => {
-    setIsIndeterminate(rest.checked === undefined && rest.defaultChecked === undefined)
+    setIsIndeterminate(
+      rest.checked === undefined && rest.defaultChecked === undefined,
+    )
   }, [rest.checked, rest.defaultChecked])
 
   useEffect(() => {
@@ -35,19 +57,38 @@ export default forwardRef(function Switch (props: SwitchProps, ref: Ref<HTMLInpu
   }, [isIndeterminate])
 
   return (
-    <div className={twMerge(switchClasses.wrapper.default, hasError && switchClasses.wrapper.error)}>
+    <div
+      className={twMerge(
+        switchClasses.wrapper.default,
+        hasError && switchClasses.wrapper.error,
+      )}
+    >
       {hasLabel && (
         <label
           htmlFor={id ?? name}
-          className={twMerge(switchClasses.label.default, hasError && switchClasses.label.error)}
+          className={twMerge(
+            switchClasses.label.default,
+            hasError && switchClasses.label.error,
+          )}
         >
           {label}
           {isRequired && <span className="text-primary-500">*</span>}
         </label>
       )}
 
-      <div className={twMerge(switchClasses.container.default, isDisabled && switchClasses.container.disabled, hasError && switchClasses.container.error)}>
-        <label className={twMerge('relative inline-flex cursor-pointer', isDisabled && 'cursor-not-allowed')}>
+      <div
+        className={twMerge(
+          switchClasses.container.default,
+          isDisabled && switchClasses.container.disabled,
+          hasError && switchClasses.container.error,
+        )}
+      >
+        <label
+          className={twMerge(
+            'relative inline-flex cursor-pointer',
+            isDisabled && 'cursor-not-allowed',
+          )}
+        >
           <input
             {...rest}
             ref={(node) => {
@@ -55,10 +96,8 @@ export default forwardRef(function Switch (props: SwitchProps, ref: Ref<HTMLInpu
                 if (typeof ref === 'function') {
                   ref(node)
                 } else if (ref != null) {
-                  // @ts-expect-error - TypeScript doesn't know this is safe
                   ref.current = node
                 }
-                // @ts-expect-error - TypeScript doesn't know this is safe
                 internalRef.current = node
               }
             }}
@@ -78,7 +117,10 @@ export default forwardRef(function Switch (props: SwitchProps, ref: Ref<HTMLInpu
 
           <div
             ref={switchRef}
-            className={twMerge(switchClasses.switch.default, hasError && switchClasses.switch.error)}
+            className={twMerge(
+              switchClasses.switch.default,
+              hasError && switchClasses.switch.error,
+            )}
           >
             <span className={switchClasses.handle.default} />
             <span className={switchClasses.thumb.default} />
@@ -86,8 +128,18 @@ export default forwardRef(function Switch (props: SwitchProps, ref: Ref<HTMLInpu
         </label>
 
         {hasDescription && (
-          <div className={twMerge(switchClasses.labelContainer.default, hasError && switchClasses.labelContainer.error)}>
-            <div className={twMerge(switchClasses.description.default, hasError && switchClasses.description.error)}>
+          <div
+            className={twMerge(
+              switchClasses.labelContainer.default,
+              hasError && switchClasses.labelContainer.error,
+            )}
+          >
+            <div
+              className={twMerge(
+                switchClasses.description.default,
+                hasError && switchClasses.description.error,
+              )}
+            >
               {description}
             </div>
           </div>

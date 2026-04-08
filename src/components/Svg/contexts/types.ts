@@ -1,4 +1,4 @@
-import { type IRectangle } from '..'
+import type { IRectangle } from '..'
 
 export interface ISvgMouseCoordinates {
   inSvgSpace: DOMPoint

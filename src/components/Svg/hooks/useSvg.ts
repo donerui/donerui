@@ -1,6 +1,6 @@
 import { useContext } from 'react'
-import { type UseSvgReturnType } from '.'
 import { SvgContext } from '..'
+import type { UseSvgReturnType } from '.'
 
 export const useSVG = (): UseSvgReturnType => {
   const context = useContext(SvgContext)

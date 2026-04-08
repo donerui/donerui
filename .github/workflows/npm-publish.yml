@@ -15,7 +15,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '16.x'
+          node-version: '24.x'
           registry-url: 'https://registry.npmjs.org'
           scope: '@donerui'
 
@@ -34,7 +34,7 @@ jobs:
         id: version-check
         run: |
           VERSION=$(node -p "require('./package.json').version")
-          NPM_VERSION=$(npm show @donerui/core version 2>/dev/null || echo "0.0.0")
+          NPM_VERSION=$(npm show @donerui/donerui version 2>/dev/null || echo "0.0.0")
           if [ "$VERSION" != "$NPM_VERSION" ]; then
             echo "VERSION_CHANGED=true" >> $GITHUB_ENV
           else
