@@ -1,8 +1,6 @@
 import { type JSX, useEffect, useState } from 'react'
 import { MdStar, MdStarBorder } from 'react-icons/md'
 import { twMerge } from 'tailwind-merge'
-import { v4 as uuidv4 } from 'uuid'
-
 import Icon from '../Icon'
 import type { IRatingProps } from './types'
 
@@ -22,7 +20,9 @@ function Rating({
   renderLabel = () => 'Label',
   labelClassName,
 }: IRatingProps): JSX.Element {
-  const [keys] = useState(Array.from({ length: count }).map(() => uuidv4()))
+  const [keys] = useState(
+    Array.from({ length: count }).map(() => crypto.randomUUID()),
+  )
 
   const controlled = value !== undefined
 

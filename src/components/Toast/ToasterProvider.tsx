@@ -1,5 +1,4 @@
 import { type JSX, useMemo, useState } from 'react'
-import { v4 as uuidv4 } from 'uuid'
 import ToasterContext from './contexts'
 import type { IToastOptions, IToastProps } from './types'
 
@@ -18,7 +17,7 @@ function ToasterProvider({
   }
 
   function createToast(options: IToastOptions): string {
-    const id = uuidv4()
+    const id = crypto.randomUUID()
     setToasts((prevToasts) => [
       ...prevToasts,
       {

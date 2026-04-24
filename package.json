@@ -1,6 +1,6 @@
 {
   "name": "@donerui/donerui",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "A modern UI library for React, styled with Tailwind CSS.",
   "main": "dist/index.js",
   "type": "module",
@@ -26,7 +26,7 @@
   "author": "Döner UI Team",
   "license": "MIT",
   "peerDependencies": {
-    "@donerui/base": "^0.0.2",
+    "@donerui/base": "^0.0.3",
     "react": "^19",
     "react-dom": "^19",
     "tailwindcss": "^3.4.0 || ^4.0.0"
@@ -40,8 +40,7 @@
     "magic.css": "^1.4.8",
     "qrcode": "^1.5.4",
     "react-icons": "^5.6.0",
-    "tailwind-merge": "^2.6.1",
-    "uuid": "^13.0.0"
+    "tailwind-merge": "^2.6.1"
   },
   "devDependencies": {
     "@biomejs/biome": "2.4.10",
@@ -50,5 +49,8 @@
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "typescript": "^6.0.2"
+  },
+  "optionalDependencies": {
+    "@donerui/base": "file:../base"
   }
 }

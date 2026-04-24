@@ -1,3 +1,4 @@
+import { useLockScroll } from '@donerui/base'
 import { type JSX, useEffect } from 'react'
 import { twMerge } from 'tailwind-merge'
 import Transition from '../Transition'
@@ -13,6 +14,8 @@ function Modal({
   onClose,
   transitionProps,
 }: IModalProps): JSX.Element {
+  useLockScroll()
+
   useEffect(() => {
     if (isOpen) {
       onOpen?.()

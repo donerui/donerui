@@ -1,5 +1,4 @@
 import { type JSX, useMemo, useState } from 'react'
-import { v4 as uuidv4 } from 'uuid'
 import DialogContext from './contexts'
 import Dialog from './Dialog'
 import type { IDialogOptions, IDialogProps } from './types'
@@ -16,7 +15,7 @@ function DialogProvider({
   }
 
   function createDialog(options: IDialogOptions): string {
-    const id = uuidv4()
+    const id = crypto.randomUUID()
     setDialogs((prevDialogs) => [
       ...prevDialogs,
       {
